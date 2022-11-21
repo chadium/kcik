@@ -1,0 +1,17 @@
+{
+  "name": "boomer-kirka-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^21.3.0"
+  },
+  "dependencies": {
+    "electron-localshortcut": "^3.2.1"
+  }
+}
