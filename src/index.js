@@ -21,7 +21,9 @@ class WinMan {
       titleBarStyle: 'hidden',
       titleBarOverlay: true,
       webPreferences: {
-        preload: path.join(__dirname, 'preload.js')
+        preload: path.join(__dirname, '..', 'dist', 'preload', 'index.js'),
+        //enableRemoteModule: false,
+        //webSecurity: false
       }
     })
 

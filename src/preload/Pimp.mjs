@@ -15,11 +15,11 @@ export class Pimp {
     }
   }
 
-  async getApi(name) {
-    if (!this._apis[info.name]) {
+  getApi(name) {
+    if (this._apis[name] === undefined) {
       throw new Error(`No api ${name}`)
     }
 
-    return this._apis[info.name]
+    return this._apis[name]
   }
 }
