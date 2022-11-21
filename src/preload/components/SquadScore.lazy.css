@@ -1,0 +1,44 @@
+.squad-score__title {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 3px;
+  position: relative;
+}
+
+.squad-score__title__score {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-right: 4px;
+}
+
+.squad-score__members {
+  border-top: 1px solid black;
+  display: table;
+}
+
+.squad-score__members__item {
+  display: table-row;
+}
+
+.squad-score__members__item > * {
+  padding-top: 4px;
+  padding-left: 8px;
+  display: table-cell;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.squad-score__members__item > *:first-child {
+  padding-left: 0;
+}
+
+.squad-score__members__item__name {
+  width: 100%;
+  text-align: left;
+}
+
+.squad-score__members__item__score {
+  padding-right: 4px;
+}

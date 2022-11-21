@@ -1,0 +1,32 @@
+.squad-score-app {
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: white;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.squad-score-app__title {
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+.squad-score-app__squads {
+  display: flex;
+
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.squad-score-app__squads > .squad-score {
+  flex: 1 0 0;
+  width: 300px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
