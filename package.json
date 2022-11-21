@@ -5,30 +5,20 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron .",
-    "build": "parcel build"
+    "build": "webpack build"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^21.3.0",
     "events": "^3.3.0",
-    "parcel": "^2.8.0",
     "path-browserify": "^1.0.1",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.0"
   },
   "dependencies": {
     "electron-localshortcut": "^3.2.1",
     "eventemitter3": "^4.0.7"
-  },
-  "targets": {
-    "preload": {
-      "source": "src/preload/index.mjs",
-      "context": "electron-renderer",
-      "distDir": "./dist/preload",
-      "outputFormat": "commonjs",
-      "optimize": false,
-      "includeNodeModules": true,
-      "sourceMap": false
-    }
   }
 }

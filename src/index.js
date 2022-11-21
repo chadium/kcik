@@ -22,12 +22,11 @@ class WinMan {
       titleBarOverlay: true,
       webPreferences: {
         preload: path.join(__dirname, '..', 'dist', 'preload', 'index.js'),
-        //enableRemoteModule: false,
-        //webSecurity: false
+        contextIsolation: false
       }
     })
 
-    this._win.loadURL('https://kirka.io/')
+    this._win.loadURL('https://kirka.io/games/EU~0TIL3wB_m')
 
     this._registerShortcuts()
   }
