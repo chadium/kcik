@@ -1,92 +1,44 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styles from "./SquadScoreApp.lazy.css"
 import SquadScore from "./SquadScore.jsx"
 
-export default function SquadScoreApp() {
+export default function SquadScoreApp({ squads, show }) {
   useEffect(() => {
     styles.use()
   }, [])
 
-  let squads = [
-    {
-      name: 'red',
-      color: '#e70000',
-      members: [
-        {
-          name: 'boomer',
-          kills: 1,
-          deaths: 2,
-          score: 100
-        },
-        {
-          name: 'helper',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-      ]
-    },
-    {
-      name: 'blue',
-      color: '#0000b3',
-      members: [
-        {
-          name: 'someone1',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-        {
-          name: 'someone2',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-      ]
-    },
-    {
-      name: 'yellow',
-      color: '#a9a900',
-      members: [
-        {
-          name: 'someone3',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-        {
-          name: 'someone4',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-      ]
+  let type = useMemo(() => {
+    let maxMembers = 0
+
+    for (let squad of squads) {
+      if (squad.members.length > maxMembers) {
+        maxMembers = squad.members.length
+      }
     }
-    ,
-    {
-      name: 'green',
-      color: '#057e05',
-      members: [
-        {
-          name: 'someone5',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-        {
-          name: 'someone6',
-          kills: 0,
-          deaths: 0,
-          score: 0
-        },
-      ]
+
+    if (maxMembers === 0) {
+      return 'Team'
+    } else if (maxMembers === 1) {
+      return 'Solo'
+    } else if (maxMembers === 2) {
+      return 'Duo'
+    } else if (maxMembers === 3) {
+      return 'Trio'
+    } else if (maxMembers === 4) {
+      return 'Squad'
     }
-  ]
+  }, [squads])
+
+  if (!show) {
+    return <></>
+  }
+
+  console.log('show')
 
   return (
     <div className="squad-score-app">
       <div className="squad-score-app__title">
-        Boomer's Squad Match
+        Boomer's {type} Match
       </div>
 
       <div className="squad-score-app__squads">
