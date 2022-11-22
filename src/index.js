@@ -1,5 +1,5 @@
 const path = require('path')
-const { app, shell, BrowserWindow, Menu } = require('electron')
+const { app, shell, ipcMain, BrowserWindow, Menu } = require('electron')
 const electronLocalshortcut = require('electron-localshortcut')
 
 const isMac = process.platform === 'darwin'
@@ -26,7 +26,7 @@ class WinMan {
       }
     })
 
-    this._win.loadURL('https://kirka.io/games/EU~0TIL3wB_m')
+    this._win.loadURL('https://kirka.io/')
 
     this._registerShortcuts()
   }
@@ -60,6 +60,19 @@ class WinMan {
     this._win.webContents.executeJavaScript('document.exitPointerLock()', true)
   }
 
+  load(url) {
+    if (this._win === null) {
+      // Not opened.
+      return
+    }
+
+    this._win.loadURL(url)
+  }
+
+  joinMatch() {
+    this._win.webContents.send('join-match')
+  }
+
   _registerShortcuts() {
     electronLocalshortcut.register(this._win, "Escape", () => this.unlockPointer());
     electronLocalshortcut.register(this._win, 'Ctrl+R', () => {
@@ -79,6 +92,13 @@ function buildMenu(wm) {
     {
       label: 'File',
       submenu: [
+        {
+          label: 'Join match',
+          click: () => {
+            wm.joinMatch()
+          }
+        },
+        { type: 'separator' },
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
     },
@@ -135,6 +155,12 @@ async function main() {
       wm.open()
     })
   }
+
+  ipcMain.on('join-match', (e, data) => {
+    if (data.startsWith('https://kirka.io/games/')) {
+      wm.load(data)
+    }
+  })
 
   wm.open()
 }
