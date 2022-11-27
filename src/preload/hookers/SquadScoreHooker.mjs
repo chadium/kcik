@@ -8,6 +8,7 @@ export class SquadScoreHooker {
   constructor() {
     this._show = false
     this._squads = []
+    this._socket = null
   }
 
   hook(pimp) {
@@ -26,17 +27,30 @@ export class SquadScoreHooker {
       reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
     })
 
-    this._refresh()
+    this._socket = userApi.wsRanking({
+      onConnect: async () => {
+        this._squads = await userApi.getRanking()
+    
+        if (this._show) {
+          reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
+        }
+      },
+      onUpdate: ({ ranking }) => {
+        this._squads = ranking
+
+        if (this._show) {
+          reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
+        }
+      }
+    })
   }
 
   unhook(pimp) {
+    this._socket.close()
+    this._socket = null
   }
 
   _makeProps() {
     return { squads: this._squads, show: this._show }
-  }
-
-  async _refresh() {
-    this._squads = await userApi.getRanking()
   }
 }

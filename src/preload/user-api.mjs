@@ -1,3 +1,5 @@
+import ReconnectingWebSocket from 'reconnecting-websocket'
+
 export class RequestError extends Error {
   constructor(message) {
     super(message)
@@ -86,4 +88,23 @@ export async function getRanking() {
   })
 
   return data.ranking
+}
+
+export async function wsRanking({ onConnect, onUpdate }) {
+  const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match/ranking`);
+
+  socket.addEventListener('open', () => {
+    console.log('open')
+    onConnect()
+  })
+
+  socket.addEventListener('message', ({ data }) => {
+    onUpdate(JSON.parse(data))
+  });
+
+  return {
+    close() {
+      socket.close()
+    }
+  }
 }
