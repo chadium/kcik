@@ -2,85 +2,12 @@ import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import SquadScoreApp from '../components/SquadScoreApp.jsx'
+import * as userApi from '../user-api.mjs'
 
 export class SquadScoreHooker {
   constructor() {
     this._show = false
-    this._squads = [
-      {
-        name: 'red',
-        color: '#e70000',
-        members: [
-          {
-            name: 'Newbie#8',
-            kills: 1,
-            deaths: 2,
-            score: 100
-          },
-          {
-            name: 'Newbie#7',
-            kills: 0,
-            deaths: 1,
-            score: 0
-          },
-        ]
-      },
-      {
-        name: 'blue',
-        color: '#0000b3',
-        members: [
-          {
-            name: 'Newbie#1',
-            kills: 0,
-            deaths: 0,
-            score: 0
-          },
-          {
-            name: 'Newbie#2',
-            kills: 0,
-            deaths: 3,
-            score: 0
-          },
-        ]
-      },
-      {
-        name: 'yellow',
-        color: '#a9a900',
-        members: [
-          {
-            name: 'Newbie#3',
-            kills: 1,
-            deaths: 0,
-            score: 50
-          },
-          {
-            name: 'Newbie#4',
-            kills: 1,
-            deaths: 0,
-            score: 50
-          },
-        ]
-      }
-      ,
-      {
-        name: 'green',
-        color: '#057e05',
-        members: [
-          {
-            name: 'Newbie#5',
-            kills: 0,
-            deaths: 1,
-            score: 0
-          },
-          {
-            name: 'Newbie#6',
-            kills: 0,
-            deaths: 0,
-            score: 0
-          },
-        ]
-      }
-    ]
+    this._squads = []
   }
 
   hook(pimp) {
@@ -98,6 +25,8 @@ export class SquadScoreHooker {
 
       reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
     })
+
+    this._refresh()
   }
 
   unhook(pimp) {
@@ -105,5 +34,9 @@ export class SquadScoreHooker {
 
   _makeProps() {
     return { squads: this._squads, show: this._show }
+  }
+
+  async _refresh() {
+    this._squads = await userApi.getRanking()
   }
 }

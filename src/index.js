@@ -1,6 +1,7 @@
 const path = require('path')
 const { app, shell, ipcMain, BrowserWindow, Menu } = require('electron')
 const electronLocalshortcut = require('electron-localshortcut')
+require('./dotenv')
 
 const isMac = process.platform === 'darwin'
 

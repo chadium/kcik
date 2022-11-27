@@ -1,3 +1,5 @@
+const Dotenv = require('dotenv-webpack');
+
 module.exports = [
   {
     mode: 'development',
@@ -23,12 +25,15 @@ module.exports = [
           use: {
             loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react']
+              presets: ['@babel/preset-react']
             }
           }
         },
       ]
     },
+    plugins: [
+      new Dotenv()
+    ],
     output: {
       path: __dirname + '/dist/preload',
       filename: 'index.js'
