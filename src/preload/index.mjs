@@ -4,6 +4,7 @@ import { RoomHooker } from './hookers/RoomHooker.mjs'
 import { WorldHooker } from './hookers/WorldHooker.mjs'
 import { SquadScoreHooker } from './hookers/SquadScoreHooker.mjs'
 import { JoinMatchHooker } from './hookers/JoinMatchHooker.mjs'
+import { CustomTeamDeathMatchHooker } from './hookers/CustomTeamDeathMatchHooker.mjs'
 
 function patchSoftlock() {
   const original = Function.prototype.constructor
@@ -24,6 +25,7 @@ async function main() {
 
   let pimp = new Pimp()
 
+  await pimp.register(new CustomTeamDeathMatchHooker())
   await pimp.register(new JoinMatchHooker(prompter))
   await pimp.register(new WorldHooker())
   await pimp.register(new RoomHooker())

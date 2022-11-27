@@ -33,8 +33,6 @@ export default function SquadScoreApp({ squads, show }) {
     return <></>
   }
 
-  console.log('show')
-
   return (
     <div className="squad-score-app">
       <div className="squad-score-app__title">
