@@ -1,8 +1,8 @@
 import EventEmitter from 'eventemitter3'
 
-export class WorldHooker {
+export class MysteryObjectHooker {
   constructor() {
-    this._worldObject = null
+    this._thatMysteryObject = null
   }
 
   hook(pimp) {
@@ -10,30 +10,30 @@ export class WorldHooker {
 
     events.on('newListener', (name, listener) => {
       if (name === 'available') {
-        if (this._worldObject) {
+        if (this._thatMysteryObject) {
           // Already available. Call it.
-          listener(this._worldObject)
+          listener(this._thatMysteryObject)
         }
       }
     })
 
     let self = this
 
-    Object.defineProperty(window, 'mWnwMWorld', {
+    Object.defineProperty(window, 'mWnwM', {
       configurable: false,
       set(v) {
-        if (self._worldObject) {
-          console.warn('Caught world object again')
+        if (self._thatMysteryObject) {
+          console.warn('Caught mystery object again')
           return
         }
 
-        console.log('Caught world object')
+        console.log('Caught mystery object')
 
-        self._worldObject = v
+        self._thatMysteryObject = v
 
         this._superUniqueProperty = v
 
-        events.emit('available', self._worldObject)
+        events.emit('available', self._thatMysteryObject)
       },
       get() {
         return this._superUniqueProperty
@@ -41,9 +41,9 @@ export class WorldHooker {
     })
 
     return {
-      name: 'world',
+      name: 'mystery',
       api: {
-        getWorld: () => this._worldObject,
+        getMysteryObject: () => this._thatMysteryObject,
         on: events.on.bind(events),
         off: events.off.bind(events)
       }

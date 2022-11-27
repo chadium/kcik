@@ -1,9 +1,12 @@
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { RoomHooker } from './hookers/RoomHooker.mjs'
-import { WorldHooker } from './hookers/WorldHooker.mjs'
+import { MysteryObjectHooker } from './hookers/MysteryObjectHooker.mjs'
+import { WorldMapHooker } from './hookers/WorldMapHooker.mjs'
 import { SquadScoreHooker } from './hookers/SquadScoreHooker.mjs'
 import { JoinMatchHooker } from './hookers/JoinMatchHooker.mjs'
+import { PlayerHooker } from './hookers/PlayerHooker.mjs'
+import { MatchHooker } from './hookers/MatchHooker.mjs'
 import { CustomTeamDeathMatchHooker } from './hookers/CustomTeamDeathMatchHooker.mjs'
 
 function patchSoftlock() {
@@ -25,20 +28,23 @@ async function main() {
 
   let pimp = new Pimp()
 
-  await pimp.register(new CustomTeamDeathMatchHooker())
-  await pimp.register(new JoinMatchHooker(prompter))
-  await pimp.register(new WorldHooker())
-  await pimp.register(new RoomHooker())
-  await pimp.register(new SquadScoreHooker())
+  let hookers = [
+    new JoinMatchHooker(prompter),
+    new MysteryObjectHooker(),
+    new WorldMapHooker(),
+    new RoomHooker(),
+    new SquadScoreHooker(),
+    new PlayerHooker(),
+    new MatchHooker(),
+    new CustomTeamDeathMatchHooker(),
+  ]
 
-  try {
-    let matchApi = pimp.getApi('match')
-
-    matchApi.on('match-join', ({ players }) => {
-      console.log('Joined match', players)
-    })
-  } catch (e) {
-    console.error(e)
+  for (let hooker of hookers) {
+    try {
+      await pimp.register(hooker)
+    } catch (e) {
+      console.error('Failed to register ' + hooker.constructor.name, e)
+    }
   }
 
   window.pimp = pimp
