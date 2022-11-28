@@ -20,7 +20,7 @@ export class Prompter {
     })
   }
 
-  async prompt({ title, buttons }) {
+  async prompt({ title, placeholder, buttons }) {
     return new Promise((resolve, reject) => {
       const onEnter = (e) => {
         this._reactRoot.render(React.createElement(Prompt, { show: false }, null))
@@ -32,7 +32,7 @@ export class Prompter {
         reject(new PrompterCancelError())
       }
 
-      this._reactRoot.render(React.createElement(Prompt, { show: true, title, buttons, onEnter, onCancel }, null))
+      this._reactRoot.render(React.createElement(Prompt, { show: true, title, placeholder, buttons, onEnter, onCancel }, null))
     })
   }
 }

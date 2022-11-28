@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styles from "./Prompt.lazy.css"
 import Button from "./Button.jsx"
+import Box from "./Box.jsx"
 
-export default function Prompt({ show, title, buttons, onEnter, onCancel }) {
+export default function Prompt({ show, title, placeholder, buttons, onEnter, onCancel }) {
   useEffect(() => {
     styles.use()
   }, [])
@@ -60,17 +61,21 @@ export default function Prompt({ show, title, buttons, onEnter, onCancel }) {
 
   return (
     <div className="prompt">
-      <div className="prompt__title">
-        {title}
-      </div>
+      <Box>
+        <div className="prompt__padding">
+          <div className="prompt__title">
+            {title}
+          </div>
 
-      <div className="prompt__input">
-        <input value={input} onChange={(e) => setInput(e.target.value)}/>
-      </div>
+          <div className="prompt__input">
+            <input placeholder={placeholder} value={input} onChange={(e) => setInput(e.target.value)}/>
+          </div>
 
-      <div className="prompt__actions">
-        {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
-      </div>
+          <div className="prompt__actions">
+            {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
+          </div>
+        </div>
+      </Box>
     </div>
   )
 }

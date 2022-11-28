@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import styles from "./SquadScoreApp.lazy.css"
 import SquadScore from "./SquadScore.jsx"
+import Box from "./Box.jsx"
 
 export default function SquadScoreApp({ squads, show }) {
   useEffect(() => {
@@ -35,15 +36,17 @@ export default function SquadScoreApp({ squads, show }) {
 
   return (
     <div className="squad-score-app">
-      <div className="squad-score-app__title">
-        Boomer's {type} Match
-      </div>
+      <Box>
+        <div className="squad-score-app__title">
+          Boomer's {type} Match
+        </div>
 
-      <div className="squad-score-app__squads">
-        {squads.map(squad => (
-          <SquadScore key={squad.name} name={squad.name} color={squad.color} members={squad.members}/>
-        ))}
-      </div>
+        <div className="squad-score-app__squads">
+          {squads.map(squad => (
+            <SquadScore key={squad.name} name={squad.name} color={squad.color} members={squad.members}/>
+          ))}
+        </div>
+      </Box>
     </div>
   )
 }

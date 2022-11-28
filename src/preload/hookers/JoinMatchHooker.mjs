@@ -9,7 +9,7 @@ export class JoinMatchHooker {
   hook(pimp) {
     ipcRenderer.on('join-match', async () => {
       try {
-        let result = await this._prompter.prompt({ title: 'Join match' })
+        let result = await this._prompter.prompt({ title: 'Join match', placeholder: "Put link here" })
 
         ipcRenderer.send('join-match', result.input)
       } catch (e) {

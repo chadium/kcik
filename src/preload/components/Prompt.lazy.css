@@ -3,16 +3,16 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #222;
-  color: white;
-  border-radius: 3px;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
   z-index: 11;
+}
+
+.prompt__padding {
   padding: 10px;
 }
 
 .prompt__actions {
   display: flex;
+  padding-top: 5px;
 }
 
 .prompt__actions > * {
