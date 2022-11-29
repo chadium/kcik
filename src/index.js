@@ -89,6 +89,9 @@ class WinMan {
     electronLocalshortcut.register(this._win, '`', () => {
       this._win.webContents.send('toggle-score')
     });
+    electronLocalshortcut.register(this._win, '=', () => {
+      this._win.webContents.send('toggle-score2')
+    });
   }
 }
 

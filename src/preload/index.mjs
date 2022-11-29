@@ -4,6 +4,7 @@ import { RoomHooker } from './hookers/RoomHooker.mjs'
 import { MysteryObjectHooker } from './hookers/MysteryObjectHooker.mjs'
 import { WorldMapHooker } from './hookers/WorldMapHooker.mjs'
 import { MatchRankingHooker } from './hookers/MatchRankingHooker.mjs'
+import { TagRankingHooker } from './hookers/TagRankingHooker.mjs'
 import { JoinMatchHooker } from './hookers/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/PlayerHooker.mjs'
 import { MatchHooker } from './hookers/MatchHooker.mjs'
@@ -34,6 +35,7 @@ async function main() {
     new WorldMapHooker(),
     new RoomHooker(),
     new MatchRankingHooker(),
+    new TagRankingHooker(),
     new PlayerHooker(),
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),

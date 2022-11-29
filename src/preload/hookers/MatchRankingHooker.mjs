@@ -27,9 +27,9 @@ export class MatchRankingHooker {
       reactRoot.render(React.createElement(MatchRanking, this._makeProps(), null))
     })
 
-    this._socket = userApi.wsRanking({
+    this._socket = userApi.wsMatchRanking({
       onConnect: async () => {
-        this._squads = await userApi.getRanking()
+        this._squads = await userApi.getMatchRanking()
     
         if (this._show) {
           reactRoot.render(React.createElement(MatchRanking, this._makeProps(), null))

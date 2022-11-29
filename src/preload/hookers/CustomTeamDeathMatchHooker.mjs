@@ -19,12 +19,12 @@ export class CustomTeamDeathMatchHooker {
     })
 
     matchApi.on('playerDeath', (e) => {
-      adminApi.addDeath(e.player.name, 1)
-      adminApi.addScore(e.player.name, -20)
+      adminApi.matchAddDeath(e.player.name, 1)
+      adminApi.matchAddScore(e.player.name, -20)
     })
     matchApi.on('playerKill', (e) => {
-      adminApi.addKill(e.player.name, 1)
-      adminApi.addScore(e.player.name, 50)
+      adminApi.matchAddKill(e.player.name, 1)
+      adminApi.matchAddScore(e.player.name, 50)
     })
   }
 
