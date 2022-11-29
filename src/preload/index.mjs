@@ -9,6 +9,7 @@ import { JoinMatchHooker } from './hookers/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/PlayerHooker.mjs'
 import { MatchHooker } from './hookers/MatchHooker.mjs'
 import { CustomTeamDeathMatchHooker } from './hookers/CustomTeamDeathMatchHooker.mjs'
+import { CustomTagMatchHooker } from './hookers/CustomTagMatchHooker.mjs'
 
 function patchSoftlock() {
   const original = Function.prototype.constructor
@@ -39,6 +40,7 @@ async function main() {
     new PlayerHooker(),
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),
+    new CustomTagMatchHooker(),
   ]
 
   for (let hooker of hookers) {

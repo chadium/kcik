@@ -38,8 +38,7 @@ export async function tagSetIt(name) {
     method: 'POST',
     url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/tag/players/it/set',
     bodyData: {
-      name,
-      amount
+      name
     }
   })
 }

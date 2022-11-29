@@ -46,16 +46,16 @@ export class TagRankingHooker {
       }
     })
 
-    this._itSocket = userApi.wsTagRanking({
+    this._itSocket = userApi.wsTagIt({
       onConnect: async () => {
-        this._it = await userApi.getTagIt()
+        this._it = await userApi.tagGetIt()
     
         if (this._show) {
           reactRoot.render(React.createElement(TagRanking, this._makeProps(), null))
         }
       },
-      onUpdate: ({ ranking }) => {
-        this._it = ranking
+      onUpdate: ({ it }) => {
+        this._it = it
 
         if (this._show) {
           reactRoot.render(React.createElement(TagRanking, this._makeProps(), null))

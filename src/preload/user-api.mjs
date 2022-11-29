@@ -17,7 +17,7 @@ export async function getTagRanking() {
   return data.ranking
 }
 
-export async function getTagIt() {
+export async function tagGetIt() {
   let { data } = await apiFetch({
     url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/tag/players/it'
   })

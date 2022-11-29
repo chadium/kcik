@@ -42,7 +42,7 @@ export default function TagRanking({ players, it, show }) {
     })
 
     return results
-  }, [players])
+  }, [players, it, now])
 
   if (!show) {
     return <></>
