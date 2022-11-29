@@ -1,4 +1,4 @@
-.squad-score-app {
+.match-ranking {
   pointer-events: none;
   position: fixed;
   top: 5%;
@@ -7,21 +7,21 @@
   z-index: 10;
 }
 
-.squad-score-app__title {
+.match-ranking__title {
   font-weight: bold;
   text-align: center;
   padding: 10px;
   padding-bottom: 0;
 }
 
-.squad-score-app__squads {
+.match-ranking__squads {
   display: flex;
 
   padding-right: 10px;
   padding-bottom: 10px;
 }
 
-.squad-score-app__squads > .squad-score {
+.match-ranking__squads > .squad-score {
   flex: 1 0 0;
   width: 300px;
   margin-left: 10px;

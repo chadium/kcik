@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
-import styles from "./SquadScoreApp.lazy.css"
+import styles from "./MatchRanking.lazy.css"
 import SquadScore from "./SquadScore.jsx"
 import Box from "./Box.jsx"
 
-export default function SquadScoreApp({ squads, show }) {
+export default function MatchRanking({ squads, show }) {
   useEffect(() => {
     styles.use()
   }, [])
@@ -35,13 +35,13 @@ export default function SquadScoreApp({ squads, show }) {
   }
 
   return (
-    <div className="squad-score-app">
+    <div className="match-ranking">
       <Box>
-        <div className="squad-score-app__title">
+        <div className="match-ranking__title">
           Boomer's {type} Match
         </div>
 
-        <div className="squad-score-app__squads">
+        <div className="match-ranking__squads">
           {squads.map(squad => (
             <SquadScore key={squad.name} name={squad.name} color={squad.color} members={squad.members}/>
           ))}

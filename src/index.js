@@ -23,7 +23,11 @@ class WinMan {
       titleBarOverlay: true,
       webPreferences: {
         preload: path.join(__dirname, '..', 'dist', 'preload', 'index.js'),
-        contextIsolation: false
+        contextIsolation: false,
+
+        // The API endpoints are not encrypted because we're not running a
+        // bank here.
+        allowRunningInsecureContent: true
       }
     })
 

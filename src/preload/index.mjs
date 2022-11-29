@@ -3,7 +3,7 @@ import { Pimp } from './Pimp.mjs'
 import { RoomHooker } from './hookers/RoomHooker.mjs'
 import { MysteryObjectHooker } from './hookers/MysteryObjectHooker.mjs'
 import { WorldMapHooker } from './hookers/WorldMapHooker.mjs'
-import { SquadScoreHooker } from './hookers/SquadScoreHooker.mjs'
+import { MatchRankingHooker } from './hookers/MatchRankingHooker.mjs'
 import { JoinMatchHooker } from './hookers/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/PlayerHooker.mjs'
 import { MatchHooker } from './hookers/MatchHooker.mjs'
@@ -33,7 +33,7 @@ async function main() {
     new MysteryObjectHooker(),
     new WorldMapHooker(),
     new RoomHooker(),
-    new SquadScoreHooker(),
+    new MatchRankingHooker(),
     new PlayerHooker(),
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),

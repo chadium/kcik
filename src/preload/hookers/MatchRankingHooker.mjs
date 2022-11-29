@@ -1,10 +1,10 @@
 import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import SquadScoreApp from '../components/SquadScoreApp.jsx'
+import MatchRanking from '../components/MatchRanking.jsx'
 import * as userApi from '../user-api.mjs'
 
-export class SquadScoreHooker {
+export class MatchRankingHooker {
   constructor() {
     this._show = false
     this._squads = []
@@ -24,7 +24,7 @@ export class SquadScoreHooker {
 
       this._show = !this._show
 
-      reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
+      reactRoot.render(React.createElement(MatchRanking, this._makeProps(), null))
     })
 
     this._socket = userApi.wsRanking({
@@ -32,14 +32,14 @@ export class SquadScoreHooker {
         this._squads = await userApi.getRanking()
     
         if (this._show) {
-          reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
+          reactRoot.render(React.createElement(MatchRanking, this._makeProps(), null))
         }
       },
       onUpdate: ({ ranking }) => {
         this._squads = ranking
 
         if (this._show) {
-          reactRoot.render(React.createElement(SquadScoreApp, this._makeProps(), null))
+          reactRoot.render(React.createElement(MatchRanking, this._makeProps(), null))
         }
       }
     })
