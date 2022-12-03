@@ -60,9 +60,11 @@ class StateInRoom extends State {
             accept(value) { return value === null }
           })
 
+          let room = this.hooker._currentRoom
+
           this.hooker._currentRoom = null
 
-          this.hooker._events.emit('leaved', { room: this.hooker._currentRoom })
+          this.hooker._events.emit('leaved', { room })
 
           this.hooker._state = new StateWaitingForRoom(this.hooker)
         } catch (e) {
