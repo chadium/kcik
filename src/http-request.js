@@ -18,18 +18,18 @@ exports.httpRequest = async function httpRequest({
     }
 
     const callback = (response) => {
-      const b = new DynamicBuffer();
+      const b = []
 
       response.on('data', (c) => {
         // I imported this library because I thought it would be capable of appending buffers.
         // Turns out, it only accepts strings... The concatenation operator is in theory more
         // efficient than this then. I need to make my own dynamic buffer.
-        b.append(c.toString())
+        b.push(c)
       })
 
       response.on('end', () => {
         resolve({
-          body: b.toBuffer()
+          body: Buffer.concat(b)
         })
       })
     }

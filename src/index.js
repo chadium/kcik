@@ -145,8 +145,10 @@ function buildMenu(wm) {
 async function main() {
   await app.whenReady()
 
-  let replacementStorage = new FileStorage({ prefix: '1up' })
-  let tgr = new TheGreatReplacer({ storage: replacementStorage })
+  let tgr = new TheGreatReplacer({
+    cacheStorage: new FileStorage({ prefix: 'url-cache' }),
+    replaceStorage: new FileStorage({ prefix: 'url-1up' })
+  })
 
   let wm = new WinMan()
 
