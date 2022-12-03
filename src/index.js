@@ -1,6 +1,8 @@
 const path = require('path')
 const { app, shell, ipcMain, BrowserWindow, Menu } = require('electron')
 const electronLocalshortcut = require('electron-localshortcut')
+const { FileStorage } = require('./storage')
+const { TheGreatReplacer } = require('./the-great-replacer')
 require('./dotenv')
 
 const isMac = process.platform === 'darwin'
@@ -142,6 +144,9 @@ function buildMenu(wm) {
 
 async function main() {
   await app.whenReady()
+
+  let replacementStorage = new FileStorage({ prefix: '1up' })
+  let tgr = new TheGreatReplacer({ storage: replacementStorage })
 
   let wm = new WinMan()
 
