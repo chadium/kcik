@@ -1,3 +1,4 @@
+const prettier = require('prettier')
 const { session } = require('electron')
 const http = require('http');
 const { deobfuscate } = require('js-deobfuscator')
@@ -83,7 +84,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
   }
 
   async _replacedFile(pathname, originalContents) {
-    let version = 'v9'
+    let version = 'v21'
     pathname = `/${version}${pathname}`
 
     try {
@@ -106,10 +107,10 @@ exports.TheGreatReplacer = class TheGreatReplacer {
   }
 
   _deobfuscate(contents) {
-    return deobfuscate(contents.toString(), {
+    let code = deobfuscate(contents.toString(), {
       arrays: {
         unpackArrays: true,
-        removeArrays: false,
+        removeArrays: true,
       },
       proxyFunctions: {
         replaceProxyFunctions: false,
@@ -120,10 +121,12 @@ exports.TheGreatReplacer = class TheGreatReplacer {
         removeDeadBranches: false,
       },
       miscellaneous: {
-        beautify: true,
-        simplifyProperties: true,
-        renameHexIdentifiers: true,
+        beautify: false,
+        simplifyProperties: false,
+        renameHexIdentifiers: false,
       },
     })
+
+    return prettier.format(code, { semi: false, parser: "babel" });
   }
 }
