@@ -49,7 +49,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
             }
 
             response.writeHead(200, {
-              'Content-Type': 'application/javascript',
+              'Content-Type': 'application/javascript; charset=utf-8',
               'Access-Control-Allow-Origin': 'https://kirka.io'
             })
             response.end(contents)
@@ -84,7 +84,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
   }
 
   async _replacedFile(pathname, originalContents) {
-    let version = 'v21'
+    let version = 'v24'
     pathname = `/${version}${pathname}`
 
     try {
@@ -127,6 +127,6 @@ exports.TheGreatReplacer = class TheGreatReplacer {
       },
     })
 
-    return prettier.format(code, { semi: false, parser: "babel" });
+    return prettier.format(code, { semi: true, parser: "babel", charset: 'utf-8' });
   }
 }
