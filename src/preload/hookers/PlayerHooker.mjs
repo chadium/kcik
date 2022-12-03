@@ -20,7 +20,8 @@ export class PlayerHooker {
             throw new Error('No player info.')
           }
 
-          return this._gameObject.WmNMwn.name
+          // TODO
+          return 'Unknown'
         },
         getKills: () => {
           if (this._userObject === null) {

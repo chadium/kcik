@@ -5,15 +5,14 @@ export class MatchHooker {
   constructor() {
     this._matchObject = null
     this._found = {}
+    this._events = new EventEmitter()
   }
 
   hook(pimp) {
-    let events = new EventEmitter()
-
     let playerApi = pimp.getApi('player')
     let roomApi = pimp.getApi('room')
-  
-    roomApi.on('available', (room) => {
+
+    roomApi.on('joined', ({ room }) => {
       room.onStateChange((e) => {
         let ownName = playerApi.getName()
 
@@ -29,7 +28,7 @@ export class MatchHooker {
           this._found[player.sessionId] = player
 
           try {
-            events.emit('playerJoin', {
+            this._events.emit('playerJoin', {
               player,
               isSelf: player.name === ownName
             })
@@ -51,7 +50,7 @@ export class MatchHooker {
 
           player.listen('deaths', (current, previous) => {
             console.log(`${player.name} got killed`)
-            events.emit('playerDeath', {
+            this._events.emit('playerDeath', {
               player,
               current,
               previous
@@ -59,7 +58,7 @@ export class MatchHooker {
           })
           player.listen('kills', (current, previous) => {
             console.log(`${player.name} killed`)
-            events.emit('playerKill', {
+            this._events.emit('playerKill', {
               player,
               current,
               previous
@@ -67,7 +66,7 @@ export class MatchHooker {
           })
           player.listen('score', (current, previous) => {
             console.log(`${player.name} new score`, current)
-            events.emit('playerScore', {
+            this._events.emit('playerScore', {
               player,
               current,
               previous
@@ -81,7 +80,7 @@ export class MatchHooker {
           let player = this._found[sessionId]
 
           try {
-            events.emit('playerLeave', {
+            this._events.emit('playerLeave', {
               player, 
               isSelf: player.name === ownName
             })
@@ -94,11 +93,30 @@ export class MatchHooker {
       })
     })
 
+    roomApi.on('leaved', ({ room }) => {
+      let ownName = playerApi.getName()
+      
+      for (let sessionId in this._found) {
+        let player = this._found[sessionId]
+
+        try {
+          this._events.emit('playerLeave', {
+            player, 
+            isSelf: player.name === ownName
+          })
+        } catch (e) {
+          log.bad(e)
+        }
+
+        delete this._found[sessionId]
+      }
+    })
+
     return {
       name: 'match',
       api: {
-        on: events.on.bind(events),
-        off: events.off.bind(events),
+        on: this._events.on.bind(this._events),
+        off: this._events.off.bind(this._events),
       }
     }
   }
