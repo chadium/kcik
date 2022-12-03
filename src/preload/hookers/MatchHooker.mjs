@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3'
+import * as log from '../log.mjs'
 
 export class MatchHooker {
   constructor() {
@@ -33,7 +34,7 @@ export class MatchHooker {
               isSelf: player.name === ownName
             })
           } catch (e) {
-            console.error(e)
+            log.bad('MatchHooker', e)
           }
 
           // let l
@@ -85,7 +86,7 @@ export class MatchHooker {
               isSelf: player.name === ownName
             })
           } catch (e) {
-            console.error(e)
+            log.bad(e)
           }
 
           delete this._found[sessionId]

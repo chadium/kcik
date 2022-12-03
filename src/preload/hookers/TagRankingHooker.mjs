@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import TagRanking from '../components/TagRanking.jsx'
 import * as userApi from '../user-api.mjs'
+import * as log from '../log.mjs'
 
 export class TagRankingHooker {
   constructor() {
@@ -22,7 +23,7 @@ export class TagRankingHooker {
     })
 
     ipcRenderer.on('toggle-score2', () => {
-      console.log('Toggle score')
+      log.info('TagRanking', 'Toggle score')
 
       this._show = !this._show
 

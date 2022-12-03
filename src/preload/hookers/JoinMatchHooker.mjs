@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron'
 import { PrompterCancelError } from '../Prompter.mjs'
+import * as log from '../log.mjs'
 
 export class JoinMatchHooker {
   constructor(prompter) {
@@ -16,7 +17,7 @@ export class JoinMatchHooker {
         if (e instanceof PrompterCancelError) {
           // Ignore.
         } else {
-          console.error(e)
+          log.bad('JoinMatch', e)
         }
       }
     })

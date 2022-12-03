@@ -1,4 +1,5 @@
 import * as adminApi from '../admin-api.mjs'
+import * as log from '../log.mjs'
 
 export class CustomTeamDeathMatchHooker {
   constructor() {
@@ -11,11 +12,11 @@ export class CustomTeamDeathMatchHooker {
     let matchApi = pimp.getApi('match')
 
     matchApi.on('playerJoin', (e) => {
-      console.log('playerJoin', e)
+      log.info('CustomTeamDeathMatch', 'playerJoin', e)
     })
 
     matchApi.on('playerLeave', (e) => {
-      console.log('playerLeave', e)
+      log.info('CustomTeamDeathMatch', 'playerLeave', e)
     })
 
     matchApi.on('playerDeath', (e) => {

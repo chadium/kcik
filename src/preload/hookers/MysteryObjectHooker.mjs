@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3'
+import * as log from '../log.mjs'
 
 export class MysteryObjectHooker {
   constructor() {
@@ -23,11 +24,11 @@ export class MysteryObjectHooker {
       configurable: false,
       set(v) {
         if (self._thatMysteryObject) {
-          console.warn('Caught mystery object again')
+          log.warn('MysteryObject', 'Caught mystery object again')
           return
         }
 
-        console.log('Caught mystery object')
+        log.info('MysteryObject', 'Caught mystery object')
 
         self._thatMysteryObject = v
 

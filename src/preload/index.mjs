@@ -2,7 +2,6 @@ import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { VueAppHooker } from './hookers/VueAppHooker.mjs'
 import { RoomHooker } from './hookers/RoomHooker.mjs'
-import { MysteryObjectHooker } from './hookers/MysteryObjectHooker.mjs'
 import { WorldMapHooker } from './hookers/WorldMapHooker.mjs'
 import { MatchRankingHooker } from './hookers/MatchRankingHooker.mjs'
 import { TagRankingHooker } from './hookers/TagRankingHooker.mjs'
@@ -11,6 +10,8 @@ import { PlayerHooker } from './hookers/PlayerHooker.mjs'
 import { MatchHooker } from './hookers/MatchHooker.mjs'
 import { CustomTeamDeathMatchHooker } from './hookers/CustomTeamDeathMatchHooker.mjs'
 import { CustomTagMatchHooker } from './hookers/CustomTagMatchHooker.mjs'
+import { SniffRoomMessagesHooker } from './hookers/SniffRoomMessagesHooker.mjs'
+import * as log from './log.mjs'
 
 function patchSoftlock() {
   const original = Function.prototype.constructor
@@ -34,7 +35,6 @@ async function main() {
   let hookers = [
     new VueAppHooker(),
     new JoinMatchHooker(prompter),
-    new MysteryObjectHooker(),
     new WorldMapHooker(),
     new RoomHooker(),
     new MatchRankingHooker(),
@@ -43,17 +43,20 @@ async function main() {
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),
     new CustomTagMatchHooker(),
+    new SniffRoomMessagesHooker(),
   ]
 
   for (let hooker of hookers) {
     try {
       await pimp.register(hooker)
     } catch (e) {
-      console.error('Failed to register ' + hooker.constructor.name, e)
+      log.bad('Index', 'Failed to register ' + hooker.constructor.name, e)
     }
   }
 
   window.pimp = pimp
 }
 
-main().catch(console.error)
+main().catch((e) => {
+  log.bad('Index', e)
+})

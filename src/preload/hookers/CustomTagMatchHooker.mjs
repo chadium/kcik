@@ -1,5 +1,6 @@
 import * as adminApi from '../admin-api.mjs'
 import * as userApi from '../user-api.mjs'
+import * as log from '../log.mjs'
 
 export class CustomTagMatchHooker {
   constructor() {
@@ -19,7 +20,7 @@ export class CustomTagMatchHooker {
 
       if (lastKiller === null) {
         // Can't do much with this info.
-        console.warn('No idea who the last killer was.')
+        log.warn('CustomTagMatch', 'No idea who the last killer was.')
         return
       }
 
@@ -31,7 +32,7 @@ export class CustomTagMatchHooker {
       }
 
       if (it.name === e.player.name) {
-        console.warn(`${lastKiller} is now it.`)
+        log.warn('CustomTagMatch', `${lastKiller} is now it.`)
         await adminApi.tagSetIt(lastKiller)
       }
     })

@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3'
 import { waitForProperty } from '../object-utils.mjs'
+import * as log from '../log.mjs'
 
 class State {
   available(game) {}
@@ -28,14 +29,14 @@ class StateWaitingForRoom extends State {
       this.hooker._state = new StateInRoom(this.hooker)
     } else {
       (async () => {
-        console.log('Will be waiting for room')
+        log.info('RoomHooker', 'Will be waiting for room')
         try {
           this.hooker._currentRoom = await waitForProperty(this.hooker._game, 'room', {
             nullable: false
           })
           this.hooker._state = new StateInRoom(this.hooker)
         } catch (e) {
-          console.error(e)
+          log.bad('RoomHooker', e)
         }
       })()
     }
@@ -47,13 +48,13 @@ class StateInRoom extends State {
     super()
     this.hooker = hooker
 
-    console.log('Found room')
+    log.info('RoomHooker', 'Found room')
 
     this.hooker._events.emit('joined', { room: this.hooker._currentRoom })
 
     {
       (async () => {
-        console.log('Will be waiting for room to be removed')
+        log.info('RoomHooker', 'Will be waiting for room to be removed')
         try {
           await waitForProperty(this.hooker._game, 'room', {
             accept(value) { return value === null }
@@ -65,7 +66,7 @@ class StateInRoom extends State {
 
           this.hooker._state = new StateWaitingForRoom(this.hooker)
         } catch (e) {
-          console.error(e)
+          log.bad('RoomHooker', e)
         }
       })()
     }
