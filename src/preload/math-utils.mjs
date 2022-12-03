@@ -1,0 +1,1 @@
+export const MAX_32BIT_INT = 2147483647

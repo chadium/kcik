@@ -1,5 +1,6 @@
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
+import { VueAppHooker } from './hookers/VueAppHooker.mjs'
 import { RoomHooker } from './hookers/RoomHooker.mjs'
 import { MysteryObjectHooker } from './hookers/MysteryObjectHooker.mjs'
 import { WorldMapHooker } from './hookers/WorldMapHooker.mjs'
@@ -31,6 +32,7 @@ async function main() {
   let pimp = new Pimp()
 
   let hookers = [
+    new VueAppHooker(),
     new JoinMatchHooker(prompter),
     new MysteryObjectHooker(),
     new WorldMapHooker(),

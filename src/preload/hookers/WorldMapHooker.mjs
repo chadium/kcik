@@ -1,45 +1,47 @@
 export class WorldMapHooker {
   constructor() {
-    this._thatMysteryObject = null
+    this._game = null
   }
 
   hook(pimp) {
-    pimp.getApi('mystery').on('available', (object) => {
-      this._thatMysteryObject = object
+    let vueAppApi = pimp.getApi('vueApp')
+
+    vueAppApi.on('available', () => {
+      this._game = vueAppApi.getGameObject()
     })
 
     return {
       name: 'worldMap',
       api: {
         getAll: () => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
-          return this._thatMysteryObject.mWnwM.mWMnwN
+          return this._game.mWnwM.mWnwM.mWMnwN
         },
         getByMaterialName: (name) => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
-          return this._thatMysteryObject.mWnwM.mWMnwN.filter(obj => obj.mWMwN.name === name)
+          return this._game.mWnwM.mWnwM.mWMnwN.filter(obj => obj.mWMwN.name === name)
         },
         getByAudioName: (name) => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
-          return this._thatMysteryObject.mWnwM.mWMnwN.filter(obj => obj.audio === name)
+          return this._game.mWnwM.mWnwM.mWMnwN.filter(obj => obj.audio === name)
         },
         getUsedMaterials: () => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
           let found = new Set
 
-          this._thatMysteryObject.mWnwM.mWMnwN.forEach(obj => {
+          this._game.mWnwM.mWnwM.mWMnwN.forEach(obj => {
             if (obj.mWMwN.name !== undefined) {
               found.add(obj.mWMwN.name)
             }
@@ -48,24 +50,24 @@ export class WorldMapHooker {
           return [...found]
         },
         getUsedAudio: () => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
           let found = new Set
 
-          this._thatMysteryObject.mWnwM.mWMnwN.forEach(obj => found.add(obj.audio))
+          this._game.mWnwM.mWnwM.mWMnwN.forEach(obj => found.add(obj.audio))
 
           return [...found]
         },
         countEveryMaterial: () => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
           let found = {}
 
-          this._thatMysteryObject.mWnwM.mWMnwN.forEach(obj => {
+          this._game.mWnwM.mWnwM.mWMnwN.forEach(obj => {
             if (obj.mWMwN.name === undefined) {
               return
             }
@@ -80,13 +82,13 @@ export class WorldMapHooker {
           return found
         },
         countEveryAudio: () => {
-          if (this._thatMysteryObject === null) {
+          if (this._game === null) {
             return []
           }
 
           let found = {}
 
-          this._thatMysteryObject.mWnwM.mWMnwN.forEach(obj => {
+          this._game.mWnwM.mWnwM.mWMnwN.forEach(obj => {
             if (!found[obj.audio]) {
               found[obj.audio] = 0
             }

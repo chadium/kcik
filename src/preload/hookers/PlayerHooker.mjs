@@ -1,30 +1,37 @@
 export class PlayerHooker {
   constructor() {
-    this._playerEntity = null
+    this._userObject = null
+    this._gameObject = null
   }
 
   hook(pimp) {
-    pimp.getApi('mystery').on('available', (mysteryObject) => {
-      // Seems to be the player entity.
-      this._playerEntity = mysteryObject.WMmNw
+    let vueAppApi = pimp.getApi('vueApp')
+
+    vueAppApi.on('available', () => {
+      this._userObject = vueAppApi.getUserObject()
+      this._gameObject = vueAppApi.getGameObject()
     })
 
     return {
       name: 'player',
       api: {
         getName: () => {
-          if (this._playerEntity === null) {
+          if (this._userObject === null) {
             throw new Error('No player info.')
           }
 
-          return this._playerEntity._components[50].name
+          return this._gameObject.WmNMwn.name
         },
-        kills: () => {
-          if (this._playerEntity === null) {
+        getKills: () => {
+          if (this._userObject === null) {
             throw new Error('No player info.')
           }
 
-          return this._playerEntity._components[50].kills
+          if (this._userObject.stats.kills === '~') {
+            return 0
+          }
+
+          return this._userObject.stats.kills
         },
       }
     }
