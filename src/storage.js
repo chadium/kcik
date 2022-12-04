@@ -28,7 +28,7 @@ exports.FileStorage = class FileStorage {
     await fs.promises.mkdir(directory, { recursive: true })
 
     try {
-      let data = await fs.promises.readFile(fullPath, "binary")
+      let data = await fs.promises.readFile(fullPath)
       return Buffer.from(data)
     } catch (e) {
       if (e.message.startsWith('ENOENT')) {
