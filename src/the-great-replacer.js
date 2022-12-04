@@ -84,7 +84,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
   }
 
   async _replacedFile(pathname, originalContents) {
-    let version = 'v31'
+    let version = 'v32'
     pathname = `/${version}${pathname}`
 
     try {
@@ -126,7 +126,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
         miscellaneous: {
           beautify: false,
           simplifyProperties: false,
-          renameHexIdentifiers: false,
+          renameHexIdentifiers: true,
         },
       })
     } catch (e) {
