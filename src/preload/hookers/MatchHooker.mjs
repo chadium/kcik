@@ -14,81 +14,85 @@ export class MatchHooker {
 
     roomApi.on('joined', ({ room }) => {
       room.onStateChange((e) => {
-        let ownName = playerApi.getName()
+        try {
+          let ownName = playerApi.getName()
 
-        let found = Object.assign({}, this._found)
+          let found = Object.assign({}, this._found)
 
-        for (let player of e.players.values()) {
-          if (player.sessionId in found) {
-            delete found[player.sessionId]
-            continue 
+          for (let player of e.players.values()) {
+            if (player.sessionId in found) {
+              delete found[player.sessionId]
+              continue 
+            }
+
+            // New player.
+            this._found[player.sessionId] = player
+
+            try {
+              this._events.emit('playerJoin', {
+                player,
+                isSelf: player.name === ownName
+              })
+            } catch (e) {
+              log.bad('MatchHooker', e)
+            }
+
+            // let l
+            // Object.defineProperty(player.death, 'onAdd', {
+            //   configurable: false,
+            //   get() {
+            //     return l
+            //   },
+            //   set(f) {
+            //     debugger
+            //     l = f
+            //   }
+            // });
+
+            player.listen('deaths', (current, previous) => {
+              console.log(`${player.name} got killed`)
+              this._events.emit('playerDeath', {
+                player,
+                current,
+                previous
+              })
+            })
+            player.listen('kills', (current, previous) => {
+              console.log(`${player.name} killed`)
+              this._events.emit('playerKill', {
+                player,
+                current,
+                previous
+              })
+            })
+            player.listen('score', (current, previous) => {
+              console.log(`${player.name} new score`, current)
+              this._events.emit('playerScore', {
+                player,
+                current,
+                previous
+              })
+            })
           }
 
-          // New player.
-          this._found[player.sessionId] = player
+          for (let sessionId in found) {
+            // Player left.
 
-          try {
-            this._events.emit('playerJoin', {
-              player,
-              isSelf: player.name === ownName
-            })
-          } catch (e) {
-            log.bad('MatchHooker', e)
+            let player = this._found[sessionId]
+
+            try {
+              this._events.emit('playerLeave', {
+                player, 
+                isSelf: player.name === ownName
+              })
+            } catch (e) {
+              log.bad(e)
+            }
+
+            delete this._found[sessionId]
           }
-
-          // let l
-          // Object.defineProperty(player.death, 'onAdd', {
-          //   configurable: false,
-          //   get() {
-          //     return l
-          //   },
-          //   set(f) {
-          //     debugger
-          //     l = f
-          //   }
-          // });
-
-          player.listen('deaths', (current, previous) => {
-            console.log(`${player.name} got killed`)
-            this._events.emit('playerDeath', {
-              player,
-              current,
-              previous
-            })
-          })
-          player.listen('kills', (current, previous) => {
-            console.log(`${player.name} killed`)
-            this._events.emit('playerKill', {
-              player,
-              current,
-              previous
-            })
-          })
-          player.listen('score', (current, previous) => {
-            console.log(`${player.name} new score`, current)
-            this._events.emit('playerScore', {
-              player,
-              current,
-              previous
-            })
-          })
-        }
-
-        for (let sessionId in found) {
-          // Player left.
-
-          let player = this._found[sessionId]
-
-          try {
-            this._events.emit('playerLeave', {
-              player, 
-              isSelf: player.name === ownName
-            })
-          } catch (e) {
-            log.bad(e)
-          }
-
-          delete this._found[sessionId]
+        } catch (e) {
+          console.error(e)
         }
       })
     })

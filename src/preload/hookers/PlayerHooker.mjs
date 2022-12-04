@@ -39,6 +39,10 @@ export class PlayerHooker {
       throw new Error('No player info.')
     }
 
+    if (this._gameObject.players === null) {
+      throw new Error('No player info.')
+    }
+
     let player = this._gameObject.players[this._gameObject.mySessionId]
 
     if (player === null) {
