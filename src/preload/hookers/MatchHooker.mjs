@@ -92,7 +92,7 @@ export class MatchHooker {
             delete this._found[sessionId]
           }
         } catch (e) {
-          console.error(e)
+          log.bad('MatchHooker', e)
         }
       })
     })
