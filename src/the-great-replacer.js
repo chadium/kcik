@@ -84,7 +84,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
   }
 
   async _replacedFile(pathname, originalContents) {
-    let version = 'v30'
+    let version = 'v31'
     pathname = `/${version}${pathname}`
 
     try {
@@ -107,25 +107,31 @@ exports.TheGreatReplacer = class TheGreatReplacer {
   }
 
   _deobfuscate(contents) {
-    let code = deobfuscate(contents.toString(), {
-      arrays: {
-        unpackArrays: true,
-        removeArrays: true,
-      },
-      proxyFunctions: {
-        replaceProxyFunctions: false,
-        removeProxyFunctions: false,
-      },
-      expressions: {
-        simplifyExpressions: true,
-        removeDeadBranches: false,
-      },
-      miscellaneous: {
-        beautify: false,
-        simplifyProperties: false,
-        renameHexIdentifiers: false,
-      },
-    })
+    let code = contents.toString()
+
+    try {
+      code = deobfuscate(code, {
+        arrays: {
+          unpackArrays: true,
+          removeArrays: true,
+        },
+        proxyFunctions: {
+          replaceProxyFunctions: false,
+          removeProxyFunctions: false,
+        },
+        expressions: {
+          simplifyExpressions: true,
+          removeDeadBranches: false,
+        },
+        miscellaneous: {
+          beautify: false,
+          simplifyProperties: false,
+          renameHexIdentifiers: false,
+        },
+      })
+    } catch (e) {
+      console.warn(e)
+    }
 
     return prettier.format(code, { semi: true, parser: "babel", charset: 'utf-8' });
   }
