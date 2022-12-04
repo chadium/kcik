@@ -101,3 +101,18 @@ export function findValue(obj, value) {
 
   return found
 }
+
+export function debugAccess(o, propName) {
+  let storage = o[propName]
+
+  Object.defineProperty(o, propName, {
+    configurable: true,
+    set(v) {
+      storage = v
+      debugger
+    },
+    get() {
+      return storage
+    }
+  })
+}

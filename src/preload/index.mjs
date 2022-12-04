@@ -11,7 +11,7 @@ import { MatchHooker } from './hookers/MatchHooker.mjs'
 import { CustomTeamDeathMatchHooker } from './hookers/CustomTeamDeathMatchHooker.mjs'
 import { CustomTagMatchHooker } from './hookers/CustomTagMatchHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/SniffRoomMessagesHooker.mjs'
-import { findValue } from './object-utils.mjs'
+import { findValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
 
 function patchSoftlock() {
@@ -57,6 +57,7 @@ async function main() {
 
   // Useful tools.
   window.findValue = findValue
+  window.debugAccess = debugAccess
   window.pimp = pimp
 }
 
