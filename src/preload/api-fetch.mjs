@@ -58,11 +58,30 @@ export async function apiFetch({
   }
 
   try {
-    let response = await fetch(url, {
-      method,
-      headers,
-      body,
-      keepalive: false
+    let request = new XMLHttpRequest();
+    request.open(method, url)
+    for (let [name, value] of Object.entries(headers)) {
+      request.setRequestHeader(name, value)
+    }
+    request.send(body)
+
+    let response = await new Promise((resolve, reject) => {
+      request.onreadystatechange = () => {
+        if (request.readyState === request.DONE) {
+          resolve({
+            status: request.status,
+            ok: request.status >= 200 && request.status <= 299,
+            headers: {
+              get(name) {
+                return request.getResponseHeader(name)
+              }
+            },
+            async json() {
+              return JSON.parse(request.responseText)
+            }
+          })
+        }
+      }
     })
 
     if (response.ok) {

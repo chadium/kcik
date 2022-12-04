@@ -58,7 +58,7 @@ export default function TagRanking({ players, it, show }) {
         <div className="tag-ranking__players">
           {finalPlayers.map(player => {
             return (
-              <div>#{player.position} {player.name}: {hhmmss(player.time)} {player.it ? "(it)" : ""}</div>
+              <div key={player.name}>#{player.position} {player.name}: {hhmmss(player.time)} {player.it ? "(it)" : ""}</div>
             )
           })}
         </div>

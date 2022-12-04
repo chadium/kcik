@@ -33,6 +33,26 @@ export async function matchAddScore(name, amount) {
   })
 }
 
+export async function tagPlayerAdd(name) {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/tag/players/add',
+    bodyData: {
+      name
+    }
+  })
+}
+
+export async function tagPlayerRemove(name) {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/tag/players/remove',
+    bodyData: {
+      name
+    }
+  })
+}
+
 export async function tagSetIt(name) {
   await apiFetch({
     method: 'POST',
@@ -40,5 +60,19 @@ export async function tagSetIt(name) {
     bodyData: {
       name
     }
+  })
+}
+
+export async function tagRemoveIt() {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/tag/players/it/remove'
+  })
+}
+
+export async function tagReset() {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/tag/reset'
   })
 }

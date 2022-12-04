@@ -37,7 +37,8 @@ export class SniffRoomMessagesHooker {
     }
     this._onLeaved = ({ room }) => {
       for (let [name, cb] of Object.entries(this._registered)) {
-        room.onMessageHandlers.off(room.getMessageHandlerKey(known[name]), cb)
+        // There is no off method. What can I do?
+        //room.onMessageHandlers.off(room.getMessageHandlerKey(known[name]), cb)
         delete this._registered[name]
       }
     }

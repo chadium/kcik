@@ -13,6 +13,8 @@ export class MatchHooker {
     let roomApi = pimp.getApi('room')
 
     roomApi.on('joined', ({ room }) => {
+      this._events.emit('matchJoin', {})
+
       room.onStateChange((e) => {
         try {
           let found = Object.assign({}, this._found)
@@ -28,7 +30,7 @@ export class MatchHooker {
 
             try {
               this._events.emit('playerJoin', {
-                player
+                playerName: player.name
               })
             } catch (e) {
               log.bad('MatchHooker', e)
@@ -79,7 +81,7 @@ export class MatchHooker {
 
             try {
               this._events.emit('playerLeave', {
-                player
+                playerName: player.name
               })
             } catch (e) {
               log.bad(e)
@@ -99,7 +101,7 @@ export class MatchHooker {
 
         try {
           this._events.emit('playerLeave', {
-            player
+            playerName: player.name
           })
         } catch (e) {
           log.bad(e)
@@ -107,6 +109,8 @@ export class MatchHooker {
 
         delete this._found[sessionId]
       }
+
+      this._events.emit('matchLeave', {})
     })
 
     let killbarApi = pimp.getApi('killbar')
@@ -128,6 +132,9 @@ export class MatchHooker {
     return {
       name: 'match',
       api: {
+        getPlayerNames: () => {
+          return Object.values(this._found).map(p => p.name)
+        },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }
