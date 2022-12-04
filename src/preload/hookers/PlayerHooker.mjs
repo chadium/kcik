@@ -16,28 +16,35 @@ export class PlayerHooker {
       name: 'player',
       api: {
         getName: () => {
-          if (this._userObject === null) {
-            throw new Error('No player info.')
-          }
-
-          // TODO
-          return 'Unknown'
+          return this._getPlayer().name
         },
         getKills: () => {
-          if (this._userObject === null) {
-            throw new Error('No player info.')
-          }
-
-          if (this._userObject.stats.kills === '~') {
-            return 0
-          }
-
-          return this._userObject.stats.kills
+          return this._getPlayer().hits
+        },
+        getDeaths: () => {
+          return this._getPlayer().deaths
+        },
+        getScore: () => {
+          return this._getPlayer().score
         },
       }
     }
   }
 
   unhook(pimp) {
+  }
+
+  _getPlayer() {
+    if (this._gameObject === null) {
+      throw new Error('No player info.')
+    }
+
+    let player = this._gameObject.players[this._gameObject.mySessionId]
+
+    if (player === null) {
+      throw new Error('No player info.')
+    }
+
+    return player
   }
 }
