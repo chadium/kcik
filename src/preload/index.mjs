@@ -11,6 +11,7 @@ import { MatchHooker } from './hookers/MatchHooker.mjs'
 import { CustomTeamDeathMatchHooker } from './hookers/CustomTeamDeathMatchHooker.mjs'
 import { CustomTagMatchHooker } from './hookers/CustomTagMatchHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/SniffRoomMessagesHooker.mjs'
+import { KillBarHooker } from './hookers/KillBarHooker.mjs'
 import { findValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
 
@@ -41,6 +42,7 @@ async function main() {
     new MatchRankingHooker(),
     new TagRankingHooker(),
     new PlayerHooker(),
+    new KillBarHooker(),
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),
     new CustomTagMatchHooker(),

@@ -15,8 +15,6 @@ export class MatchHooker {
     roomApi.on('joined', ({ room }) => {
       room.onStateChange((e) => {
         try {
-          let ownName = playerApi.getName()
-
           let found = Object.assign({}, this._found)
 
           for (let player of e.players.values()) {
@@ -30,8 +28,7 @@ export class MatchHooker {
 
             try {
               this._events.emit('playerJoin', {
-                player,
-                isSelf: player.name === ownName
+                player
               })
             } catch (e) {
               log.bad('MatchHooker', e)
@@ -50,25 +47,25 @@ export class MatchHooker {
             // });
 
             player.listen('deaths', (current, previous) => {
-              console.log(`${player.name} got killed`)
+              log.info('Match', `${player.name} got killed`)
               this._events.emit('playerDeath', {
-                player,
+                playerName: player.name,
                 current,
                 previous
               })
             })
             player.listen('kills', (current, previous) => {
-              console.log(`${player.name} killed`)
+              log.info('Match', `${player.name} killed`)
               this._events.emit('playerKill', {
-                player,
+                playerName: player.name,
                 current,
                 previous
               })
             })
             player.listen('score', (current, previous) => {
-              console.log(`${player.name} new score`, current)
+              log.info('Match', `${player.name} new score`, current)
               this._events.emit('playerScore', {
-                player,
+                playerName: player.name,
                 current,
                 previous
               })
@@ -82,8 +79,7 @@ export class MatchHooker {
 
             try {
               this._events.emit('playerLeave', {
-                player, 
-                isSelf: player.name === ownName
+                player
               })
             } catch (e) {
               log.bad(e)
@@ -98,15 +94,12 @@ export class MatchHooker {
     })
 
     roomApi.on('leaved', ({ room }) => {
-      let ownName = playerApi.getName()
-      
       for (let sessionId in this._found) {
         let player = this._found[sessionId]
 
         try {
           this._events.emit('playerLeave', {
-            player, 
-            isSelf: player.name === ownName
+            player
           })
         } catch (e) {
           log.bad(e)
@@ -114,6 +107,22 @@ export class MatchHooker {
 
         delete this._found[sessionId]
       }
+    })
+
+    let killbarApi = pimp.getApi('killbar')
+
+    killbarApi.on('kill', ({ deadPlayerName, killerPlayerName, headshot }) => {
+      this._events.emit('kill', {
+        deadPlayerName,
+        killerPlayerName,
+        headshot
+      })
+    })
+
+    killbarApi.on('suicide', ({ deadPlayerName }) => {
+      this._events.emit('suicide', {
+        deadPlayerName
+      })
     })
 
     return {

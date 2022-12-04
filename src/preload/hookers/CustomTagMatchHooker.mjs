@@ -5,9 +5,6 @@ import * as log from '../log.mjs'
 export class CustomTagMatchHooker {
   constructor() {
     this._playerEntity = null
-
-    // Will need this to keep track of who killed who.
-    this._playerLastKiller = null
   }
 
   hook(pimp) {
@@ -15,15 +12,7 @@ export class CustomTagMatchHooker {
 
     let matchApi = pimp.getApi('match')
 
-    matchApi.on('playerDeath', async (e) => {
-      let lastKiller = this._playerLastKiller
-
-      if (lastKiller === null) {
-        // Can't do much with this info.
-        log.warn('CustomTagMatch', 'No idea who the last killer was.')
-        return
-      }
-
+    matchApi.on('kill', async ({ killerPlayerName, deadPlayerName }) => {
       let it = await userApi.tagGetIt()
 
       if (it === null) {
@@ -31,13 +20,30 @@ export class CustomTagMatchHooker {
         return
       }
 
-      if (it.name === e.player.name) {
-        log.warn('CustomTagMatch', `${lastKiller} is now it.`)
-        await adminApi.tagSetIt(lastKiller)
+      if (it.name === deadPlayerName) {
+        log.info('CustomTagMatch', `${killerPlayerName} is now it.`)
+        await adminApi.tagSetIt(killerPlayerName)
       }
     })
-    matchApi.on('playerKill', (e) => {
-      this._playerLastKiller = e.player.name
+    matchApi.on('suicide', async ({ deadPlayerName }) => {
+      let it = await userApi.tagGetIt()
+
+      if (it === null) {
+        // Can't really do much.
+        return
+      }
+
+      // TODO: remove tag and tag someone else at random
+    })
+    matchApi.on('playerLeave', async ({ deadPlayerName }) => {
+      let it = await userApi.tagGetIt()
+
+      if (it === null) {
+        // Can't really do much.
+        return
+      }
+
+      // TODO: remove tag and tag someone else at random
     })
   }
 
