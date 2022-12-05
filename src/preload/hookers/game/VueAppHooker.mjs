@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3'
-import { waitForElm } from '../dom-utils.mjs'
-import { waitForProperty } from '../object-utils.mjs'
+import { waitForElm } from '../../dom-utils.mjs'
+import { waitForProperty } from '../../object-utils.mjs'
 
 export class VueAppHooker {
   constructor() {

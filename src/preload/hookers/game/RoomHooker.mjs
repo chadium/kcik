@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3'
-import { waitForProperty } from '../object-utils.mjs'
-import * as log from '../log.mjs'
+import { waitForProperty } from '../../object-utils.mjs'
+import * as log from '../../log.mjs'
 
 class State {
   available(game) {}

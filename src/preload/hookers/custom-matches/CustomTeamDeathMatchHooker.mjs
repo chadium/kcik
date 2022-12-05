@@ -1,5 +1,5 @@
-import * as adminApi from '../admin-api.mjs'
-import * as log from '../log.mjs'
+import * as adminApi from '../../admin-api.mjs'
+import * as log from '../../log.mjs'
 
 export class CustomTeamDeathMatchHooker {
   constructor() {

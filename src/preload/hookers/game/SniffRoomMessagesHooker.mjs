@@ -1,4 +1,4 @@
-import * as log from '../log.mjs'
+import * as log from '../../log.mjs'
 
 let known = {
   "metadata": 0,

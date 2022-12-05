@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import TagRanking from '../components/TagRanking.jsx'
-import * as userApi from '../user-api.mjs'
-import * as log from '../log.mjs'
+import TagRanking from '../../components/TagRanking.jsx'
+import * as userApi from '../../user-api.mjs'
+import * as log from '../../log.mjs'
 
 export class TagRankingHooker {
   constructor() {

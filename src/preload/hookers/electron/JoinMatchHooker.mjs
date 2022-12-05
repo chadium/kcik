@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron'
-import { PrompterCancelError } from '../Prompter.mjs'
-import * as log from '../log.mjs'
+import { PrompterCancelError } from '../../Prompter.mjs'
+import * as log from '../../log.mjs'
 
 export class JoinMatchHooker {
   constructor(prompter) {

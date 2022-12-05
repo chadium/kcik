@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3'
-import * as log from '../log.mjs'
+import * as log from '../../log.mjs'
 
 export class MysteryObjectHooker {
   constructor() {

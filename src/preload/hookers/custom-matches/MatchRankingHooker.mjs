@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import MatchRanking from '../components/MatchRanking.jsx'
-import * as userApi from '../user-api.mjs'
-import * as log from '../log.mjs'
+import MatchRanking from '../../components/MatchRanking.jsx'
+import * as userApi from '../../user-api.mjs'
+import * as log from '../../log.mjs'
 
 export class MatchRankingHooker {
   constructor() {

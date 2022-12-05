@@ -1,8 +1,8 @@
-import * as adminApi from '../admin-api.mjs'
-import * as userApi from '../user-api.mjs'
-import * as log from '../log.mjs'
-import * as randUtils from '../rand-utils.mjs'
-import * as arrayUtils from '../array-utils.mjs'
+import * as adminApi from '../../admin-api.mjs'
+import * as userApi from '../../user-api.mjs'
+import * as log from '../../log.mjs'
+import * as randUtils from '../../rand-utils.mjs'
+import * as arrayUtils from '../../array-utils.mjs'
 
 class State {
   async matchJoin() {

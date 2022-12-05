@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3'
-import * as log from '../log.mjs'
-import * as arrayUtils from '../array-utils.mjs'
+import * as log from '../../log.mjs'
+import * as arrayUtils from '../../array-utils.mjs'
 
 export class KillBarHooker {
   constructor() {
