@@ -46,7 +46,7 @@ async function main() {
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),
     new CustomTagMatchHooker(),
-    new SniffRoomMessagesHooker(),
+    //new SniffRoomMessagesHooker(),
   ]
 
   for (let hooker of hookers) {
