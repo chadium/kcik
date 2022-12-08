@@ -7,7 +7,7 @@ export default function Box({ children }) {
   }, [])
 
   return (
-    <div className="box">
+    <div className="box boomer-dark">
       {children}
     </div>
   )

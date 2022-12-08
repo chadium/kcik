@@ -21,6 +21,7 @@
 .check {
   width: var(--boomer-control-height);
   height: var(--boomer-control-height);
+  border-radius: var(--boomer-border-radius);
   text-align: center;
   line-height: var(--boomer-control-height);
   font-size: var(--boomer-control-height);
