@@ -86,7 +86,7 @@ export default function ComboBox({ options, value, onChange }) {
   }
 
   return (
-    <div className={['boomer-bright', styles.locals.container].join()}>
+    <div className={[styles.locals.container].join(' ')}>
       <label
         className={styles.locals.button}
         ref={setReferenceElement}

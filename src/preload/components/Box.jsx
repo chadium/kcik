@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import styles from "./Box.lazy.css"
+import styles from "./Box.lazy.module.css"
 
 export default function Box({ children }) {
   useEffect(() => {
@@ -7,7 +7,8 @@ export default function Box({ children }) {
   }, [])
 
   return (
-    <div className="box boomer-dark">
+    <div className={[styles.locals.container, 'boomer-dark'].join(' ')}>
+      <div className={styles.locals.bg}></div>
       {children}
     </div>
   )

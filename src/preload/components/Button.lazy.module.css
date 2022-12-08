@@ -1,6 +1,6 @@
 .container {
   font-size: var(--boomer-font-size-normal);
-  font-weight: bold;
+  font-weight: 600;
   color: var(--boomer-action-text-color);
   background-color: var(--boomer-action-bg-color);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -8,4 +8,17 @@
   line-height: var(--boomer-control-height);
   padding: 0 var(--boomer-safe-space);
   cursor: pointer;
+
+  position: relative;
+}
+
+.foreground {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+}
+
+.container:active > .foreground {
+  opacity: 0.1;
 }

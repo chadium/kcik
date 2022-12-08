@@ -7,6 +7,9 @@ export default function Button({ theme = 'ok', children, onClick }) {
   }, [])
 
   return (
-    <button className={[styles.locals.container, `boomer-theme--${theme}`].join(' ')} onClick={onClick}>{children}</button>
+    <button className={[styles.locals.container, `boomer-theme--${theme}`].join(' ')} onClick={onClick}>
+      {children}
+      <div className={styles.locals.foreground}></div>
+    </button>
   )
 }
