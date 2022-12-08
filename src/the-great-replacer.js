@@ -68,7 +68,7 @@ exports.TheGreatReplacer = class TheGreatReplacer {
 
       return { contents, path: this._cacheStorage.fullPath(pathname) }
     } catch (e) {
-      let message = `${url} was not cached`
+      let message = `${pathname} was not cached`
       if (e instanceof FileNotFoundError) {
         console.warn(message)
       } else {
