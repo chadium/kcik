@@ -108,6 +108,41 @@ export class RoomHooker {
         getPlayerBySessionId: (sessionId) => {
           // TODO
         },
+        exitRoom: async () => {
+          if (this._currentRoom === null) {
+            // There is nothing to do.
+            return
+          }
+
+          let vueApp = vueAppApi.getVueApp()
+          await vueApp.$store.dispatch('game/exitGame')
+
+          // We could also call the leave method but unlike game/exitGame it
+          // just sends a message to the server and does not wait for the
+          // room to actually stop existing.
+          //this._currentRoom.leave()
+        },
+        createRoom: async (options) => {
+          let vueApp = vueAppApi.getVueApp()
+
+          options.applyToKirkaGame(vueAppApi.getGameObject())
+
+          if (this._game.room) {
+            // Must leave current room otherwise game/enterGame will do nothing.
+            await vueApp.$store.dispatch('game/exitGame')
+          }
+
+          await vueApp.$store.dispatch('game/enterGame')
+          if (this._game.room) {
+            return this._game.room.id
+          } else {
+            // Unfortunately the error message is sent to a notification
+            // module. We don't have access to the error object. The
+            // most we could do is hook into the notification module
+            // and retrieve the error message.
+            throw new Error('Failed to join room.')
+          }
+        },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }

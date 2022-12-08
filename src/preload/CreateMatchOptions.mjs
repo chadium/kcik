@@ -66,5 +66,7 @@ export class CreateMatchOptions {
     o.privacy = this._privacy
 
     o.serverName = this._name
+
+    o.searchingRoom = false
   }
 }

@@ -8,9 +8,8 @@ import { TagRankingHooker } from './hookers/custom-matches/TagRankingHooker.mjs'
 import { JoinMatchHooker } from './hookers/electron/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/game/PlayerHooker.mjs'
 import { MatchHooker } from './hookers/game/MatchHooker.mjs'
-import { CustomTeamDeathMatchHooker } from './hookers/custom-matches/CustomTeamDeathMatchHooker.mjs'
-import { CustomTagMatchHooker } from './hookers/custom-matches/CustomTagMatchHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/game/SniffRoomMessagesHooker.mjs'
+import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
 import { findValue, debugAccess } from './object-utils.mjs'
@@ -45,10 +44,9 @@ async function main() {
     new MatchRankingHooker(),
     new TagRankingHooker(),
     new PlayerHooker(),
+    new SoundHooker(),
     new KillBarHooker(),
     new MatchHooker(),
-    new CustomTeamDeathMatchHooker(),
-    new CustomTagMatchHooker(),
     new CreateCustomMatchHooker(),
     //new SniffRoomMessagesHooker(),
   ]
