@@ -1,0 +1,13 @@
+.container + .container {
+  margin-top: 20px;
+}
+
+.label {
+  font-size: var(--boomer-font-size-normal);
+  text-transform: uppercase;
+  color: var(--boomer-special-text-color);
+}
+
+.content {
+  margin-top: var(--boomer-safe-space);
+}

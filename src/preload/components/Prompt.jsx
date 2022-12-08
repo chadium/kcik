@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import styles from "./Prompt.lazy.css"
+import styles from "./Prompt.lazy.module.css"
+import InputText from "./InputText.jsx"
 import Button from "./Button.jsx"
-import Box from "./Box.jsx"
+import ModalBox from "./ModalBox.jsx"
 
 export default function Prompt({ show, title, placeholder, buttons, onEnter, onCancel }) {
   useEffect(() => {
@@ -29,11 +30,12 @@ export default function Prompt({ show, title, placeholder, buttons, onEnter, onC
       buttons = [
         {
           text: 'OK',
-          action: 'accept', 
+          action: 'accept',
         },
         {
           text: 'Cancel',
-          action: 'reject', 
+          action: 'reject',
+          theme: 'other',
         },
       ]
     }
@@ -49,33 +51,22 @@ export default function Prompt({ show, title, placeholder, buttons, onEnter, onC
       realButtons.push({
         children: button.text,
         onClick: map[button.action],
+        theme: button.theme
       })
     }
 
     return realButtons
   }, [buttons, onAccept, onReject])
 
-  if (!show) {
-    return <></>
-  }
-
   return (
-    <div className="prompt">
-      <Box>
-        <div className="prompt__padding">
-          <div className="prompt__title">
-            {title}
-          </div>
+    <ModalBox show={show} onClose={onReject} title={title}>
+      <InputText placeholder={placeholder} value={input} onChange={setInput}/>
 
-          <div className="prompt__input">
-            <input placeholder={placeholder} value={input} onChange={(e) => setInput(e.target.value)}/>
-          </div>
+      <div className="boomer-p-t"></div>
 
-          <div className="prompt__actions">
-            {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
-          </div>
-        </div>
-      </Box>
-    </div>
+      <div className={styles.locals.actions}>
+        {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
+      </div>
+    </ModalBox>
   )
 }

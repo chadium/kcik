@@ -9,13 +9,21 @@ module.exports = [
       rules: [
         {
           test: /\.css$/i,
-          exclude: /\.lazy\.css$/i,
+          exclude: [/\.lazy\.css$/i, /\.lazy\.module\.css$/i],
           use: ["style-loader", "css-loader"],
         },
         {
           test: /\.lazy\.css$/i,
+          exclude: /\.lazy\.module\.css$/i,
           use: [
-            { loader: "style-loader", options: { injectType: "lazyStyleTag" } },
+            { loader: "style-loader", options: { injectType: "lazySingletonStyleTag" } },
+            "css-loader",
+          ],
+        },
+        {
+          test: /\.lazy\.module\.css$/i,
+          use: [
+            { loader: "style-loader", options: { injectType: "lazySingletonStyleTag" } },
             "css-loader",
           ],
         },
@@ -36,7 +44,10 @@ module.exports = [
     ],
     output: {
       path: __dirname + '/dist/preload',
-      filename: 'index.js'
+      filename: 'index.js',
+      // Some stylesheet in react-select references a resource using url() so I need
+      // to explicitly define this.
+      publicPath: '/',
     }
   }
 ];

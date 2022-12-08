@@ -80,6 +80,10 @@ class WinMan {
     this._win.webContents.send('join-match')
   }
 
+  createCustomMatch() {
+    this._win.webContents.send('create-custom-match')
+  }
+
   _registerShortcuts() {
     electronLocalshortcut.register(this._win, "Escape", () => this.unlockPointer());
     electronLocalshortcut.register(this._win, 'Ctrl+R', () => {
@@ -106,6 +110,12 @@ function buildMenu(wm) {
           label: 'Join match',
           click: () => {
             wm.joinMatch()
+          }
+        },
+        {
+          label: 'Create custom match',
+          click: () => {
+            wm.createCustomMatch()
           }
         },
         { type: 'separator' },

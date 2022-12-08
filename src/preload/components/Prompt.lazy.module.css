@@ -1,0 +1,8 @@
+.actions {
+  display: flex;
+  gap: var(--boomer-safe-space);
+}
+
+.actions > * {
+  flex: 1;
+}

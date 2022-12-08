@@ -1,0 +1,46 @@
+.button {
+  font-size: var(--boomer-font-size-normal);
+  display: flex;
+  cursor: pointer;
+  color: var(--boomer-text-color);
+  background: var(--boomer-bg-color);
+  border: var(--boomer-control-border);
+  border-radius: var(--boomer-border-radius);
+  line-height: var(--boomer-control-height);
+  padding: 0 var(--boomer-safe-space);
+}
+
+.prompt {
+  flex: 1 1;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.arrow {
+  flex: 0 0;
+  margin-left: var(--boomer-safe-space);
+  pointer-events: none;
+}
+
+.list {
+  font-size: var(--boomer-font-size-normal);
+  width: 100%;
+  max-height: 100px;
+  color: var(--boomer-text-color);
+  background: var(--boomer-bg-color);
+  border-radius: var(--boomer-border-radius);
+  padding: calc(var(--boomer-safe-space) / 2) 0;
+  overflow-y: auto;
+}
+
+.item {
+  padding: calc(var(--boomer-safe-space) / 2) var(--boomer-safe-space);
+  cursor: pointer;
+}
+
+.item:hover,
+.item.selected {
+  background-color: var(--boomer-bg-select-color)
+}

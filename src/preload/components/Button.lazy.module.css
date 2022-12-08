@@ -1,0 +1,11 @@
+.container {
+  font-size: var(--boomer-font-size-normal);
+  font-weight: bold;
+  color: var(--boomer-action-text-color);
+  background-color: var(--boomer-action-bg-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--boomer-border-radius);
+  line-height: var(--boomer-control-height);
+  padding: 0 var(--boomer-safe-space);
+  cursor: pointer;
+}

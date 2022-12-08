@@ -1,0 +1,13 @@
+.container + .container {
+  margin-top: var(--boomer-safe-space);
+}
+
+.container {
+  display: flex;
+}
+
+.label {
+  flex: 1;
+  font-size: var(--boomer-font-size-normal);
+  margin-right: var(--boomer-safe-space);
+}

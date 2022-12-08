@@ -1,0 +1,39 @@
+.container {
+  font-size: var(--boomer-font-size-normal);
+  display: inline-flex;
+  height: var(--boomer-control-height);
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.container > input {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.label {
+  padding-left: calc(var(--boomer-safe-space) / 2);
+}
+
+.check {
+  width: var(--boomer-control-height);
+  height: var(--boomer-control-height);
+  text-align: center;
+  line-height: var(--boomer-control-height);
+  font-size: var(--boomer-control-height);
+}
+
+.checked {
+  background-color: var(--boomer-action-bg-color);
+}
+.checked:before {
+  content: "✓";
+  color: var(--boomer-action-text-color);
+}
+
+.unchecked {
+  border: 2px solid var(--boomer-action-bg-color);
+}

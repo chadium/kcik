@@ -1,12 +1,12 @@
 import React, { useEffect} from 'react'
-import styles from "./Button.lazy.css"
+import styles from "./Button.lazy.module.css"
 
-export default function Button({ children, onClick }) {
+export default function Button({ theme = 'ok', children, onClick }) {
   useEffect(() => {
     styles.use()
   }, [])
 
   return (
-    <button onClick={onClick}>{children}</button>
+    <button className={[styles.locals.container, `boomer-theme--${theme}`].join(' ')} onClick={onClick}>{children}</button>
   )
 }

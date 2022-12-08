@@ -12,8 +12,11 @@ import { CustomTeamDeathMatchHooker } from './hookers/custom-matches/CustomTeamD
 import { CustomTagMatchHooker } from './hookers/custom-matches/CustomTagMatchHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/game/SniffRoomMessagesHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
+import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
 import { findValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
+import styles from "./global.lazy.css"
+
 
 function patchSoftlock() {
   const original = Function.prototype.constructor
@@ -46,6 +49,7 @@ async function main() {
     new MatchHooker(),
     new CustomTeamDeathMatchHooker(),
     new CustomTagMatchHooker(),
+    new CreateCustomMatchHooker(),
     //new SniffRoomMessagesHooker(),
   ]
 
@@ -61,6 +65,10 @@ async function main() {
   window.findValue = findValue
   window.debugAccess = debugAccess
   window.pimp = pimp
+
+  addEventListener('DOMContentLoaded', (event) => {
+    styles.use()
+  })
 }
 
 main().catch((e) => {

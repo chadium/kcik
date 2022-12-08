@@ -1,0 +1,15 @@
+.container {
+  margin: calc(var(--boomer-safe-space) * -1);
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.container:empty {
+  display: none;
+}
+
+.container > * {
+  margin: var(--boomer-safe-space);
+  margin-right: 0;
+  margin-bottom: 0;
+}
