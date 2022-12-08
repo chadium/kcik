@@ -13,13 +13,25 @@ export class CreateCustomMatchHooker {
     const root = document.createElement('div')
     const reactRoot = ReactDOM.createRoot(root)
 
+    const vueAppApi = pimp.getApi('vueApp')
+
     addEventListener('DOMContentLoaded', (event) => {
       document.body.append(root)
     })
 
     ipcRenderer.on('create-custom-match', async () => {
       try {
-        let data = await new Promise((resolve, reject) => {
+        let gameObject = vueAppApi.getGameObject()
+        let maps = Object.values(gameObject.maps).map(w => ({
+          label: w.name,
+          value: w.type
+        }))
+        let weapons = Object.values(gameObject.weapons).map(w => ({
+          label: w.name,
+          value: w.type
+        }))
+
+        let options = await new Promise((resolve, reject) => {
           const onCreate = (e) => {
             resolve(e)
           }
@@ -28,8 +40,10 @@ export class CreateCustomMatchHooker {
             reject(new Error('Cancelled'))
           }
 
-          reactRoot.render(React.createElement(CreateCustomMatch, { show: true, onCreate, onCancel }, null))
+          reactRoot.render(React.createElement(CreateCustomMatch, { show: true, maps, weapons, onCreate, onCancel }, null))
         })
+
+        options.kirkaOptions.applyToKirkaGame(gameObject)
       } finally {
         reactRoot.render(React.createElement(CreateCustomMatch, { show: false }, null))
       }
