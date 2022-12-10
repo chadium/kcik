@@ -32,7 +32,7 @@ export class Pimp {
 
     let info = await hooker.hook(this)
 
-    this._hookers.push()
+    this._hookers.push(hooker)
 
     if (info) {
       // Expecting an API.
