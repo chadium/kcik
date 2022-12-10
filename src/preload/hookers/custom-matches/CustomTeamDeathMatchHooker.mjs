@@ -1,15 +1,16 @@
+import { Hooker } from '../../Pimp.mjs'
 import * as adminApi from '../../admin-api.mjs'
 import * as log from '../../log.mjs'
 
-export class CustomTeamDeathMatchHooker {
+export class CustomTeamDeathMatchHooker extends Hooker {
   constructor() {
     this._playerEntity = null
   }
 
-  hook(pimp) {
-    let playerApi = pimp.getApi('player')
+  hook() {
+    let playerApi = this.pimp.getApi('player')
 
-    let matchApi = pimp.getApi('match')
+    let matchApi = this.pimp.getApi('match')
 
     matchApi.on('playerJoin', (e) => {
       log.info('CustomTeamDeathMatch', 'playerJoin', e)
@@ -29,6 +30,6 @@ export class CustomTeamDeathMatchHooker {
     })
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }

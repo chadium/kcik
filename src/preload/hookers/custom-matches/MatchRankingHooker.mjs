@@ -1,3 +1,4 @@
+import { Hooker } from '../../Pimp.mjs'
 import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -5,8 +6,9 @@ import MatchRanking from '../../components/MatchRanking.jsx'
 import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
 
-export class MatchRankingHooker {
+export class MatchRankingHooker extends Hooker {
   constructor() {
+    super()
     this._show = false
     this._squads = []
     this._socket = null
@@ -14,8 +16,8 @@ export class MatchRankingHooker {
     this._reactRoot = null
   }
 
-  hook(pimp) {
-    const domApi = pimp.getApi('dom')
+  hook() {
+    const domApi = this.pimp.getApi('dom')
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
@@ -46,7 +48,7 @@ export class MatchRankingHooker {
     })
   }
 
-  unhook(pimp) {
+  unhook() {
     this._socket.close()
     this._socket = null
 

@@ -1,15 +1,17 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import { waitForElm } from '../../dom-utils.mjs'
 import { waitForProperty } from '../../object-utils.mjs'
 
-export class VueAppHooker {
+export class VueAppHooker extends Hooker {
   constructor() {
+    super()
     this._vueApp = null
     this._events = new EventEmitter()
   }
 
-  hook(pimp) {
-    const domApi = pimp.getApi('dom')
+  hook() {
+    const domApi = this.pimp.getApi('dom')
 
     domApi.on('bodyAvailable', async () => {
       let app = await waitForElm('app')

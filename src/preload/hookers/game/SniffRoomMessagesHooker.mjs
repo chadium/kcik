@@ -1,3 +1,4 @@
+import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 
 let known = {
@@ -22,8 +23,9 @@ let known = {
   "importMapDone": 18
 }
 
-export class SniffRoomMessagesHooker {
+export class SniffRoomMessagesHooker extends Hooker {
   constructor() {
+    super()
     this._registered = {}
     this._onJoined = ({ room }) => {
       log.info('SniffRoom', 'hook sniff')
@@ -44,15 +46,15 @@ export class SniffRoomMessagesHooker {
     }
   }
 
-  hook(pimp) {
-    let roomApi = pimp.getApi('room')
+  hook() {
+    let roomApi = this.pimp.getApi('room')
 
     roomApi.on('available', this._onJoined)
     roomApi.on('leaved', this._onLeaved)
   }
 
-  unhook(pimp) {
-    let roomApi = pimp.getApi('room')
+  unhook() {
+    let roomApi = this.pimp.getApi('room')
 
     roomApi.off('available', this._onJoined)
     roomApi.off('leaved', this._onLeaved)

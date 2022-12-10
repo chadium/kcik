@@ -1,11 +1,14 @@
-export class PlayerHooker {
+import { Hooker } from '../../Pimp.mjs'
+
+export class PlayerHooker extends Hooker {
   constructor() {
+    super()
     this._userObject = null
     this._gameObject = null
   }
 
-  hook(pimp) {
-    let vueAppApi = pimp.getApi('vueApp')
+  hook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
       this._userObject = vueAppApi.getUserObject()
@@ -31,7 +34,7 @@ export class PlayerHooker {
     }
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 
   _getPlayer() {

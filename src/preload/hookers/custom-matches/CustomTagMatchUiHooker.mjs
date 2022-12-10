@@ -1,12 +1,13 @@
-import { ipcRenderer } from 'electron'
+import { Hooker } from '../../Pimp.mjs'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import CustomTagMatchUi from '../../components/CustomTagMatchUi.jsx'
 import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
 
-export class CustomTagMatchUiHooker {
+export class CustomTagMatchUiHooker extends Hooker {
   constructor() {
+    super()
     this._players = []
     this._it = null
     this._rankingSocket = null
@@ -21,14 +22,14 @@ export class CustomTagMatchUiHooker {
     }
   }
 
-  async hook(pimp) {
-    const domApi = pimp.getApi('dom')
+  async hook() {
+    const domApi = this.pimp.getApi('dom')
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
 
-    let customTagMatchApi = pimp.getApi('customTagMatch')
+    let customTagMatchApi = this.pimp.getApi('customTagMatch')
 
     this._created = customTagMatchApi.getCreatedTimestamp()
     this._state = await customTagMatchApi.getState()
@@ -57,8 +58,8 @@ export class CustomTagMatchUiHooker {
     })
   }
 
-  unhook(pimp) {
-    let customTagMatchApi = pimp.getApi('customTagMatch')
+  unhook() {
+    let customTagMatchApi = this.pimp.getApi('customTagMatch')
     customTagMatchApi.off('stateChange', this._onStateChange)
 
     this._rankingSocket.close()

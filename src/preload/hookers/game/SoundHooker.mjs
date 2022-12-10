@@ -1,13 +1,15 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 
-export class SoundHooker {
+export class SoundHooker extends Hooker {
   constructor() {
+    super()
     this._events = new EventEmitter()
   }
 
-  hook(pimp) {
-    let vueAppApi = pimp.getApi('vueApp')
+  hook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
 
     return {
       name: 'sound',
@@ -29,6 +31,6 @@ export class SoundHooker {
     }
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }

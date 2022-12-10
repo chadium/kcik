@@ -1,9 +1,11 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 import * as arrayUtils from '../../array-utils.mjs'
 
-export class KillBarHooker {
+export class KillBarHooker extends Hooker {
   constructor() {
+    super()
     this._f = (e) => {
       if (e.killer === undefined) {
         log.info('KillBar', `${e.dead} has killed himself`)
@@ -26,8 +28,8 @@ export class KillBarHooker {
     this._events = new EventEmitter()
   }
 
-  hook(pimp) {
-    let vueAppApi = pimp.getApi('vueApp')
+  hook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
       let app = vueAppApi.getVueApp()
@@ -44,8 +46,8 @@ export class KillBarHooker {
     }
   }
 
-  unhook(pimp) {
-    let vueAppApi = pimp.getApi('vueApp')
+  unhook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
 
     let app = vueAppApi.getVueApp()
 

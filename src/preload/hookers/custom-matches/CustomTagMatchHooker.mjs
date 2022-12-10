@@ -1,4 +1,5 @@
 import EventEmitter from 'events'
+import { Hooker } from '../../Pimp.mjs'
 import * as adminApi from '../../admin-api.mjs'
 import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
@@ -142,8 +143,9 @@ class StateMatchActive extends State {
   }
 }
 
-export class CustomTagMatchHooker {
+export class CustomTagMatchHooker extends Hooker {
   constructor(match) {
+    super()
     this._events = new EventEmitter()
     this._state = new Machine({ base: State })
     this._state.hooker = this
@@ -169,10 +171,10 @@ export class CustomTagMatchHooker {
     }
   }
 
-  async hook(pimp) {
+  async hook() {
     this._state.start(new StateUnknown())
 
-    this._matchApi = pimp.getApi('match')
+    this._matchApi = this.pimp.getApi('match')
 
     this._matchApi.on('matchAvailable', this._onMatchJoin)
     this._matchApi.on('matchLeave', this._onMatchLeave)
@@ -192,7 +194,7 @@ export class CustomTagMatchHooker {
     }
   }
 
-  async unhook(pimp) {
+  async unhook() {
     this._matchApi.off('matchAvailable', this._onMatchJoin)
     this._matchApi.off('matchLeave', this._onMatchLeave)
     this._matchApi.off('playerJoin', this._onPlayerJoin)

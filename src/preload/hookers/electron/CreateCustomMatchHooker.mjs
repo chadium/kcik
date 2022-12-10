@@ -1,3 +1,4 @@
+import { Hooker } from '../../Pimp.mjs'
 import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -8,16 +9,17 @@ import { CustomTagMatchUiHooker } from '../custom-matches/CustomTagMatchUiHooker
 import * as adminApi from '../../admin-api.mjs'
 import * as log from '../../log.mjs'
 
-export class CreateCustomMatchHooker {
+export class CreateCustomMatchHooker extends Hooker {
   constructor() {
+    super()
     this._root = null
     this._reactRoot = null
   }
 
-  hook(pimp) {
-    const vueAppApi = pimp.getApi('vueApp')
-    const roomApi = pimp.getApi('room')
-    const domApi = pimp.getApi('dom')
+  hook() {
+    const vueAppApi = this.pimp.getApi('vueApp')
+    const roomApi = this.pimp.getApi('room')
+    const domApi = this.pimp.getApi('dom')
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
@@ -56,7 +58,7 @@ export class CreateCustomMatchHooker {
     })
   }
 
-  unhook(pimp) {
+  unhook() {
     this._reactRoot.unmount()
     this._root.remove()
   }

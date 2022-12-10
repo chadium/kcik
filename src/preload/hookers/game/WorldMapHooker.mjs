@@ -1,10 +1,13 @@
-export class WorldMapHooker {
+import { Hooker } from '../../Pimp.mjs'
+
+export class WorldMapHooker extends Hooker {
   constructor() {
+    super()
     this._game = null
   }
 
-  hook(pimp) {
-    let vueAppApi = pimp.getApi('vueApp')
+  hook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
       this._game = vueAppApi.getGameObject()
@@ -102,6 +105,6 @@ export class WorldMapHooker {
     }
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }

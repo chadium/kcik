@@ -1,13 +1,15 @@
+import { Hooker } from '../../Pimp.mjs'
 import { ipcRenderer } from 'electron'
 import { PrompterCancelError } from '../../Prompter.mjs'
 import * as log from '../../log.mjs'
 
-export class JoinMatchHooker {
+export class JoinMatchHooker extends Hooker {
   constructor(prompter) {
+    super()
     this._prompter = prompter
   }
 
-  hook(pimp) {
+  hook() {
     ipcRenderer.on('join-match', async () => {
       try {
         let buttons = [
@@ -35,6 +37,6 @@ export class JoinMatchHooker {
     })
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }

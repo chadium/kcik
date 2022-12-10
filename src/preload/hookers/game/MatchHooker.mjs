@@ -1,16 +1,18 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 
-export class MatchHooker {
+export class MatchHooker extends Hooker {
   constructor() {
+    super()
     this._matchObject = null
     this._found = {}
     this._events = new EventEmitter()
   }
 
-  hook(pimp) {
-    let playerApi = pimp.getApi('player')
-    let roomApi = pimp.getApi('room')
+  hook() {
+    let playerApi = this.pimp.getApi('player')
+    let roomApi = this.pimp.getApi('room')
 
     roomApi.on('joined', ({ room }) => {
       this._events.emit('matchJoin', {})
@@ -126,7 +128,7 @@ export class MatchHooker {
       this._events.emit('matchLeave', {})
     })
 
-    let killbarApi = pimp.getApi('killbar')
+    let killbarApi = this.pimp.getApi('killbar')
 
     killbarApi.on('kill', ({ deadPlayerName, killerPlayerName, headshot }) => {
       this._events.emit('kill', {
@@ -154,6 +156,6 @@ export class MatchHooker {
     }
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }

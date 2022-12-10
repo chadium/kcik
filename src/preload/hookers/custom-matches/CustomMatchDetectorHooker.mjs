@@ -1,4 +1,5 @@
 import deepEqual from 'deep-equal'
+import { Hooker } from '../../Pimp.mjs'
 import { CustomTeamDeathMatchHooker } from '../custom-matches/CustomTeamDeathMatchHooker.mjs'
 import { CustomTagMatchHooker } from '../custom-matches/CustomTagMatchHooker.mjs'
 import { CustomTagMatchUiHooker } from '../custom-matches/CustomTagMatchUiHooker.mjs'
@@ -76,13 +77,13 @@ class StatePlayingCustomMatch extends State {
     }
 
     for (let hooker of this.hookers) {
-      await this.machine.hooker._pimp.register(hooker)
+      await this.machine.hooker.pimp.register(hooker)
     }
   }
 
   async [MachineState.ON_LEAVE]() {
     for (let hooker of this.hookers) {
-      await this.machine.hooker._pimp.unregister(hooker)
+      await this.machine.hooker.pimp.unregister(hooker)
     }
 
     this.hookers.length = 0
@@ -110,21 +111,20 @@ class StatePlayingCustomMatch extends State {
   }
 }
 
-export class CustomMatchDetectorHooker {
+export class CustomMatchDetectorHooker extends Hooker {
   constructor() {
+    super()
     this._hookers = []
     this._matchSocket = null
     this._match = null
     this._state = new Machine({ base: State })
     this._state.hooker = this
-    this._pimp = null
   }
 
-  async hook(pimp) {
-    this._pimp = pimp
+  async hook() {
     await this._state.start(new StateIdle())
 
-    const roomApi = pimp.getApi('room')
+    const roomApi = this.pimp.getApi('room')
 
     roomApi.on('available', ({ room }) => {
       this._state.call('onRoomJoin', room)
@@ -144,7 +144,7 @@ export class CustomMatchDetectorHooker {
     })
   }
 
-  async unhook(pimp) {
+  async unhook() {
     await this._state.stop()
 
     this._matchSocket.close()

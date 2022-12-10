@@ -1,3 +1,4 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import { waitForProperty } from '../../object-utils.mjs'
 import * as log from '../../log.mjs'
@@ -76,16 +77,17 @@ class StateInRoom extends State {
   }
 }
 
-export class RoomHooker {
+export class RoomHooker extends Hooker {
   constructor() {
+    super()
     this._game = null
     this._currentRoom = null
     this._state = new StateUnknown(this)
     this._events = new EventEmitter()
   }
 
-  hook(pimp) {
-    let vueAppApi = pimp.getApi('vueApp')
+  hook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
       this._state.available(vueAppApi.getGameObject())
@@ -153,6 +155,6 @@ export class RoomHooker {
     }
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }

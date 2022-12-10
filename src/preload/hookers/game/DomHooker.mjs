@@ -1,3 +1,4 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import { Machine, MachineState } from '../../state-machine.mjs'
 import * as log from '../../log.mjs'
@@ -28,8 +29,9 @@ class StateWaiting extends MachineState {
   }
 }
 
-export class DomHooker {
+export class DomHooker extends Hooker {
   constructor() {
+    super()
     this._vueApp = null
     this._events = new EventEmitter()
     this._state = new Machine()
@@ -39,7 +41,7 @@ export class DomHooker {
     this._onRemove = []
   }
 
-  async hook(pimp) {
+  async hook() {
     if (document.body !== null) {
       log.info('Dom', 'Body element is already loaded')
       await this._state.start(new StateLoaded())
@@ -90,7 +92,7 @@ export class DomHooker {
     }
   }
 
-  async unhook(pimp) {
+  async unhook() {
     this._events.removeAllListeners()
 
     for (let onRemove of this._onRemove) {

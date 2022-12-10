@@ -1,12 +1,14 @@
+import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 
-export class MysteryObjectHooker {
+export class MysteryObjectHooker extends Hooker {
   constructor() {
+    super()
     this._thatMysteryObject = null
   }
 
-  hook(pimp) {
+  hook() {
     let events = new EventEmitter()
 
     events.on('newListener', (name, listener) => {
@@ -51,6 +53,6 @@ export class MysteryObjectHooker {
     }
   }
 
-  unhook(pimp) {
+  unhook() {
   }
 }
