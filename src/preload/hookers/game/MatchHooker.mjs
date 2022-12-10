@@ -14,6 +14,19 @@ export class MatchHooker {
 
     roomApi.on('joined', ({ room }) => {
       this._events.emit('matchJoin', {})
+    })
+
+    this._events.on('newListener', (name, listener) => {
+      if (name === 'matchAvailable') {
+        let room = roomApi.getRoom()
+        if (room !== null) {
+          listener({})
+        }
+      }
+    })
+
+    roomApi.on('available', ({ room }) => {
+      this._events.emit('matchAvailable', {})
 
       room.onStateChange((e) => {
         try {

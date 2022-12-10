@@ -51,7 +51,7 @@ export async function wsTeamDeathmatchRanking({ onConnect, onUpdate }) {
   }
 }
 
-export async function wsTagRanking({ onConnect, onUpdate }) {
+export function wsTagRanking({ onConnect, onUpdate }) {
   const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/tag/ranking`);
 
   socket.addEventListener('open', () => {
@@ -69,7 +69,7 @@ export async function wsTagRanking({ onConnect, onUpdate }) {
   }
 }
 
-export async function wsTagIt({ onConnect, onUpdate }) {
+export function wsTagIt({ onConnect, onUpdate }) {
   const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/tag/players/it`);
 
   socket.addEventListener('open', () => {
@@ -87,7 +87,7 @@ export async function wsTagIt({ onConnect, onUpdate }) {
   }
 }
 
-export async function wsMatch({ onConnect, onUpdate }) {
+export function wsMatch({ onConnect, onUpdate }) {
   const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match`);
 
   socket.addEventListener('open', () => {

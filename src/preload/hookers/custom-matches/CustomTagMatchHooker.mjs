@@ -167,7 +167,7 @@ export class CustomTagMatchHooker {
 
     this._matchApi = pimp.getApi('match')
 
-    this._matchApi.on('matchJoin', this._onMatchJoin)
+    this._matchApi.on('matchAvailable', this._onMatchJoin)
     this._matchApi.on('matchLeave', this._onMatchLeave)
     this._matchApi.on('playerJoin', this._onPlayerJoin)
     this._matchApi.on('playerLeave', this._onPlayerLeave)
@@ -185,7 +185,7 @@ export class CustomTagMatchHooker {
   }
 
   async unhook(pimp) {
-    this._matchApi.off('matchJoin', this._onMatchJoin)
+    this._matchApi.off('matchAvailable', this._onMatchJoin)
     this._matchApi.off('matchLeave', this._onMatchLeave)
     this._matchApi.off('playerJoin', this._onPlayerJoin)
     this._matchApi.off('playerLeave', this._onPlayerLeave)

@@ -50,7 +50,7 @@ class StatePlayingNormalMatch extends State {
   }
 
   onCustomMatchAvailable(match) {
-    if (match.roomId === room.id) {
+    if (match.roomId === this.roomId) {
       log.info('CustomMatchDetector', 'Normal match turned custom')
       this.machine.next(new StatePlayingCustomMatch(this.roomId, match))
     }
@@ -95,7 +95,7 @@ class StatePlayingCustomMatch extends State {
 
   onCustomMatchAvailable(match) {
     // A new custom match.
-    if (match.roomId === room.id) {
+    if (match.roomId === this.roomId) {
       log.info('CustomMatchDetector', 'New custom match')
       this.machine.next(new StatePlayingCustomMatch(this.roomId, match))
     } else {
@@ -126,7 +126,7 @@ export class CustomMatchDetectorHooker {
 
     const roomApi = pimp.getApi('room')
 
-    roomApi.on('joined', ({ room }) => {
+    roomApi.on('available', ({ room }) => {
       this._state.call('onRoomJoin', room)
     })
 

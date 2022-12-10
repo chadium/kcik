@@ -64,6 +64,9 @@ export class CustomTagMatchUiHooker {
     this._rankingSocket.close()
     this._rankingSocket = null
 
+    this._itSocket.close()
+    this._itSocket = null
+
     this._reactRoot.unmount()
     this._root.remove()
   }

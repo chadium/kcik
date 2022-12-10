@@ -47,14 +47,14 @@ export class SniffRoomMessagesHooker {
   hook(pimp) {
     let roomApi = pimp.getApi('room')
 
-    roomApi.on('joined', this._onJoined)
+    roomApi.on('available', this._onJoined)
     roomApi.on('leaved', this._onLeaved)
   }
 
   unhook(pimp) {
     let roomApi = pimp.getApi('room')
 
-    roomApi.off('joined', this._onJoined)
+    roomApi.off('available', this._onJoined)
     roomApi.off('leaved', this._onLeaved)
 
     let room = roomApi.getRoom()

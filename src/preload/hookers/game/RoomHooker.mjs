@@ -51,6 +51,7 @@ class StateInRoom extends State {
     log.info('RoomHooker', 'Found room')
 
     this.hooker._events.emit('joined', { room: this.hooker._currentRoom })
+    this.hooker._events.emit('available', { room: this.hooker._currentRoom })
 
     {
       (async () => {
@@ -91,8 +92,8 @@ export class RoomHooker {
     })
 
     this._events.on('newListener', (name, listener) => {
-      if (name === 'joined') {
-        if (this._currentRoom) {
+      if (name === 'available') {
+        if (this._currentRoom !== null) {
           // Already joined. Call it.
           listener({ room: this._currentRoom })
         }
