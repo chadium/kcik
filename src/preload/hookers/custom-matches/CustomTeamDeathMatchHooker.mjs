@@ -4,6 +4,7 @@ import * as log from '../../log.mjs'
 
 export class CustomTeamDeathMatchHooker extends Hooker {
   constructor() {
+    super()
     this._playerEntity = null
   }
 
