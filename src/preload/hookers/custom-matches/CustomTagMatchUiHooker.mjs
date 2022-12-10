@@ -16,7 +16,7 @@ export class CustomTagMatchUiHooker {
     this._state = null
     this._onStateChange =  ({ state }) => {
       this._state = state
-      reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+      this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
     }
   }
 

@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter3'
+import EventEmitter from 'events'
 import { waitForElm } from '../../dom-utils.mjs'
 import { waitForProperty } from '../../object-utils.mjs'
 

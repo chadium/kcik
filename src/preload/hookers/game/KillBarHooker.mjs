@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter3'
+import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 import * as arrayUtils from '../../array-utils.mjs'
 

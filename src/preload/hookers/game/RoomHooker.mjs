@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter3'
+import EventEmitter from 'events'
 import { waitForProperty } from '../../object-utils.mjs'
 import * as log from '../../log.mjs'
 

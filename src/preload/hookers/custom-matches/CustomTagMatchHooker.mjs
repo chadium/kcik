@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter3'
+import EventEmitter from 'events'
 import * as adminApi from '../../admin-api.mjs'
 import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
