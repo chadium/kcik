@@ -82,7 +82,6 @@ class StatePlayingCustomMatch extends State {
   }
 
   async [MachineState.ON_LEAVE]() {
-    debugger
     for (let hooker of this.hookers) {
       await this.machine.hooker.pimp.unregister(hooker)
     }
