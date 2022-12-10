@@ -48,6 +48,11 @@ class StateMatchWait extends State {
   async [MachineState.ON_ENTER]() {
     this.machine.hooker._emitStateChange()
 
+    for (let playerName of this.machine.hooker.pimp.getApi('match').getPlayerNames()) {
+      log.info('CustomTagMatch', `Adding ${playerName} to tag match.`)
+      await adminApi.tagPlayerAdd(playerName)
+    }
+
     const remaining = (this.machine.hooker._match.timestamp + 30000) - Date.now()
 
     log.info('CustomTagMatch', `Waiting for game to start...`)
@@ -150,7 +155,6 @@ export class CustomTagMatchHooker extends Hooker {
     this._state = new Machine({ base: State })
     this._state.hooker = this
     this._match = match
-    this._matchApi = null
     this._onMatchJoin = async () => {
       await this._state.call('matchJoin', )
     }
@@ -174,14 +178,14 @@ export class CustomTagMatchHooker extends Hooker {
   async hook() {
     this._state.start(new StateUnknown())
 
-    this._matchApi = this.pimp.getApi('match')
+    const matchApi = this.pimp.getApi('match')
 
-    this._matchApi.on('matchAvailable', this._onMatchJoin)
-    this._matchApi.on('matchLeave', this._onMatchLeave)
-    this._matchApi.on('playerJoin', this._onPlayerJoin)
-    this._matchApi.on('playerLeave', this._onPlayerLeave)
-    this._matchApi.on('kill', this._onKill)
-    this._matchApi.on('suicide', this._onSuicide)
+    matchApi.on('matchAvailable', this._onMatchJoin)
+    matchApi.on('matchLeave', this._onMatchLeave)
+    matchApi.on('playerJoin', this._onPlayerJoin)
+    matchApi.on('playerLeave', this._onPlayerLeave)
+    matchApi.on('kill', this._onKill)
+    matchApi.on('suicide', this._onSuicide)
 
     return {
       name: 'customTagMatch',
@@ -195,16 +199,20 @@ export class CustomTagMatchHooker extends Hooker {
   }
 
   async unhook() {
-    this._matchApi.off('matchAvailable', this._onMatchJoin)
-    this._matchApi.off('matchLeave', this._onMatchLeave)
-    this._matchApi.off('playerJoin', this._onPlayerJoin)
-    this._matchApi.off('playerLeave', this._onPlayerLeave)
-    this._matchApi.off('kill', this._onKill)
-    this._matchApi.off('suicide', this._onSuicide)
+    const matchApi = this.pimp.getApi('match')
+
+    matchApi.off('matchAvailable', this._onMatchJoin)
+    matchApi.off('matchLeave', this._onMatchLeave)
+    matchApi.off('playerJoin', this._onPlayerJoin)
+    matchApi.off('playerLeave', this._onPlayerLeave)
+    matchApi.off('kill', this._onKill)
+    matchApi.off('suicide', this._onSuicide)
   }
 
   async _makeSomebodyIt(exception) {
-    let playerNames = this._matchApi.getPlayerNames()
+    const matchApi = this.pimp.getApi('match')
+
+    let playerNames = matchApi.getPlayerNames()
 
     if (exception !== undefined) {
       arrayUtils.removeFirstByValue(playerNames, exception)
