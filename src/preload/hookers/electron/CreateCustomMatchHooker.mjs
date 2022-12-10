@@ -10,18 +10,17 @@ import * as log from '../../log.mjs'
 
 export class CreateCustomMatchHooker {
   constructor() {
+    this._root = null
+    this._reactRoot = null
   }
 
   hook(pimp) {
-    const root = document.createElement('div')
-    const reactRoot = ReactDOM.createRoot(root)
-
     const vueAppApi = pimp.getApi('vueApp')
     const roomApi = pimp.getApi('room')
+    const domApi = pimp.getApi('dom')
 
-    addEventListener('DOMContentLoaded', (event) => {
-      document.body.append(root)
-    })
+    this._root = domApi.addElement()
+    this._reactRoot = ReactDOM.createRoot(this._root)
 
     ipcRenderer.on('create-custom-match', async () => {
       try {
@@ -44,7 +43,7 @@ export class CreateCustomMatchHooker {
             reject(new Error('Cancelled'))
           }
 
-          reactRoot.render(React.createElement(CreateCustomMatch, { show: true, maps, weapons, onCreate, onCancel }, null))
+          this._reactRoot.render(React.createElement(CreateCustomMatch, { show: true, maps, weapons, onCreate, onCancel }, null))
         })
 
         let { roomId, regionId } = await roomApi.createRoom(options.kirkaOptions)
@@ -52,11 +51,13 @@ export class CreateCustomMatchHooker {
         log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
         await adminApi.matchSet(regionId, roomId, options.type)
       } finally {
-        reactRoot.render(React.createElement(CreateCustomMatch, { show: false }, null))
+        this._reactRoot.render(React.createElement(CreateCustomMatch, { show: false }, null))
       }
     })
   }
 
   unhook(pimp) {
+    this._reactRoot.unmount()
+    this._root.remove()
   }
 }

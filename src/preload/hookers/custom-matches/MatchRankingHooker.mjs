@@ -10,15 +10,15 @@ export class MatchRankingHooker {
     this._show = false
     this._squads = []
     this._socket = null
+    this._root = null
+    this._reactRoot = null
   }
 
   hook(pimp) {
-    let root = document.createElement('div')
-    const reactRoot = ReactDOM.createRoot(root)
+    const domApi = pimp.getApi('dom')
 
-    addEventListener('DOMContentLoaded', (event) => {
-      document.body.append(root)
-    })
+    this._root = domApi.addElement()
+    this._reactRoot = ReactDOM.createRoot(this._root)
 
     ipcRenderer.on('toggle-score', () => {
       log.info('MatchRanking', 'Toggle score')
@@ -49,6 +49,9 @@ export class MatchRankingHooker {
   unhook(pimp) {
     this._socket.close()
     this._socket = null
+
+    this._reactRoot.unmount()
+    this._root.remove()
   }
 
   _makeProps() {

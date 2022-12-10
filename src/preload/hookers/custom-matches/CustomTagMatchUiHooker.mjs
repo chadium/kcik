@@ -14,23 +14,23 @@ export class CustomTagMatchUiHooker {
     this._root = null
     this._reactRoot = null
     this._state = null
-    this._onStateChange =  ({ state }) => {
+    this._created = null
+    this._onStateChange = ({ state }) => {
       this._state = state
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
     }
   }
 
   hook(pimp) {
-    this._root = document.createElement('div')
-    this._reactRoot = ReactDOM.createRoot(this._root)
+    const domApi = pimp.getApi('dom')
 
-    addEventListener('DOMContentLoaded', (event) => {
-      document.body.append(this._root)
-      this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
-    })
+    this._root = domApi.addElement()
+    this._reactRoot = ReactDOM.createRoot(this._root)
+    this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
 
     let customTagMatchApi = pimp.getApi('customTagMatch')
 
+    this._created = customTagMatchApi.getCreatedTimestamp()
     this._state = customTagMatchApi.getState()
     customTagMatchApi.on('stateChange', this._onStateChange)
 
@@ -75,7 +75,8 @@ export class CustomTagMatchUiHooker {
     return {
       players: this._players,
       it: this._it,
-      state: this._state
+      state: this._state,
+      created: this._created
     }
   }
 }

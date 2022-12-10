@@ -52,7 +52,7 @@ class StateMatchWait extends State {
     this._timeout = setTimeout(() => {
       this._hooker._state = new StateMatchActive(this._hooker)
       this._hooker._emitStateChange()
-    }, 30000)
+    }, (this._hooker._match.timestamp + 30000) - Date.now())
   }
 
   getState() {
@@ -137,9 +137,10 @@ class StateMatchActive extends State {
 }
 
 export class CustomTagMatchHooker {
-  constructor() {
+  constructor(match) {
     this._events = new EventEmitter()
     this._state = null
+    this._match = match
     this._matchApi = null
     this._onMatchJoin = async () => {
       await this._state.matchJoin()
@@ -177,6 +178,7 @@ export class CustomTagMatchHooker {
     return {
       name: 'customTagMatch',
       api: {
+        getCreatedTimestamp: () => this._match.timestamp,
         getState: () => this._state.getState(),
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),

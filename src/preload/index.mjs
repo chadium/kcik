@@ -1,5 +1,6 @@
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
+import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
 import { RoomHooker } from './hookers/game/RoomHooker.mjs'
 import { WorldMapHooker } from './hookers/game/WorldMapHooker.mjs'
@@ -31,9 +32,11 @@ function patchSoftlock() {
 async function main() {
   patchSoftlock()
 
-  let prompter = new Prompter()
-
   let pimp = new Pimp()
+
+  await pimp.register(new DomHooker())
+
+  let prompter = new Prompter(pimp.getApi('dom').addElement())
 
   let hookers = [
     new VueAppHooker(),
@@ -62,7 +65,7 @@ async function main() {
   window.debugAccess = debugAccess
   window.pimp = pimp
 
-  addEventListener('DOMContentLoaded', (event) => {
+  pimp.getApi('dom').on('headAvailable', () => {
     styles.use()
   })
 }

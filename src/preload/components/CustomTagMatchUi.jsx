@@ -1,14 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styles from "./CustomTagMatchUi.lazy.module.css"
 import Box from "./Box.jsx"
-import { hhmmss } from "../duration-format.mjs"
+import { hhmmss, seconds } from "../duration-format.mjs"
+import { useTimeUpdate } from "../use-time-update.mjs"
 
-export default function CustomTagMatchUi({ players, it, state }) {
+export default function CustomTagMatchUi({ players, it, state, created }) {
   useEffect(() => {
     styles.use()
   }, [])
-
-  const [now, setNow] = useState(Date.now())
 
   const isWaiting = useMemo(() => {
     return state === 'waiting'
@@ -18,13 +17,13 @@ export default function CustomTagMatchUi({ players, it, state }) {
     return state === 'playing'
   }, [state])
 
-  useEffect(() => {
-    let id = setInterval(() => {
-      setNow(Date.now())
-    }, 1000)
+  const remainingTime = useTimeUpdate(() => {
+    return (created + 30000) - Date.now()
+  }, isWaiting)
 
-    return () => clearInterval(id)
-  }, [])
+  const now = useTimeUpdate(() => {
+    return Date.now()
+  }, players.length > 0)
 
   const finalPlayers = useMemo(() => {
     let results = players.map(player => {
@@ -53,13 +52,13 @@ export default function CustomTagMatchUi({ players, it, state }) {
   }, [players, it, now])
 
   return (
-    <>
+    <div>
       {isWaiting && (
         <>
           <div className={styles.locals.waiting}>
             <Box>
               <div className={styles.locals.waitingIntro}>Tag match will start in</div>
-              <div className={styles.locals.waitingTimer}>30 secs</div>
+              <div className={styles.locals.waitingTimer}>{seconds(remainingTime)} secs</div>
             </Box>
           </div>
 
@@ -84,6 +83,6 @@ export default function CustomTagMatchUi({ players, it, state }) {
           </Box>
         </div>
       )}
-    </>
+    </div>
   )
 }

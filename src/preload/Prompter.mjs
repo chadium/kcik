@@ -10,14 +10,8 @@ export class PrompterCancelError extends Error {
 }
 
 export class Prompter {
-  constructor() {
-    let root = document.createElement('div')
-
+  constructor(root) {
     this._reactRoot = ReactDOM.createRoot(root)
-
-    addEventListener('DOMContentLoaded', (event) => {
-      document.body.append(root)
-    })
   }
 
   async prompt({ title, placeholder, buttons }) {

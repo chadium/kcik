@@ -7,7 +7,7 @@ export default function Box({ children }) {
   }, [])
 
   return (
-    <div className={[styles.locals.container, 'boomer-dark'].join(' ')}>
+    <div className={[styles.locals.container].join(' ')}>
       <div className={styles.locals.bg}></div>
       {children}
     </div>
