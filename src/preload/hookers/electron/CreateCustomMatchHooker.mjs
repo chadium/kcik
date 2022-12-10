@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom/client'
 import CreateCustomMatch from '../../components/CreateCustomMatch.jsx'
 import { CustomTeamDeathMatchHooker } from '../custom-matches/CustomTeamDeathMatchHooker.mjs'
 import { CustomTagMatchHooker } from '../custom-matches/CustomTagMatchHooker.mjs'
-import * as userApi from '../../user-api.mjs'
+import { CustomTagMatchUiHooker } from '../custom-matches/CustomTagMatchUiHooker.mjs'
+import * as adminApi from '../../admin-api.mjs'
 import * as log from '../../log.mjs'
 
 export class CreateCustomMatchHooker {
@@ -46,19 +47,10 @@ export class CreateCustomMatchHooker {
           reactRoot.render(React.createElement(CreateCustomMatch, { show: true, maps, weapons, onCreate, onCancel }, null))
         })
 
-        let id = await roomApi.createRoom(options.kirkaOptions)
+        let { roomId, regionId } = await roomApi.createRoom(options.kirkaOptions)
 
-        log.info('CreateCustomMatch', `Creating custom match in room ${id}`)
-
-        async function onJoin() {
-          if (options.type === 'tag') {
-            await pimp.register(new CustomTagMatchHooker())
-          } else if (options.type === 'multi-team-deathmatch') {
-            await pimp.register(new CustomTeamDeathMatchHooker())
-          } else {
-            throw new Error(`Unknown type ${options.type}`)
-          }
-        }
+        log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
+        await adminApi.matchSet(regionId, roomId, options.type)
       } finally {
         reactRoot.render(React.createElement(CreateCustomMatch, { show: false }, null))
       }

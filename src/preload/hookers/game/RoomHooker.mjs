@@ -134,7 +134,10 @@ export class RoomHooker {
 
           await vueApp.$store.dispatch('game/enterGame')
           if (this._game.room) {
-            return this._game.room.id
+            return {
+              roomId: this._game.room.id,
+              regionId: this._game.selectedRegion
+            }
           } else {
             // Unfortunately the error message is sent to a notification
             // module. We don't have access to the error object. The

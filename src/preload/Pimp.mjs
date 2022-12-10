@@ -15,6 +15,19 @@ export class Pimp {
     }
   }
 
+  async unregister(hooker) {
+    let index = this._hookers.indexOf(hooker)
+
+    if (index === -1) {
+      // Not registered.
+      return
+    }
+
+    this._hookers.splice(index, 1)
+
+    await hooker.unhook(this)
+  }
+
   getApi(name) {
     if (this._apis[name] === undefined) {
       throw new Error(`No api ${name}`)

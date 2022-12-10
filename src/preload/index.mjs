@@ -3,14 +3,13 @@ import { Pimp } from './Pimp.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
 import { RoomHooker } from './hookers/game/RoomHooker.mjs'
 import { WorldMapHooker } from './hookers/game/WorldMapHooker.mjs'
-import { MatchRankingHooker } from './hookers/custom-matches/MatchRankingHooker.mjs'
-import { TagRankingHooker } from './hookers/custom-matches/TagRankingHooker.mjs'
 import { JoinMatchHooker } from './hookers/electron/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/game/PlayerHooker.mjs'
 import { MatchHooker } from './hookers/game/MatchHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/game/SniffRoomMessagesHooker.mjs'
 import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
+import { CustomMatchDetectorHooker } from './hookers/custom-matches/CustomMatchDetectorHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
 import { findValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
@@ -41,12 +40,11 @@ async function main() {
     new JoinMatchHooker(prompter),
     new WorldMapHooker(),
     new RoomHooker(),
-    new MatchRankingHooker(),
-    new TagRankingHooker(),
     new PlayerHooker(),
     new SoundHooker(),
     new KillBarHooker(),
     new MatchHooker(),
+    new CustomMatchDetectorHooker(),
     new CreateCustomMatchHooker(),
     //new SniffRoomMessagesHooker(),
   ]

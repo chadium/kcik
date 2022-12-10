@@ -1,0 +1,39 @@
+.waiting {
+  pointer-events: none;
+  position: fixed;
+  top: 5%;
+  left: 30px;
+  z-index: 10;
+  text-align: center;
+}
+
+.waitingIntro {
+  font-size: 20px;
+}
+
+.waitingTimer {
+  font-size: 40px;
+}
+
+.players {
+  pointer-events: none;
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  z-index: 10;
+}
+
+.title {
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+.players {
+  padding: 10px;
+}
+
+.players > * {
+  margin-top: 10px;
+}

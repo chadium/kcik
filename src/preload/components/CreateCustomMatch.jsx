@@ -33,7 +33,8 @@ export default function CreateCustomMatch({ show, maps = [], weapons = [], onCre
     minutes: 8,
     map: maps?.[0]?.value,
     weapons: weapons.map(w => w.value),
-    name: 'Yeehaw'
+    name: ''
+    //name: 'Yeehaw'
   })
 
   function create() {

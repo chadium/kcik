@@ -1,6 +1,18 @@
 import { apiFetch } from './api-fetch.mjs'
 
-export async function matchAddKill(name, amount) {
+export async function matchSet(regionId, roomId, type) {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/match',
+    bodyData: {
+      regionId,
+      roomId,
+      type
+    }
+  })
+}
+
+export async function teamDeathmatchAddKill(name, amount) {
   await apiFetch({
     method: 'POST',
     url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/match/members/add-kill',
@@ -11,7 +23,7 @@ export async function matchAddKill(name, amount) {
   })
 }
 
-export async function matchAddDeath(name, amount) {
+export async function teamDeathmatchAddDeath(name, amount) {
   await apiFetch({
     method: 'POST',
     url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/match/members/add-death',
@@ -22,7 +34,7 @@ export async function matchAddDeath(name, amount) {
   })
 }
 
-export async function matchAddScore(name, amount) {
+export async function teamDeathmatchAddScore(name, amount) {
   await apiFetch({
     method: 'POST',
     url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/match/members/add-score',

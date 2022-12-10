@@ -1,3 +1,4 @@
+import EventEmitter from 'eventemitter3'
 import * as adminApi from '../../admin-api.mjs'
 import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
@@ -9,7 +10,7 @@ class State {
   }
   async matchLeave() {
   }
-  async playerLeave(playerName) {
+  async playerJoin(playerName) {
   }
   async playerLeave(playerName) {
   }
@@ -25,10 +26,15 @@ class StateUnknown extends State {
     this._hooker = hooker
   }
 
+  getState() {
+    return 'unknown'
+  }
+
   async matchJoin() {
     log.info('CustomTagMatch', `Joined tag game.`)
     await adminApi.tagReset()
     this._hooker._state = new StateMatchWait(this._hooker)
+    this._hooker._emitStateChange()
   }
 
   async matchLeave() {
@@ -45,7 +51,12 @@ class StateMatchWait extends State {
     log.info('CustomTagMatch', `Waiting for game to start...`)
     this._timeout = setTimeout(() => {
       this._hooker._state = new StateMatchActive(this._hooker)
+      this._hooker._emitStateChange()
     }, 30000)
+  }
+
+  getState() {
+    return 'waiting'
   }
 
   async playerJoin(playerName) {
@@ -70,6 +81,10 @@ class StateMatchActive extends State {
         await this._hooker._makeSomebodyIt()
       })()
     }
+  }
+
+  getState() {
+    return 'playing'
   }
 
   async playerJoin(playerName) {
@@ -123,7 +138,8 @@ class StateMatchActive extends State {
 
 export class CustomTagMatchHooker {
   constructor() {
-    this._state = new StateUnknown(this)
+    this._events = new EventEmitter()
+    this._state = null
     this._matchApi = null
     this._onMatchJoin = async () => {
       await this._state.matchJoin()
@@ -145,7 +161,10 @@ export class CustomTagMatchHooker {
     }
   }
 
-  hook(pimp) {
+  async hook(pimp) {
+    this._state = new StateUnknown(this)
+    this._emitStateChange()
+
     this._matchApi = pimp.getApi('match')
 
     this._matchApi.on('matchJoin', this._onMatchJoin)
@@ -154,9 +173,18 @@ export class CustomTagMatchHooker {
     this._matchApi.on('playerLeave', this._onPlayerLeave)
     this._matchApi.on('kill', this._onKill)
     this._matchApi.on('suicide', this._onSuicide)
+
+    return {
+      name: 'customTagMatch',
+      api: {
+        getState: () => this._state.getState(),
+        on: this._events.on.bind(this._events),
+        off: this._events.off.bind(this._events),
+      }
+    }
   }
 
-  unhook(pimp) {
+  async unhook(pimp) {
     this._matchApi.off('matchJoin', this._onMatchJoin)
     this._matchApi.off('matchLeave', this._onMatchLeave)
     this._matchApi.off('playerJoin', this._onPlayerJoin)
@@ -180,5 +208,9 @@ export class CustomTagMatchHooker {
     let otherPlayerName = randUtils.pickOne(playerNames)
 
     await adminApi.tagSetIt(otherPlayerName)
+  }
+
+  _emitStateChange() {
+    this._events.emit('stateChange', { state: this._state.getState() })
   }
 }

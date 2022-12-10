@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { apiFetch } from './api-fetch.mjs'
 
-export async function getMatchRanking() {
+export async function getTeamDeathmatchRanking() {
   let { data } = await apiFetch({
     url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/match/ranking'
   })
@@ -25,7 +25,15 @@ export async function tagGetIt() {
   return data.it
 }
 
-export async function wsMatchRanking({ onConnect, onUpdate }) {
+export async function matchGet() {
+  let { data } = await apiFetch({
+    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/match'
+  })
+
+  return data.match
+}
+
+export async function wsTeamDeathmatchRanking({ onConnect, onUpdate }) {
   const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match/ranking`);
 
   socket.addEventListener('open', () => {
@@ -63,6 +71,24 @@ export async function wsTagRanking({ onConnect, onUpdate }) {
 
 export async function wsTagIt({ onConnect, onUpdate }) {
   const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/tag/players/it`);
+
+  socket.addEventListener('open', () => {
+    onConnect()
+  })
+
+  socket.addEventListener('message', ({ data }) => {
+    onUpdate(JSON.parse(data))
+  });
+
+  return {
+    close() {
+      socket.close()
+    }
+  }
+}
+
+export async function wsMatch({ onConnect, onUpdate }) {
+  const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match`);
 
   socket.addEventListener('open', () => {
     onConnect()
