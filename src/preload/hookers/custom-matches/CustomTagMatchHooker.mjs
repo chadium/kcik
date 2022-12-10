@@ -4,8 +4,9 @@ import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
 import * as randUtils from '../../rand-utils.mjs'
 import * as arrayUtils from '../../array-utils.mjs'
+import { Machine, MachineState } from '../../state-machine.mjs'
 
-class State {
+class State extends MachineState {
   async matchJoin() {
   }
   async matchLeave() {
@@ -21,11 +22,6 @@ class State {
 }
 
 class StateUnknown extends State {
-  constructor(hooker) {
-    super()
-    this._hooker = hooker
-  }
-
   getState() {
     return 'unknown'
   }
@@ -33,8 +29,7 @@ class StateUnknown extends State {
   async matchJoin() {
     log.info('CustomTagMatch', `Joined tag game.`)
     await adminApi.tagReset()
-    this._hooker._state = new StateMatchWait(this._hooker)
-    this._hooker._emitStateChange()
+    this.machine.next(new StateMatchWait())
   }
 
   async matchLeave() {
@@ -44,15 +39,24 @@ class StateUnknown extends State {
 }
 
 class StateMatchWait extends State {
-  constructor(hooker) {
+  constructor() {
     super()
-    this._hooker = hooker
+    this._timeout = null
+  }
+
+  async [MachineState.ON_ENTER]() {
+    this.machine.hooker._emitStateChange()
+
+    const remaining = (this.machine.hooker._match.timestamp + 30000) - Date.now()
 
     log.info('CustomTagMatch', `Waiting for game to start...`)
     this._timeout = setTimeout(() => {
-      this._hooker._state = new StateMatchActive(this._hooker)
-      this._hooker._emitStateChange()
-    }, (this._hooker._match.timestamp + 30000) - Date.now())
+      this.machine.next(new StateMatchActive())
+    }, remaining)
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    clearTimeout(this._timeout)
   }
 
   getState() {
@@ -71,16 +75,11 @@ class StateMatchWait extends State {
 }
 
 class StateMatchActive extends State {
-  constructor(hooker) {
-    super()
-    this._hooker = hooker
+  async [MachineState.ON_ENTER]() {
+    this.machine.hooker._emitStateChange()
 
-    {
-      (async () => {
-        log.info('CustomTagMatch', `Game started`)
-        await this._hooker._makeSomebodyIt()
-      })()
-    }
+    log.info('CustomTagMatch', `Game started`)
+    await this.machine.hooker._makeSomebodyIt()
   }
 
   getState() {
@@ -90,6 +89,13 @@ class StateMatchActive extends State {
   async playerJoin(playerName) {
     log.info('CustomTagMatch', `${playerName} joined tag mid match`)
     await adminApi.tagPlayerAdd(playerName)
+
+    let it = await userApi.tagGetIt()
+
+    if (it === null) {
+      log.info('CustomTagMatch', `Nobody is it so will make ${playerName} it.`)
+      await this.machine.hooker._makeSomebodyIt()
+    }
   }
 
   async playerLeave(playerName) {
@@ -101,7 +107,7 @@ class StateMatchActive extends State {
     if (it !== null) {
       if (it.name === playerName) {
         log.info('CustomTagMatch', `${playerName} left. Making somebody else it.`)
-        await this._hooker._makeSomebodyIt()
+        await this.machine.hooker._makeSomebodyIt()
       }
     }
   }
@@ -131,7 +137,7 @@ class StateMatchActive extends State {
     if (it.name === deadPlayerName) {
       log.info('CustomTagMatch', `${deadPlayerName} killed themselves. Making somebody else it.`)
       await adminApi.tagRemoveIt()
-      await this._hooker._makeSomebodyIt(deadPlayerName)
+      await this.machine.hooker._makeSomebodyIt(deadPlayerName)
     }
   }
 }
@@ -139,32 +145,32 @@ class StateMatchActive extends State {
 export class CustomTagMatchHooker {
   constructor(match) {
     this._events = new EventEmitter()
-    this._state = null
+    this._state = new Machine({ base: State })
+    this._state.hooker = this
     this._match = match
     this._matchApi = null
     this._onMatchJoin = async () => {
-      await this._state.matchJoin()
+      await this._state.call('matchJoin', )
     }
     this._onMatchLeave = async () => {
-      await this._state.matchLeave()
+      await this._state.call('matchLeave', )
     }
     this._onPlayerJoin = async ({ playerName }) => {
-      await this._state.playerJoin(playerName)
+      await this._state.call('playerJoin', playerName)
     }
     this._onPlayerLeave = async ({ playerName }) => {
-      await this._state.playerLeave(playerName)
+      await this._state.call('playerLeave', playerName)
     }
     this._onKill = async ({ killerPlayerName, deadPlayerName }) => {
-      await this._state.kill(killerPlayerName, deadPlayerName)
+      await this._state.call('kill', killerPlayerName, deadPlayerName)
     }
     this._onSuicide = async ({ deadPlayerName }) => {
-      await this._state.suicide(deadPlayerName)
+      await this._state.call('suicide', deadPlayerName)
     }
   }
 
   async hook(pimp) {
-    this._state = new StateUnknown(this)
-    this._emitStateChange()
+    this._state.start(new StateUnknown())
 
     this._matchApi = pimp.getApi('match')
 
@@ -179,7 +185,7 @@ export class CustomTagMatchHooker {
       name: 'customTagMatch',
       api: {
         getCreatedTimestamp: () => this._match.timestamp,
-        getState: () => this._state.getState(),
+        getState: () => this._state.call('getState'),
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }
@@ -198,13 +204,13 @@ export class CustomTagMatchHooker {
   async _makeSomebodyIt(exception) {
     let playerNames = this._matchApi.getPlayerNames()
 
-    if (playerNames.length <= 1) {
-      // Can't do anything.
-      return
-    }
-
     if (exception !== undefined) {
       arrayUtils.removeFirstByValue(playerNames, exception)
+    }
+
+    if (playerNames.length === 0) {
+      // Can't do anything.
+      return
     }
 
     let otherPlayerName = randUtils.pickOne(playerNames)
@@ -212,7 +218,7 @@ export class CustomTagMatchHooker {
     await adminApi.tagSetIt(otherPlayerName)
   }
 
-  _emitStateChange() {
-    this._events.emit('stateChange', { state: this._state.getState() })
+  async _emitStateChange() {
+    this._events.emit('stateChange', { state: await this._state.call('getState') })
   }
 }

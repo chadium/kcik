@@ -21,7 +21,7 @@ export class CustomTagMatchUiHooker {
     }
   }
 
-  hook(pimp) {
+  async hook(pimp) {
     const domApi = pimp.getApi('dom')
 
     this._root = domApi.addElement()
@@ -31,7 +31,7 @@ export class CustomTagMatchUiHooker {
     let customTagMatchApi = pimp.getApi('customTagMatch')
 
     this._created = customTagMatchApi.getCreatedTimestamp()
-    this._state = customTagMatchApi.getState()
+    this._state = await customTagMatchApi.getState()
     customTagMatchApi.on('stateChange', this._onStateChange)
 
     this._rankingSocket = userApi.wsTagRanking({
