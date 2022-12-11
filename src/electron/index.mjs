@@ -134,7 +134,6 @@ function buildMenu(wm) {
         { type: 'separator' },
         {
           label: 'Restart',
-          accelerator: 'Ctrl+F5',
           click: () => {
             wm.restart()
           }
