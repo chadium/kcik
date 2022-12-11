@@ -49,3 +49,7 @@
 .boomer-p-t {
   padding-top: var(--boomer-safe-space);
 }
+
+.boomer-text-shadow {
+  text-shadow: -1px -1px 0 #0f0f0f, 1px -1px 0 #0f0f0f, -1px 1px 0 #0f0f0f, 1px 1px 0 #0f0f0f, 0 0.13rem 1px rgb(0 0 0 / 49%);
+}

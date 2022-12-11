@@ -55,18 +55,20 @@ export default function CustomTagMatchUi({ players, it, state, created }) {
     <div>
       {isWaiting && (
         <>
-          <div className={styles.locals.waiting}>
-            <Box>
-              <div className={styles.locals.waitingIntro}>Tag match will start in</div>
-              <div className={styles.locals.waitingTimer}>{seconds(remainingTime)} secs</div>
-            </Box>
+          <div className={[styles.locals.waiting, 'boomer-text-shadow'].join(' ')}>
+            <div className={styles.locals.waitingIntro}>Tag match will start in</div>
+            <div className={styles.locals.waitingTimer}>{seconds(remainingTime)} secs</div>
+            <div className={styles.locals.waitingTip}>A random player will become it when the match starts</div>
           </div>
 
           <div className={styles.locals.rules}>
             <Box>
-              <div>- Kill the person who's it.</div>
-              <div>- Whoever kills it becomes it.</div>
-              <div>- Stay it for as long as possible.</div>
+              <div className={styles.locals.rulesContent}>
+                <div className={styles.locals.rulesTitle}>How to play:</div>
+                <div>- Kill the person who's it.</div>
+                <div>- Whoever kills it becomes it.</div>
+                <div>- Stay it for as long as possible.</div>
+              </div>
             </Box>
           </div>
         </>

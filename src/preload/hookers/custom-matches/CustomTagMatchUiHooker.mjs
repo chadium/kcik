@@ -2,7 +2,6 @@ import { Hooker } from '../../Pimp.mjs'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import CustomTagMatchUi from '../../components/CustomTagMatchUi.jsx'
-import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
 
 export class CustomTagMatchUiHooker extends Hooker {
