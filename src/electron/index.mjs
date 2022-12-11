@@ -164,6 +164,13 @@ function buildMenu(wm) {
       role: 'help',
       submenu: [
         {
+          label: 'Explore user data',
+          click: async () => {
+            const userDataPath = app.getPath('userData');
+            await shell.openExternal('file://' + userDataPath)
+          }
+        },
+        {
           label: 'Website',
           click: async () => {
             await shell.openExternal('https://the28yearoldboomer.com')
