@@ -50,8 +50,10 @@ export class CreateCustomMatchHooker extends Hooker {
 
         let { roomId, regionId } = await roomApi.createRoom(options.kirkaOptions)
 
-        log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
-        await adminApi.matchSet(regionId, roomId, options.type)
+        if (ADMIN) {
+          log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
+          await adminApi.matchSet(regionId, roomId, options.type)
+        }
       } finally {
         this._reactRoot.render(React.createElement(CreateCustomMatch, { show: false }, null))
       }
