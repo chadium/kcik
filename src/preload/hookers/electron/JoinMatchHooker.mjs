@@ -11,7 +11,19 @@ export class JoinMatchHooker extends Hooker {
   }
 
   hook() {
-    ipcRenderer.on('join-match', async () => {
+    let roomApi = this.pimp.getApi('room')
+
+    ipcRenderer.send('menu.join-match.enable', roomApi.getRoom() === null)
+
+    roomApi.on('joined', () => {
+      ipcRenderer.send('menu.join-match.enable', false)
+    })
+
+    roomApi.on('leaved', () => {
+      ipcRenderer.send('menu.join-match.enable', true)
+    })
+
+    ipcRenderer.on('menu.join-match.click', async () => {
       try {
         let buttons = [
           {
@@ -29,7 +41,7 @@ export class JoinMatchHooker extends Hooker {
 
         let [regionId, roomId] = this._extractIds(result.input)
 
-        await this.pimp.getApi('room').joinRoom(regionId, roomId)
+        await roomApi.joinRoom(regionId, roomId)
       } catch (e) {
         if (e instanceof PrompterCancelError) {
           // Ignore.
@@ -42,6 +54,7 @@ export class JoinMatchHooker extends Hooker {
   }
 
   unhook() {
+    throw new Error('To be implemented.')
   }
 
   _extractIds(url) {

@@ -86,12 +86,8 @@ class WinMan {
     this._win.loadURL(url)
   }
 
-  joinMatch() {
-    this._win.webContents.send('join-match')
-  }
-
-  createCustomMatch() {
-    this._win.webContents.send('create-custom-match')
+  menuClickSend(id) {
+    this._win.webContents.send(`menu.${id}.click`)
   }
 
   _registerShortcuts() {
@@ -122,16 +118,17 @@ function buildMenu(wm) {
       label: 'File',
       submenu: [
         {
+          id: 'join-match',
           label: 'Join match',
           click: () => {
-            wm.joinMatch()
+            wm.menuClickSend('join-match')
           }
         },
         {
           id: 'create-custom-match',
           label: 'Create custom match',
           click: () => {
-            wm.createCustomMatch()
+            wm.menuClickSend('create-custom-match')
           }
         },
         { type: 'separator' },
@@ -198,6 +195,10 @@ async function main() {
     menu.getMenuItemById('create-custom-match').visible = false
     menu.getMenuItemById('dev-tools').visible = false
   }
+
+  ipcMain.on('menu.join-match.enable', (e, state) => {
+    menu.getMenuItemById('join-match').enabled = Boolean(state)
+  })
 
   Menu.setApplicationMenu(menu)
 

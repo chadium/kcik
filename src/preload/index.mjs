@@ -42,9 +42,9 @@ async function main() {
 
   let hookers = [
     new VueAppHooker(),
-    new JoinMatchHooker(prompter, messenger),
     new WorldMapHooker(),
     new RoomHooker(),
+    new JoinMatchHooker(prompter, messenger),
     new PlayerHooker(),
     new SoundHooker(),
     new KillBarHooker(),

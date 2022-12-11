@@ -24,7 +24,7 @@ export class CreateCustomMatchHooker extends Hooker {
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
 
-    ipcRenderer.on('create-custom-match', async () => {
+    ipcRenderer.on('menu.create-custom-match.click', async () => {
       try {
         let gameObject = vueAppApi.getGameObject()
         let maps = Object.values(gameObject.maps).map(w => ({
