@@ -1,6 +1,7 @@
 import deepEqual from 'deep-equal'
 import { Hooker } from '../../Pimp.mjs'
 import { CustomTeamDeathMatchHooker } from '../custom-matches/CustomTeamDeathMatchHooker.mjs'
+import { CustomTagMatchAdminHooker } from '../custom-matches/CustomTagMatchAdminHooker.mjs'
 import { CustomTagMatchHooker } from '../custom-matches/CustomTagMatchHooker.mjs'
 import { CustomTagMatchUiHooker } from '../custom-matches/CustomTagMatchUiHooker.mjs'
 import * as adminApi from '../../admin-api.mjs'
@@ -69,6 +70,7 @@ class StatePlayingCustomMatch extends State {
   async [MachineState.ON_ENTER]() {
     if (this.match.type === 'tag') {
       this.hookers.push(new CustomTagMatchHooker(this.match))
+      this.hookers.push(new CustomTagMatchAdminHooker(this.match))
       this.hookers.push(new CustomTagMatchUiHooker())
     } else if (this.match.type === 'multi-team-deathmatch') {
       this.hookers.push(new CustomTeamDeathMatchHooker())
