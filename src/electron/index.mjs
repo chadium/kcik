@@ -122,13 +122,6 @@ function buildMenu(wm) {
       label: 'File',
       submenu: [
         {
-          label: 'Restart',
-          accelerator: 'Ctrl+R',
-          click: () => {
-            wm.restart()
-          }
-        },
-        {
           label: 'Join match',
           click: () => {
             wm.joinMatch()
@@ -139,6 +132,14 @@ function buildMenu(wm) {
           label: 'Create custom match',
           click: () => {
             wm.createCustomMatch()
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Restart',
+          accelerator: 'Ctrl+R',
+          click: () => {
+            wm.restart()
           }
         },
         { type: 'separator' },
