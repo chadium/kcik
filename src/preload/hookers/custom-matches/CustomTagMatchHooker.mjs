@@ -1,3 +1,4 @@
+import deepEqual from 'deep-equal'
 import EventEmitter from 'events'
 import { Hooker } from '../../Pimp.mjs'
 import * as userApi from '../../user-api.mjs'
@@ -75,6 +76,8 @@ export class CustomTagMatchHooker extends Hooker {
     this._match = match
     this._rankingSocket = null
     this._itSocket = null
+    this._players = []
+    this._it = null
     this._onMatchJoin = async () => {
       await this._state.call('matchJoin')
     }
@@ -93,23 +96,27 @@ export class CustomTagMatchHooker extends Hooker {
 
     this._rankingSocket = userApi.wsTagRanking({
       onConnect: async () => {
-        this._players = await userApi.getTagRanking()
-        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+        if (this._setPlayers(await userApi.getTagRanking())) {
+          this._events.emit('playersChange', this._players)
+        }
       },
       onUpdate: ({ ranking }) => {
-        this._players = ranking
-        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+        if (this._setPlayers(ranking)) {
+          this._events.emit('playersChange', this._players)
+        }
       }
     })
 
     this._itSocket = userApi.wsTagIt({
       onConnect: async () => {
-        this._it = await userApi.tagGetIt()
-        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+        if (this._setIt(await userApi.tagGetIt())) {
+          this._events.emit('itChange', this._it)
+        }
       },
       onUpdate: ({ it }) => {
-        this._it = it
-        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+        if (this._setIt(it)) {
+          this._events.emit('itChange', this._it)
+        }
       }
     })
 
@@ -118,6 +125,8 @@ export class CustomTagMatchHooker extends Hooker {
       api: {
         getCreatedTimestamp: () => this._match.timestamp,
         getState: () => this._state.call('getState'),
+        getPlayers: () => this._players,
+        getIt: () => this._it,
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }
@@ -141,5 +150,23 @@ export class CustomTagMatchHooker extends Hooker {
 
   async _emitStateChange() {
     this._events.emit('stateChange', { state: await this._state.call('getState') })
+  }
+
+  _setIt(it) {
+    if (!deepEqual(this._it, it)) {
+      this._it = it
+      return true
+    } else {
+      return false
+    }
+  }
+
+  _setPlayers(players) {
+    if (!deepEqual(this._players, players)) {
+      this._players = players
+      return true
+    } else {
+      return false
+    }
   }
 }
