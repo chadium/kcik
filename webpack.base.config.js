@@ -1,14 +1,31 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const pkg = require('./package.json')
 const Dotenv = require('dotenv-webpack')
+const { DefinePlugin } = require('webpack')
 // Used by dotenv-webpack during compilation but turns out I need some of
 // those variables here. So I use the same module to stay consistent.
 require('dotenv-defaults').config()
 
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
+
+const version = (() => {
+  if (mode === 'production') {
+    return JSON.stringify('v' + pkg.version)
+  } else {
+    return JSON.stringify('DEV BUILD ' + new Date().toISOString())
+  }
+})()
+
+let definePlugin = new DefinePlugin({
+  BOOMER_VERSION: version
+})
+
 const mainConfig = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode,
   entry: './src/electron/index.mjs',
   target: 'electron-main',
   plugins: [
+    definePlugin,
     new Dotenv(),
     // new BundleAnalyzerPlugin({
     //   openAnalyzer: false
@@ -25,7 +42,7 @@ const mainConfig = {
 }
 
 const rendererConfig = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode,
   entry: './src/preload/index.mjs',
   target: 'electron-renderer',
   module: {
@@ -63,6 +80,7 @@ const rendererConfig = {
     ]
   },
   plugins: [
+    definePlugin,
     new Dotenv(),
     // new BundleAnalyzerPlugin({
     //   openAnalyzer: false

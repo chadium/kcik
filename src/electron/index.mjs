@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, shell, ipcMain, BrowserWindow, Menu } from 'electron'
+import { app, shell, ipcMain, BrowserWindow, Menu, screen } from 'electron'
 import electronLocalshortcut from 'electron-localshortcut'
 import { FileStorage } from './storage.mjs'
 import { TheGreatReplacer } from './the-great-replacer.mjs'
@@ -17,11 +17,12 @@ class WinMan {
       return
     }
 
+    const [width, height] = this._bestDefaultSize()
+
     this._win = new BrowserWindow({
-      width: 1280,
-      height: 720,
-      titleBarStyle: 'hidden',
-      titleBarOverlay: true,
+      title: 'Boomer Kirka Client ' + BOOMER_VERSION,
+      width: Math.floor(width * 0.666666),
+      height: Math.floor(height * 0.666666),
       webPreferences: {
         preload: path.join(__dirname, '..', 'preload', 'index.js'),
         contextIsolation: false,
@@ -30,6 +31,10 @@ class WinMan {
         // bank here.
         allowRunningInsecureContent: process.env.NODE_ENV !== 'production'
       }
+    })
+
+    this._win.on('page-title-updated', (e) => {
+      e.preventDefault()
     })
 
     this._win.loadURL('https://kirka.io/')
@@ -43,7 +48,12 @@ class WinMan {
       return
     }
 
-    this._win.loadURL('https://kirka.io/')
+    this._win.reload()
+  }
+
+  restart() {
+    this.close()
+    this.open()
   }
 
   close() {
@@ -85,12 +95,13 @@ class WinMan {
 
   _registerShortcuts() {
     electronLocalshortcut.register(this._win, "Escape", () => this.unlockPointer());
-    electronLocalshortcut.register(this._win, 'Ctrl+R', () => {
-      this.reload()
-    });
-    electronLocalshortcut.register(this._win, 'F5', () => {
-      this._win.reload()
-    });
+  }
+
+  _bestDefaultSize() {
+    const primaryDisplay = screen.getPrimaryDisplay()
+    const { width, height } = primaryDisplay.workAreaSize
+
+    return [width, height]
   }
 }
 
@@ -99,6 +110,13 @@ function buildMenu(wm) {
     {
       label: 'File',
       submenu: [
+        {
+          label: 'Restart',
+          accelerator: 'Ctrl+R',
+          click: () => {
+            wm.restart()
+          }
+        },
         {
           label: 'Join match',
           click: () => {
@@ -121,11 +139,15 @@ function buildMenu(wm) {
       submenu: [
         {
           label: 'Reload',
+          accelerator: 'F5',
           click: () => {
             wm.reload()
           }
         },
-        { role: 'toggleDevTools' },
+        {
+          id: 'dev-tools',
+          role: 'toggleDevTools'
+        },
         { type: 'separator' },
         { role: 'togglefullscreen' }
       ]
@@ -162,6 +184,7 @@ async function main() {
 
   if (!ADMIN) {
     menu.getMenuItemById('create-custom-match').visible = false
+    menu.getMenuItemById('dev-tools').visible = false
   }
 
   Menu.setApplicationMenu(menu)
@@ -182,12 +205,6 @@ async function main() {
       wm.open()
     })
   }
-
-  ipcMain.on('join-match', (e, data) => {
-    if (data.startsWith('https://kirka.io/games/')) {
-      wm.load(data)
-    }
-  })
 
   wm.open()
 }
