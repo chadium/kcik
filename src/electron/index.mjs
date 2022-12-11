@@ -1,9 +1,8 @@
-const path = require('path')
-const { app, shell, ipcMain, BrowserWindow, Menu } = require('electron')
-const electronLocalshortcut = require('electron-localshortcut')
-const { FileStorage } = require('./storage')
-const { TheGreatReplacer } = require('./the-great-replacer')
-require('./dotenv')
+import path from 'path'
+import { app, shell, ipcMain, BrowserWindow, Menu } from 'electron'
+import electronLocalshortcut from 'electron-localshortcut'
+import { FileStorage } from './storage.mjs'
+import { TheGreatReplacer } from './the-great-replacer.mjs'
 
 const isMac = process.platform === 'darwin'
 
@@ -24,12 +23,12 @@ class WinMan {
       titleBarStyle: 'hidden',
       titleBarOverlay: true,
       webPreferences: {
-        preload: path.join(__dirname, '..', 'dist', 'preload', 'index.js'),
+        preload: path.join(__dirname, '..', 'preload', 'index.js'),
         contextIsolation: false,
 
         // The API endpoints are not encrypted because we're not running a
         // bank here.
-        allowRunningInsecureContent: true
+        allowRunningInsecureContent: process.env.NODE_ENV !== 'production'
       }
     })
 
@@ -107,6 +106,7 @@ function buildMenu(wm) {
           }
         },
         {
+          id: 'create-custom-match',
           label: 'Create custom match',
           click: () => {
             wm.createCustomMatch()
@@ -149,14 +149,22 @@ function buildMenu(wm) {
 async function main() {
   await app.whenReady()
 
-  let tgr = new TheGreatReplacer({
-    cacheStorage: new FileStorage({ prefix: 'url-cache' }),
-    replaceStorage: new FileStorage({ prefix: 'url-1up' })
-  })
+  if (ADMIN) {
+    let tgr = new TheGreatReplacer({
+      cacheStorage: new FileStorage({ prefix: 'url-cache' }),
+      replaceStorage: new FileStorage({ prefix: 'url-1up' })
+    })
+  }
 
   let wm = new WinMan()
 
-  Menu.setApplicationMenu(buildMenu(wm))
+  let menu = buildMenu(wm)
+
+  if (!ADMIN) {
+    menu.getMenuItemById('create-custom-match').visible = false
+  }
+
+  Menu.setApplicationMenu(menu)
 
   // Quit when all windows are closed, except on macOS. There, it's common
   // for applications and their menu bar to stay active until the user quits

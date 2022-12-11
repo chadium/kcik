@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
-    "build": "webpack build",
+    "start-user": "electron dist/user/electron/index.js",
+    "start-admin": "electron dist/admin/electron/index.js",
+    "build": "webpack build -c webpack.user.config.js && webpack build -c webpack.admin.config.js",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "postinstall": "pushd node_modules/dynamic-buffer && npm install && npm run build"

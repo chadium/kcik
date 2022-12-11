@@ -1,11 +1,11 @@
-const prettier = require('prettier')
-const { session } = require('electron')
-const http = require('http');
-const { deobfuscate } = require('js-deobfuscator')
-const { httpRequest } = require('./http-request')
-const { FileNotFoundError } = require('./storage')
+import prettier from 'prettier'
+import { session } from 'electron'
+import http from 'http'
+import { deobfuscate } from 'js-deobfuscator'
+import { httpRequest } from './http-request.mjs'
+import { FileNotFoundError } from './storage.mjs'
 
-exports.TheGreatReplacer = class TheGreatReplacer {
+export class TheGreatReplacer {
   constructor({ cacheStorage, replaceStorage }) {
     this._cacheStorage = cacheStorage
     this._replaceStorage = replaceStorage

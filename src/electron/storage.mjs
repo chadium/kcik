@@ -1,15 +1,15 @@
-const { app } = require('electron');
-const path = require('path');
-const fs = require('fs')
+import { app } from 'electron'
+import path from 'path'
+import fs from 'fs'
 
-exports.FileNotFoundError = class FileNotFoundError extends Error {
+export class FileNotFoundError extends Error {
   constructor(message) {
     super(message)
     this.name = this.constructor.name
   }
 }
 
-exports.FileStorage = class FileStorage {
+export class FileStorage {
   constructor({
     prefix = 'misc'
   } = {}) {
@@ -32,7 +32,7 @@ exports.FileStorage = class FileStorage {
       return Buffer.from(data)
     } catch (e) {
       if (e.message.startsWith('ENOENT')) {
-        throw new exports.FileNotFoundError(`${fullPath} not found`)
+        throw new FileNotFoundError(`${fullPath} not found`)
       } else {
         throw e
       }
