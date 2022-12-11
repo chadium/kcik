@@ -17,10 +17,11 @@ class WinMan {
       return
     }
 
+    const title = this._makeTitle()
     const [width, height] = this._bestDefaultSize()
 
     this._win = new BrowserWindow({
-      title: 'Boomer Kirka Client ' + BOOMER_VERSION,
+      title,
       width: Math.floor(width * 0.666666),
       height: Math.floor(height * 0.666666),
       webPreferences: {
@@ -102,6 +103,16 @@ class WinMan {
     const { width, height } = primaryDisplay.workAreaSize
 
     return [width, height]
+  }
+
+  _makeTitle() {
+    let text = 'Boomer Kirka Client ' + BOOMER_VERSION
+
+    if (BOOMER_ADMIN) {
+      text += ' (Admin)'
+    }
+
+    return text
   }
 }
 
