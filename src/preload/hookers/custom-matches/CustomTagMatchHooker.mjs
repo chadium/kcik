@@ -199,6 +199,8 @@ export class CustomTagMatchHooker extends Hooker {
   }
 
   async unhook() {
+    await this._state.stop()
+
     const matchApi = this.pimp.getApi('match')
 
     matchApi.off('matchAvailable', this._onMatchJoin)
