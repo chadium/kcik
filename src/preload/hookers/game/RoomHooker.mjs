@@ -125,6 +125,28 @@ export class RoomHooker extends Hooker {
           // room to actually stop existing.
           //this._currentRoom.leave()
         },
+        joinRoom: async (regionId, roomId) => {
+          if (this._currentRoom !== null) {
+            throw new Error('Cannot join room while already in a room')
+          }
+
+          let id = `${regionId}~${roomId}`
+
+          let vueApp = vueAppApi.getVueApp()
+          await vueApp.$store.dispatch('game/connectByIdRoom', id)
+          if (this._game.room) {
+            return {
+              roomId: this._game.room.id,
+              regionId: this._game.selectedRegion
+            }
+          } else {
+            // Unfortunately the error message is sent to a notification
+            // module. We don't have access to the error object. The
+            // most we could do is hook into the notification module
+            // and retrieve the error message.
+            throw new Error('Failed to join room.')
+          }
+        },
         createRoom: async (options) => {
           let vueApp = vueAppApi.getVueApp()
 

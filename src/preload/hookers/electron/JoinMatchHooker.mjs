@@ -4,9 +4,10 @@ import { PrompterCancelError } from '../../Prompter.mjs'
 import * as log from '../../log.mjs'
 
 export class JoinMatchHooker extends Hooker {
-  constructor(prompter) {
+  constructor(prompter, messenger) {
     super()
     this._prompter = prompter
+    this._messenger = messenger
   }
 
   hook() {
@@ -26,17 +27,32 @@ export class JoinMatchHooker extends Hooker {
 
         let result = await this._prompter.prompt({ title: 'Join match', placeholder: "Put link here", buttons })
 
-        ipcRenderer.send('join-match', result.input)
+        let [regionId, roomId] = this._extractIds(result.input)
+
+        await this.pimp.getApi('room').joinRoom(regionId, roomId)
       } catch (e) {
         if (e instanceof PrompterCancelError) {
           // Ignore.
         } else {
           log.bad('JoinMatch', e)
+          await this._messenger.prompt({ title: e.name, message: e.message })
         }
       }
     })
   }
 
   unhook() {
+  }
+
+  _extractIds(url) {
+    const regexp = /\/games\/(.+)~(.+)$/
+
+    let matches = regexp.exec(url)
+
+    if (matches === null) {
+      throw new Error('Link not recognized. Did you type it correctly?')
+    }
+
+    return [matches[1], matches[2]]
   }
 }

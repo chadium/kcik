@@ -1,3 +1,4 @@
+import { Messenger } from './Messenger.mjs'
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
@@ -37,10 +38,11 @@ async function main() {
   await pimp.register(new DomHooker())
 
   let prompter = new Prompter(pimp.getApi('dom').addElement())
+  let messenger = new Messenger(pimp.getApi('dom').addElement())
 
   let hookers = [
     new VueAppHooker(),
-    new JoinMatchHooker(prompter),
+    new JoinMatchHooker(prompter, messenger),
     new WorldMapHooker(),
     new RoomHooker(),
     new PlayerHooker(),

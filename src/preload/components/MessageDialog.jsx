@@ -1,38 +1,16 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import Train from "./Train.jsx"
-import InputText from "./InputText.jsx"
 import Button from "./Button.jsx"
 import ModalBox from "./ModalBox.jsx"
 
-export default function Prompt({ show, title, placeholder, buttons, onEnter, onCancel }) {
-  let [input, setInput] = useState('')
-
-  const onAccept = useCallback(function (e) {
-    if (onEnter) {
-      onEnter({
-        input
-      })
-    }
-  }, [onEnter, input])
-
-  const onReject = useCallback(function (e) {
-    if (onCancel) {
-      onCancel()
-    }
-  }, [onCancel])
-
+export default function MessageDialog({ show, title, message, buttons, onAccept, onReject }) {
   let realButtons = useMemo(() => {
     if (buttons === undefined) {
       buttons = [
         {
           text: 'OK',
           action: 'accept',
-        },
-        {
-          text: 'Cancel',
-          action: 'reject',
-          theme: 'other',
-        },
+        }
       ]
     }
 
@@ -56,7 +34,7 @@ export default function Prompt({ show, title, placeholder, buttons, onEnter, onC
 
   return (
     <ModalBox show={show} onClose={onReject} title={title}>
-      <InputText placeholder={placeholder} value={input} onChange={setInput}/>
+      <p>{message}</p>
 
       <div className="boomer-p-t"></div>
 

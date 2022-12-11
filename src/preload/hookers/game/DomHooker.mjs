@@ -14,9 +14,9 @@ class StateLoaded extends MachineState {
 class StateWaiting extends MachineState {
   constructor() {
     super()
-    this._onLoaded = async (e) => {
+    this._onLoaded = (e) => {
       log.info('Dom', 'DOMContentLoaded')
-      await this.machine.next(new StateLoaded())
+      this.machine.next(new StateLoaded())
     }
   }
 

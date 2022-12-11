@@ -73,6 +73,8 @@ export class CustomTagMatchHooker extends Hooker {
     this._state = new Machine({ base: State })
     this._state.hooker = this
     this._match = match
+    this._rankingSocket = null
+    this._itSocket = null
     this._onMatchJoin = async () => {
       await this._state.call('matchJoin')
     }
@@ -89,6 +91,28 @@ export class CustomTagMatchHooker extends Hooker {
     matchApi.on('matchAvailable', this._onMatchJoin)
     matchApi.on('matchLeave', this._onMatchLeave)
 
+    this._rankingSocket = userApi.wsTagRanking({
+      onConnect: async () => {
+        this._players = await userApi.getTagRanking()
+        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+      },
+      onUpdate: ({ ranking }) => {
+        this._players = ranking
+        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+      }
+    })
+
+    this._itSocket = userApi.wsTagIt({
+      onConnect: async () => {
+        this._it = await userApi.tagGetIt()
+        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+      },
+      onUpdate: ({ it }) => {
+        this._it = it
+        this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+      }
+    })
+
     return {
       name: 'customTagMatch',
       api: {
@@ -102,6 +126,12 @@ export class CustomTagMatchHooker extends Hooker {
 
   async unhook() {
     await this._state.stop()
+
+    this._rankingSocket.close()
+    this._rankingSocket = null
+
+    this._itSocket.close()
+    this._itSocket = null
 
     const matchApi = this.pimp.getApi('match')
 

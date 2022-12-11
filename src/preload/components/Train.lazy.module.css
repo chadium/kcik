@@ -1,8 +1,8 @@
-.actions {
+.container {
   display: flex;
   gap: var(--boomer-safe-space);
 }
 
-.actions > * {
+.container > * {
   flex: 1;
 }

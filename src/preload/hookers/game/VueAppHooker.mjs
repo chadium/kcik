@@ -2,6 +2,7 @@ import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import { waitForElm } from '../../dom-utils.mjs'
 import { waitForProperty } from '../../object-utils.mjs'
+import * as log from '../../log.mjs'
 
 export class VueAppHooker extends Hooker {
   constructor() {
@@ -16,6 +17,7 @@ export class VueAppHooker extends Hooker {
     domApi.on('bodyAvailable', async () => {
       let app = await waitForElm('app')
       this._vueApp = await waitForProperty(app, '__vue__')
+      log.info('VueApp', 'Found Vue app instance.')
       this._events.emit('available', this._vueApp)
     })
 
