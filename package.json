@@ -22,11 +22,13 @@
     "@electron-forge/maker-squirrel": "^6.0.3",
     "@electron-forge/maker-zip": "^6.0.3",
     "babel-loader": "^9.1.0",
+    "dotenv-defaults": "^5.0.2",
     "dotenv-webpack": "^8.0.1",
     "electron": "^21.3.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "webpack": "^5.75.0",
+    "webpack-bundle-analyzer": "^4.7.0",
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
@@ -46,5 +48,6 @@
     "react-popper": "^2.3.0",
     "reconnecting-websocket": "^4.4.0",
     "style-loader": "^3.3.1"
-  }
+  },
+  "sideEffects": false
 }
