@@ -70,7 +70,7 @@ class StatePlayingCustomMatch extends State {
   async [MachineState.ON_ENTER]() {
     if (this.match.type === 'tag') {
       this.hookers.push(new CustomTagMatchHooker(this.match))
-      if (ADMIN) {
+      if (BOOMER_ADMIN) {
         this.hookers.push(new CustomTagMatchAdminHooker(this.match))
       }
       this.hookers.push(new CustomTagMatchUiHooker())

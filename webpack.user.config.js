@@ -6,7 +6,7 @@ const WebpackObfuscator = require('webpack-obfuscator');
 for (let config of configs) {
   config.plugins.push(
     new DefinePlugin({
-      ADMIN: false
+      BOOMER_ADMIN: false
     })
   )
 

@@ -5,7 +5,7 @@ const configs = require('./webpack.base.config.js')
 for (let config of configs) {
   config.plugins.push(
     new DefinePlugin({
-      ADMIN: true
+      BOOMER_ADMIN: true
     })
   )
 

@@ -171,7 +171,7 @@ function buildMenu(wm) {
 async function main() {
   await app.whenReady()
 
-  if (ADMIN) {
+  if (BOOMER_ADMIN) {
     let tgr = new TheGreatReplacer({
       cacheStorage: new FileStorage({ prefix: 'url-cache' }),
       replaceStorage: new FileStorage({ prefix: 'url-1up' })
@@ -182,7 +182,7 @@ async function main() {
 
   let menu = buildMenu(wm)
 
-  if (!ADMIN) {
+  if (!BOOMER_ADMIN) {
     menu.getMenuItemById('create-custom-match').visible = false
     menu.getMenuItemById('dev-tools').visible = false
   }

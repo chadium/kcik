@@ -50,7 +50,7 @@ export class CreateCustomMatchHooker extends Hooker {
 
         let { roomId, regionId } = await roomApi.createRoom(options.kirkaOptions)
 
-        if (ADMIN) {
+        if (BOOMER_ADMIN) {
           log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
           await adminApi.matchSet(regionId, roomId, options.type)
         }
