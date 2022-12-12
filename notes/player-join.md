@@ -15,5 +15,10 @@ When a new player joins the room receives a message which triggers a state chang
   - Call a method that will create scene object by cloning from an existing scene.
   - Copies all animations and plays standing animation
   - Copies position from player object. Literally calls a copy method in the scene object's position object. It just copies x y z.
+  - Decides player name color and whether player name should be shown all the time
+  - Creates scene object that contains player name
+  - ...
+  - Creates a bunch of other scene objects.
+  - Acquires entity something something. Adds components to the entity. Stores entity in game system.
   - ...
   - End up calling `setOtherPlayerCallbacks`

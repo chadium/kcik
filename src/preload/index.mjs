@@ -9,6 +9,7 @@ import { WorldMapHooker } from './hookers/game/WorldMapHooker.mjs'
 import { LoadingHooker } from './hookers/electron/LoadingHooker.mjs'
 import { JoinMatchHooker } from './hookers/electron/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/game/PlayerHooker.mjs'
+import { EntityComponentSystemHooker } from './hookers/game/EntityComponentSystemHooker.mjs'
 import { MatchHooker } from './hookers/game/MatchHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/game/SniffRoomMessagesHooker.mjs'
 import { SoundHooker } from './hookers/game/SoundHooker.mjs'
@@ -45,6 +46,7 @@ async function main() {
   let hookers = [
     new VueAppHooker(),
     new LoadingHooker(),
+    new EntityComponentSystemHooker(),
     new WorldHooker(),
     new WorldMapHooker(),
     new RoomHooker(),

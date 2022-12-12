@@ -1,4 +1,9 @@
+import objectPath from 'object-path'
 import { MAX_32BIT_INT } from './math-utils.mjs'
+
+export function getByPath(o, path) {
+  return objectPath.get(o, path)
+}
 
 export async function waitForProperty(o, propName, {
   timeout = MAX_32BIT_INT,
