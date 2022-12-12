@@ -5,7 +5,7 @@ export function getByPath(o, path) {
   return objectPath.get(o, path)
 }
 
-export async function hijackProperty(o, propName, {
+export function hijackProperty(o, propName, {
   get = () => {},
   set = () => {}
 } = {}) {
@@ -20,6 +20,47 @@ export async function hijackProperty(o, propName, {
       let value = o[propName]
       delete o[propName]
       o[propName] = value
+    }
+  }
+}
+
+export function hijackPropertyWithMemory(o, propName, {
+  get,
+  set
+} = {}) {
+  let storage = o[propName]
+
+  let propSet = (() => {
+    if (set) {
+      return (v) => {
+        storage = v
+        set(v)
+      }
+    } else {
+      return (v) => {
+        storage = v
+      }
+    }
+  })()
+
+  let propGet = (() => {
+    if (get) {
+      return () => get()
+    } else {
+      return () => {}
+    }
+  })()
+
+  Object.defineProperty(o, propName, {
+    configurable: true,
+    set: propSet,
+    get: propGet
+  })
+
+  return {
+    close() {
+      delete o[propName]
+      o[propName] = storage
     }
   }
 }

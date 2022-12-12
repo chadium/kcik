@@ -1,11 +1,11 @@
 import { Hooker } from '../../Pimp.mjs'
-import { hijackProperty, pathsToPredicate } from '../../object-utils.mjs'
+import { hijackPropertyWithMemory, pathsToPredicate } from '../../object-utils.mjs'
 
 class Modded {
   constructor(component, field, state) {
     this.component = component
     this.state = state
-    this.accessorHandle = hijackProperty(component, field, {
+    this.accessorHandle = hijackPropertyWithMemory(component, field, {
       get: () => this.state
     })
   }
@@ -52,7 +52,16 @@ export class PlayerNameVisibilityHooker extends Hooker {
           }
 
           let entity = ecsApi.getPlayerEntity(sessionId)
+
+          if (entity === null) {
+            throw new Error(`Entitiy of ${sessionId} not found`)
+          }
+
           let component = ecsApi.getPlayerNameComponent(entity)
+
+          if (component === null) {
+            throw new Error(`Player name component of ${sessionId} not found`)
+          }
 
           if (this._boolField === null) {
             this._findBoolField(component)

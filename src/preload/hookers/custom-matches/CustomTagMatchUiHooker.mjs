@@ -25,9 +25,23 @@ export class CustomTagMatchUiHooker extends Hooker {
       this._it = it
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
 
-      // const playerNameVisibilityApi = this.pimp.getApi('playerNameVisibility')
-      // playerNameVisibilityApi.clear()
-      // playerNameVisibilityApi.
+      const playerNameVisibilityApi = this.pimp.getApi('playerNameVisibility')
+      playerNameVisibilityApi.clear()
+
+      if (this._it) {
+        const playerApi = this.pimp.getApi('player')
+
+        if (this._it.name === playerApi.getName()) {
+          // No label to place.
+        } else {
+          const matchApi = this.pimp.getApi('match')
+          let sessionId = matchApi.getSessionIdByName(this._it.name)
+
+          if (sessionId) {
+            playerNameVisibilityApi.takeControl(sessionId, true)
+          }
+        }
+      }
     }
   }
 

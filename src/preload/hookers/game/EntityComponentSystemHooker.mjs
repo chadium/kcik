@@ -82,7 +82,13 @@ export class EntityComponentSystemHooker extends Hooker {
           return this._getPlayerSystem()
         },
         getPlayerEntity: (sessionId) => {
-          return this._getPlayerSystem().players[sessionId] ?? null
+          let playerSystem = this._getPlayerSystem()
+
+          if (playerSystem === null) {
+            return null
+          }
+
+          return playerSystem.players[sessionId] ?? null
         },
         getPlayerNameComponent: (entity) => {
           for (let component of Object.values(entity._components)) {
@@ -103,6 +109,10 @@ export class EntityComponentSystemHooker extends Hooker {
   }
 
   _getPlayerSystem() {
+    if (this._world === null) {
+      return null
+    }
+
     let s = this._world.systemManager._systems.find(s => s.setOtherPlayerCallbacks)
     return s ?? null
   }

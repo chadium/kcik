@@ -13,10 +13,7 @@ export class MatchHooker extends Hooker {
   hook() {
     let playerApi = this.pimp.getApi('player')
     let roomApi = this.pimp.getApi('room')
-
-    roomApi.on('joined', ({ room }) => {
-      this._events.emit('matchJoin', {})
-    })
+    let ecsApi = this.pimp.getApi('ecs')
 
     this._events.on('newListener', (name, listener) => {
       if (name === 'matchAvailable') {
@@ -27,121 +24,127 @@ export class MatchHooker extends Hooker {
       }
     })
 
-    roomApi.on('available', ({ room }) => {
-      this._events.emit('matchAvailable', {})
-
-      room.onStateChange((e) => {
-        try {
-          let found = Object.assign({}, this._found)
-
-          for (let player of e.players.values()) {
-            if (player.sessionId in found) {
-              delete found[player.sessionId]
-              continue 
-            }
-
-            // New player.
-            this._found[player.sessionId] = player
-
-            try {
-              this._events.emit('playerJoin', {
-                playerName: player.name
-              })
-            } catch (e) {
-              log.bad('MatchHooker', e)
-            }
-
-            // let l
-            // Object.defineProperty(player.death, 'onAdd', {
-            //   configurable: false,
-            //   get() {
-            //     return l
-            //   },
-            //   set(f) {
-            //     debugger
-            //     l = f
-            //   }
-            // });
-
-            player.listen('deaths', (current, previous) => {
-              log.info('Match', `${player.name} got killed`)
-              this._events.emit('playerDeath', {
-                playerName: player.name,
-                current,
-                previous
-              })
-            })
-            player.listen('kills', (current, previous) => {
-              log.info('Match', `${player.name} killed`)
-              this._events.emit('playerKill', {
-                playerName: player.name,
-                current,
-                previous
-              })
-            })
-            player.listen('score', (current, previous) => {
-              log.info('Match', `${player.name} new score`, current)
-              this._events.emit('playerScore', {
-                playerName: player.name,
-                current,
-                previous
-              })
-            })
-          }
-
-          for (let sessionId in found) {
-            // Player left.
-
-            let player = this._found[sessionId]
-
-            try {
-              this._events.emit('playerLeave', {
-                playerSessionId: player.sessionId,
-                playerName: player.name
-              })
-            } catch (e) {
-              log.bad(e)
-            }
-
-            delete this._found[sessionId]
-          }
-        } catch (e) {
-          log.bad('MatchHooker', e)
-        }
+    ecsApi.on('available', () => {
+      roomApi.on('joined', ({ room }) => {
+        this._events.emit('matchJoin', {})
       })
-    })
 
-    roomApi.on('leaved', ({ room }) => {
-      for (let sessionId in this._found) {
-        let player = this._found[sessionId]
+      roomApi.on('available', ({ room }) => {
+        this._events.emit('matchAvailable', {})
 
-        try {
-          this._events.emit('playerLeave', {
-            playerName: player.name
-          })
-        } catch (e) {
-          log.bad(e)
-        }
+        room.onStateChange((e) => {
+          try {
+            let found = Object.assign({}, this._found)
 
-        delete this._found[sessionId]
-      }
+            for (let player of e.players.values()) {
+              if (player.sessionId in found) {
+                delete found[player.sessionId]
+                continue 
+              }
 
-      this._events.emit('matchLeave', {})
-    })
+              // New player.
+              this._found[player.sessionId] = player
 
-    let killbarApi = this.pimp.getApi('killbar')
+              try {
+                this._events.emit('playerJoin', {
+                  playerName: player.name
+                })
+              } catch (e) {
+                log.bad('MatchHooker', e)
+              }
 
-    killbarApi.on('kill', ({ deadPlayerName, killerPlayerName, headshot }) => {
-      this._events.emit('kill', {
-        deadPlayerName,
-        killerPlayerName,
-        headshot
+              // let l
+              // Object.defineProperty(player.death, 'onAdd', {
+              //   configurable: false,
+              //   get() {
+              //     return l
+              //   },
+              //   set(f) {
+              //     debugger
+              //     l = f
+              //   }
+              // });
+
+              player.listen('deaths', (current, previous) => {
+                log.info('Match', `${player.name} got killed`)
+                this._events.emit('playerDeath', {
+                  playerName: player.name,
+                  current,
+                  previous
+                })
+              })
+              player.listen('kills', (current, previous) => {
+                log.info('Match', `${player.name} killed`)
+                this._events.emit('playerKill', {
+                  playerName: player.name,
+                  current,
+                  previous
+                })
+              })
+              player.listen('score', (current, previous) => {
+                log.info('Match', `${player.name} new score`, current)
+                this._events.emit('playerScore', {
+                  playerName: player.name,
+                  current,
+                  previous
+                })
+              })
+            }
+
+            for (let sessionId in found) {
+              // Player left.
+
+              let player = this._found[sessionId]
+
+              try {
+                this._events.emit('playerLeave', {
+                  playerSessionId: player.sessionId,
+                  playerName: player.name
+                })
+              } catch (e) {
+                log.bad(e)
+              }
+
+              delete this._found[sessionId]
+            }
+          } catch (e) {
+            log.bad('MatchHooker', e)
+          }
+        })
       })
-    })
 
-    killbarApi.on('suicide', ({ deadPlayerName }) => {
-      this._events.emit('suicide', {
-        deadPlayerName
+      roomApi.on('leaved', ({ room }) => {
+        for (let sessionId in this._found) {
+          let player = this._found[sessionId]
+  
+          try {
+            this._events.emit('playerLeave', {
+              playerName: player.name
+            })
+          } catch (e) {
+            log.bad(e)
+          }
+  
+          delete this._found[sessionId]
+        }
+  
+        this._events.emit('matchLeave', {})
+      })
+
+      let killbarApi = this.pimp.getApi('killbar')
+  
+      killbarApi.on('kill', ({ deadPlayerName, killerPlayerName, headshot }) => {
+        this._events.emit('kill', {
+          deadPlayerName,
+          killerPlayerName,
+          headshot
+        })
+      })
+  
+      killbarApi.on('suicide', ({ deadPlayerName }) => {
+        this._events.emit('suicide', {
+          deadPlayerName
+        })
       })
     })
 
@@ -177,5 +180,6 @@ export class MatchHooker extends Hooker {
   }
 
   unhook() {
+    throw new Error('To be implemented.')
   }
 }
