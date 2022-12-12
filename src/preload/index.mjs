@@ -16,7 +16,7 @@ import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
 import { CustomMatchDetectorHooker } from './hookers/custom-matches/CustomMatchDetectorHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
-import { findKey, findValue, debugAccess } from './object-utils.mjs'
+import { pathsToKey, pathsToValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
 
@@ -69,8 +69,8 @@ async function main() {
   }
 
   // Useful tools.
-  window.findKey = findKey
-  window.findValue = findValue
+  window.pathsToKey = pathsToKey
+  window.pathsToValue = pathsToValue
   window.debugAccess = debugAccess
   window.pimp = pimp
 

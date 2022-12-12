@@ -2,17 +2,13 @@ import EventEmitter from 'events'
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import { isObject } from '../../object-utils.mjs'
+import { onceMutation } from '../../vuex-utils.mjs'
 import * as kirkaSceneUtils from '../../kirka-scene-utils.mjs'
 
 export class WorldHooker extends Hooker {
   constructor() {
     super()
-    this._f = (world) => {
-      log.info('World', 'World was set world. Saving it.')
-      this._world = world
-      this._events.emit('available', this._world)
-    }
-
+    this._setWorldMutationHooker = null
     this._world = null
     this._events = new EventEmitter()
   }
@@ -41,7 +37,11 @@ export class WorldHooker extends Hooker {
       }
 
       log.warn('World', 'Could not find renderer. Will hook into setWorld and wait for it.')
-      vueAppApi.getVueApp().$store._mutations['game/setWorld'].push(this._f)
+      this._setWorldMutationHooker = onceMutation(vueAppApi.getVueApp().$store, 'game/setWorld', (world) => {
+        log.info('World', 'World was set world. Saving it.')
+        this._world = world
+        this._events.emit('available', this._world)
+      })
     })
 
     return {
@@ -112,14 +112,9 @@ export class WorldHooker extends Hooker {
   }
 
   unhook() {
-    let vueAppApi = this.pimp.getApi('vueApp')
-
-    let app = vueAppApi.getVueApp()
-
-    if (app !== null) {
-      let mutations = app.$store._mutations['game/setWorld']
-
-      arrayUtils.removeFirstByValue(mutations, this._f)
+    if (this._setWorldMutationHooker !== null) {
+      this._setWorldMutationHooker.close()
+      this._setWorldMutationHooker = null
     }
   }
 }

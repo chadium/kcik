@@ -70,7 +70,7 @@ export async function waitForProperty(o, propName, {
   })
 }
 
-export function findValue(obj, value) {
+export function pathsToValue(obj, value) {
   let seen = new Set()
   let found = []
 
@@ -107,7 +107,7 @@ export function findValue(obj, value) {
   return found
 }
 
-export function findKey(obj, needle) {
+export function pathsToKey(obj, needle) {
   let seen = new Set()
   let found = []
 
@@ -140,6 +140,51 @@ export function findKey(obj, needle) {
   for (let key of Object.keys(obj)) {
     findNested(obj, key, needle, [])
   }
+
+  return found
+}
+
+export function findFirstValueByPredicate(obj, {
+  predicate,
+  maxLevel = Infinity
+}) {
+  let seen = new Set()
+  let found = undefined
+
+  function findNested(obj, level) {
+    if (obj === null) {
+      // Ignore.
+    } else if (typeof obj === 'object') {
+      if (seen.has(obj)) {
+        // Skip to prevent stack overflow.
+        return
+      }
+
+      seen.add(obj)
+
+      if (predicate(obj)) {
+        found = obj
+        return
+      }
+
+      if (level === maxLevel) {
+        // Nope.
+        return
+      }
+
+      for (let k in obj) {
+        findNested(obj[k], level + 1)
+
+        if (found !== undefined) {
+          break
+        }
+      }
+    } else {
+      // Ignore.
+    }
+  }
+
+  findNested(obj, 0)
 
   return found
 }
