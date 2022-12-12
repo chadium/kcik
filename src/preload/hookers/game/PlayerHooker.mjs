@@ -21,6 +21,9 @@ export class PlayerHooker extends Hooker {
         getName: () => {
           return this._getPlayer().name
         },
+        getSessionId: () => {
+          return this._gameObject.mySessionId
+        },
         getKills: () => {
           return this._getPlayer().hits
         },

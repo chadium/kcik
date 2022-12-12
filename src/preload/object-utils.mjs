@@ -5,6 +5,25 @@ export function getByPath(o, path) {
   return objectPath.get(o, path)
 }
 
+export async function hijackProperty(o, propName, {
+  get = () => {},
+  set = () => {}
+} = {}) {
+  Object.defineProperty(o, propName, {
+    configurable: true,
+    set,
+    get
+  })
+
+  return {
+    close() {
+      let value = o[propName]
+      delete o[propName]
+      o[propName] = value
+    }
+  }
+}
+
 export async function waitForProperty(o, propName, {
   timeout = MAX_32BIT_INT,
   nullable = true,
@@ -144,6 +163,47 @@ export function pathsToKey(obj, needle) {
   return found
 }
 
+export function pathsToPredicate(obj, {
+  predicate,
+  maxLevel = Infinity
+}) {
+  let seen = new Set()
+  let found = []
+
+  function findNested(obj, level, previousPath) {
+    if (typeof obj === 'object') {
+      if (seen.has(obj)) {
+        // Skip to prevent stack overflow.
+        return
+      }
+
+      seen.add(obj)
+    }
+
+    if (predicate(obj, previousPath)) {
+      found.push(previousPath.concat())
+    }
+
+    if (level === maxLevel) {
+      // Nope.
+      return
+    }
+
+    if (typeof obj === 'object') {
+      for (let k in obj) {
+        let currentPath = previousPath.concat()
+        currentPath.push(k)
+
+        findNested(obj[k], level + 1, currentPath)
+      }
+    }
+  }
+
+  findNested(obj, 0, [])
+
+  return found
+}
+
 export function findFirstValueByPredicate(obj, {
   predicate,
   maxLevel = Infinity
@@ -153,7 +213,7 @@ export function findFirstValueByPredicate(obj, {
 
   function findNested(obj, level) {
     if (obj === null) {
-      // Ignore.
+      // TODO: This shouldn't be ignored.
     } else if (typeof obj === 'object') {
       if (seen.has(obj)) {
         // Skip to prevent stack overflow.

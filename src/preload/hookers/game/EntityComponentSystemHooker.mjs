@@ -9,6 +9,7 @@ export class EntityComponentSystemHooker extends Hooker {
     super()
     this._world = null
     this._events = new EventEmitter()
+    this._setWorldMutationHooker = null
   }
 
   hook() {
@@ -19,6 +20,10 @@ export class EntityComponentSystemHooker extends Hooker {
           listener(this._world)
         }
       }
+    })
+
+    this._events.on('created', () => {
+      // TODO: Figure out how to detect when it's destroyed
     })
 
     let vueAppApi = this.pimp.getApi('vueApp')
@@ -33,6 +38,8 @@ export class EntityComponentSystemHooker extends Hooker {
       if (world !== undefined) {
         log.info('EntityComponentSystem', 'Found ECSY world.')
         this._world = world
+        this._events.emit('created', this._world)
+        this._events.emit('available', this._world)
       } else {
         log.bad('EntityComponentSystem', 'Could not find ECSY world. Will hook into setWorld and wait for it.')
         this._setWorldMutationHooker = onceMutation(vueAppApi.getVueApp().$store, 'game/setWorld', (world) => {
@@ -47,6 +54,7 @@ export class EntityComponentSystemHooker extends Hooker {
           if (world !== undefined) {
             log.info('EntityComponentSystem', 'Found ECSY world.')
             this._world = world
+            this._events.emit('created', this._world)
             this._events.emit('available', this._world)
           }
         })
@@ -58,6 +66,9 @@ export class EntityComponentSystemHooker extends Hooker {
       api: {
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
+        getWorld: () => {
+          return this._world
+        },
         getComponentsManager: () => {
           return this._world.componentsManager
         },
@@ -68,8 +79,20 @@ export class EntityComponentSystemHooker extends Hooker {
           return this._world.systemManager
         },
         getPlayerSystem: () => {
-          let s = this._world.systemManager._systems.find(s => s.setOtherPlayerCallbacks)
-          return s ?? null
+          return this._getPlayerSystem()
+        },
+        getPlayerEntity: (sessionId) => {
+          return this._getPlayerSystem().players[sessionId] ?? null
+        },
+        getPlayerNameComponent: (entity) => {
+          for (let component of Object.values(entity._components)) {
+            if ('elem' in component && component.elem.type === 'Sprite') {
+              // It's probably it.
+              return component
+            }
+          }
+
+          return null
         }
       }
     }
@@ -77,5 +100,10 @@ export class EntityComponentSystemHooker extends Hooker {
 
   unhook() {
     throw new Error('To be implemented.')
+  }
+
+  _getPlayerSystem() {
+    let s = this._world.systemManager._systems.find(s => s.setOtherPlayerCallbacks)
+    return s ?? null
   }
 }

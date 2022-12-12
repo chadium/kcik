@@ -24,6 +24,10 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._onItChange = (it) => {
       this._it = it
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+
+      // const playerNameVisibilityApi = this.pimp.getApi('playerNameVisibility')
+      // playerNameVisibilityApi.clear()
+      // playerNameVisibilityApi.
     }
   }
 

@@ -96,6 +96,7 @@ export class MatchHooker extends Hooker {
 
             try {
               this._events.emit('playerLeave', {
+                playerSessionId: player.sessionId,
                 playerName: player.name
               })
             } catch (e) {
@@ -149,6 +150,25 @@ export class MatchHooker extends Hooker {
       api: {
         getPlayerNames: () => {
           return Object.values(this._found).map(p => p.name)
+        },
+        getSessionIdByName: (name) => {
+          for (let player of Object.values(this._found)) {
+            if (player.name === name) {
+              return player.sessionId
+            }
+          }
+
+          return null
+        },
+        getOtherPlayerIdentifications: () => {
+          let mySessionId = playerApi.getSessionId()
+
+          return Object.values(this._found)
+            .filter(p => p.sessionId !== mySessionId)
+            .map(p => ({
+              name: p.name,
+              sessionId: p.sessionId,
+            }))
         },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),

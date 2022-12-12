@@ -16,6 +16,7 @@ import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
 import { CustomMatchDetectorHooker } from './hookers/custom-matches/CustomMatchDetectorHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
+import { PlayerNameVisibilityHooker } from './hookers/mods/PlayerNameVisibilityHooker.mjs'
 import { pathsToKey, pathsToValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
@@ -57,6 +58,7 @@ async function main() {
     new MatchHooker(),
     new CustomMatchDetectorHooker(),
     new CreateCustomMatchHooker(),
+    new PlayerNameVisibilityHooker(),
     //new SniffRoomMessagesHooker(),
   ]
 
