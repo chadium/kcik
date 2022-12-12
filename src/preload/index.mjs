@@ -11,6 +11,7 @@ import { JoinMatchHooker } from './hookers/electron/JoinMatchHooker.mjs'
 import { PlayerHooker } from './hookers/game/PlayerHooker.mjs'
 import { EntityComponentSystemHooker } from './hookers/game/EntityComponentSystemHooker.mjs'
 import { MatchHooker } from './hookers/game/MatchHooker.mjs'
+import { MatchUiHooker } from './hookers/game/MatchUiHooker.mjs'
 import { SniffRoomMessagesHooker } from './hookers/game/SniffRoomMessagesHooker.mjs'
 import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
@@ -56,6 +57,7 @@ async function main() {
     new SoundHooker(),
     new KillBarHooker(),
     new MatchHooker(),
+    new MatchUiHooker(),
     new CustomMatchDetectorHooker(),
     new CreateCustomMatchHooker(),
     new PlayerNameVisibilityHooker(),

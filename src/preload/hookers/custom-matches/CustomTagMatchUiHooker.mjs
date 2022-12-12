@@ -59,10 +59,16 @@ export class CustomTagMatchUiHooker extends Hooker {
     customTagMatchApi.on('playersChange', this._onPlayersChange)
     customTagMatchApi.on('itChange', this._onItChange)
 
+    let matchUiApi = this.pimp.getApi('matchUi')
+    matchUiApi.show('killDeathCounter', false)
+
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
   }
 
   unhook() {
+    let matchUiApi = this.pimp.getApi('matchUi')
+    matchUiApi.show('killDeathCounter', true)
+
     let customTagMatchApi = this.pimp.getApi('customTagMatch')
     customTagMatchApi.off('stateChange', this._onStateChange)
     customTagMatchApi.off('playersChange', this._onPlayersChange)
