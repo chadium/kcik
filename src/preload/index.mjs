@@ -3,6 +3,7 @@ import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
+import { WorldHooker } from './hookers/game/WorldHooker.mjs'
 import { RoomHooker } from './hookers/game/RoomHooker.mjs'
 import { WorldMapHooker } from './hookers/game/WorldMapHooker.mjs'
 import { JoinMatchHooker } from './hookers/electron/JoinMatchHooker.mjs'
@@ -13,7 +14,7 @@ import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
 import { CustomMatchDetectorHooker } from './hookers/custom-matches/CustomMatchDetectorHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
-import { findValue, debugAccess } from './object-utils.mjs'
+import { findKey, findValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
 
@@ -42,6 +43,7 @@ async function main() {
 
   let hookers = [
     new VueAppHooker(),
+    new WorldHooker(),
     new WorldMapHooker(),
     new RoomHooker(),
     new JoinMatchHooker(prompter, messenger),
@@ -63,6 +65,7 @@ async function main() {
   }
 
   // Useful tools.
+  window.findKey = findKey
   window.findValue = findValue
   window.debugAccess = debugAccess
   window.pimp = pimp

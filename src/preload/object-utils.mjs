@@ -102,6 +102,43 @@ export function findValue(obj, value) {
   return found
 }
 
+export function findKey(obj, needle) {
+  let seen = new Set()
+  let found = []
+
+  function findNested(obj, key, needle, previousPath) {
+    // Base case
+    let currentPath = previousPath.concat()
+    currentPath.push(key)
+
+    if (key === needle) {
+      found.push(currentPath)
+    } else if (obj[key] === null) {
+      // Ignore.
+    } else if (typeof obj[key] === 'object') {
+      if (seen.has(obj[key])) {
+        // Skip to prevent stack overflow.
+        return
+      }
+
+      seen.add(obj[key])
+
+      let newObj = obj[key]
+      for (let newKey of Object.keys(newObj)) {
+        findNested(newObj, newKey, needle, currentPath)
+      }
+    } else {
+      // Ignore.
+    }
+  }
+
+  for (let key of Object.keys(obj)) {
+    findNested(obj, key, needle, [])
+  }
+
+  return found
+}
+
 export function debugAccess(o, propName) {
   let storage = o[propName]
 
@@ -115,4 +152,8 @@ export function debugAccess(o, propName) {
       return storage
     }
   })
+}
+
+export function isObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]'
 }
