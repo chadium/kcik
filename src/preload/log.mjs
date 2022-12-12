@@ -1,11 +1,11 @@
 export function info(tag, ...args) {
-  console.log(`%c ${tag} `, 'background: #222; color: #dcff6c', ...args);
+  console.log(`%c ${tag} `, 'background: #dcff6c; color: #222222', ...args);
 }
 
 export function warn(tag, ...args) {
-  console.log(`%c ${tag} `, 'background: #222; color: #ffe96c', ...args);
+  console.log(`%c ${tag} `, 'background: #ffe96c; color: #222222', ...args);
 }
 
 export function bad(tag, ...args) {
-  console.log(`%c ${tag} `, 'background: #222; color: #ff6c6c', ...args);
+  console.log(`%c ${tag} `, 'background: #ff6c6c; color: #ffffff', ...args);
 }
