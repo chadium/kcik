@@ -61,6 +61,8 @@ export class CustomTagMatchUiHooker extends Hooker {
 
     let matchUiApi = this.pimp.getApi('matchUi')
     matchUiApi.show('killDeathCounter', false)
+    matchUiApi.show('chatInstructions', false)
+    matchUiApi.show('tabInfo', false)
 
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
   }
@@ -68,6 +70,8 @@ export class CustomTagMatchUiHooker extends Hooker {
   unhook() {
     let matchUiApi = this.pimp.getApi('matchUi')
     matchUiApi.show('killDeathCounter', true)
+    matchUiApi.show('chatInstructions', true)
+    matchUiApi.show('tabInfo', true)
 
     let customTagMatchApi = this.pimp.getApi('customTagMatch')
     customTagMatchApi.off('stateChange', this._onStateChange)

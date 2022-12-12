@@ -10,8 +10,18 @@ export class MatchUiHooker extends Hooker {
     this._root = null
     this._reactRoot = null
     this._styles = {
+      tabInfo: `
+        .desktop-game-interface > .tab-info {
+          display: none !important;
+        }
+      `,
       killDeathCounter: `
-        .kill-death {
+        .desktop-game-interface .kill-death {
+          display: none !important;
+        }
+      `,
+      chatInstructions: `
+        .desktop-game-interface > .chat > .info {
           display: none !important;
         }
       `,
