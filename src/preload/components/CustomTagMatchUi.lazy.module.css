@@ -20,16 +20,41 @@
 
 .waitingTip {
   margin-top: var(--boomer-safe-space);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.it {
+  pointer-events: none;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  text-align: center;
+  color: white;
+  font-size: 1.25rem;
+}
+
+.itName {
+  font-size: 3rem;
+}
+
+.playersEntryIt {
+  opacity: 0;
+  margin-right: var(--boomer-safe-space);
+}
+
+.playersEntryIt.show {
+  opacity: 1;
 }
 
 .rules {
   pointer-events: none;
   position: fixed;
-  top: 66px;
-  left: 18px;
+  top: 6rem;
+  left: 2rem;
   z-index: 1;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .rulesContent {
@@ -45,8 +70,8 @@
 .players {
   pointer-events: none;
   position: fixed;
-  top: 66px;
-  left: 18px;
+  top: 6rem;
+  left: 2rem;
   z-index: 1;
 }
 
@@ -72,12 +97,4 @@
   text-align: center;
   padding: 10px;
   padding-bottom: 0;
-}
-
-.players {
-  padding: 10px;
-}
-
-.players > * {
-  margin-top: 10px;
 }

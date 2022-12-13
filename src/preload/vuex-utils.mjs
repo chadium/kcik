@@ -20,3 +20,17 @@ export function onceMutation(store, mutationName, cb) {
     close
   }
 }
+
+export function overrideMutation(store, mutationName, cb) {
+  let originalMutations = store._mutations[mutationName]
+
+  function close() {
+    store._mutations[mutationName] = originalMutations
+  }
+
+  store._mutations[mutationName] = [cb]
+
+  return {
+    close
+  }
+}

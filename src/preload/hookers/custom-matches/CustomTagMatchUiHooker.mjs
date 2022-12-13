@@ -14,6 +14,11 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._state = null
     this._created = null
     this._meName = null
+    this._showRanking = false
+    this._onTab = (state) => {
+      this._showRanking = state
+      this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+    },
     this._onPlayerAvailable = () => {
       let playerApi = this.pimp.getApi('player')
       this._meName = playerApi.getName()
@@ -72,6 +77,9 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('killDeathCounter', false)
     matchUiApi.show('chatInstructions', false)
     matchUiApi.show('tabInfo', false)
+    matchUiApi.show('mapName', false)
+    matchUiApi.show('inviteAndSpectate', BOOMER_ADMIN)
+    matchUiApi.overrideTab(this._onTab)
 
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
   }
@@ -81,6 +89,9 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('killDeathCounter', true)
     matchUiApi.show('chatInstructions', true)
     matchUiApi.show('tabInfo', true)
+    matchUiApi.show('mapName', true)
+    matchUiApi.show('inviteAndSpectate', true)
+    matchUiApi.overrideTab(null)
 
     let customTagMatchApi = this.pimp.getApi('customTagMatch')
     customTagMatchApi.off('stateChange', this._onStateChange)
@@ -100,7 +111,8 @@ export class CustomTagMatchUiHooker extends Hooker {
       meName: this._meName,
       it: this._it,
       state: this._state,
-      created: this._created
+      created: this._created,
+      showRanking: this._showRanking
     }
   }
 }

@@ -2,6 +2,7 @@ import { Hooker } from '../../Pimp.mjs'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import StyleToggle from '../../components/StyleToggle.jsx'
+import { overrideMutation } from '../../vuex-utils.mjs'
 import * as log from '../../log.mjs'
 
 export class MatchUiHooker extends Hooker {
@@ -25,12 +26,24 @@ export class MatchUiHooker extends Hooker {
           display: none !important;
         }
       `,
+      mapName: `
+        .desktop-game-interface > .mini-map-cont {
+          display: none !important;
+        }
+      `,
+      inviteAndSpectate: `
+        .esc-interface .invite2 {
+          display: none !important;
+        }
+      `,
     }
     this._hide = {}
+    this._overrideTab = null
   }
 
   async hook() {
     const domApi = this.pimp.getApi('dom')
+    const vueAppApi = this.pimp.getApi('vueApp')
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
@@ -43,6 +56,17 @@ export class MatchUiHooker extends Hooker {
         show: (name, state) => {
           this._hide[name] = !state
           this._reactRoot.render(React.createElement(StyleToggle, this._makeProps(), null))
+        },
+        overrideTab: (fn) => {
+          if (this._overrideTab !== null) {
+            this._overrideTab.close()
+          }
+
+          if (fn === null) {
+            return
+          }
+
+          this._overrideTab = overrideMutation(vueAppApi.getVueApp().$store, 'game/setTabVisible', fn)
         }
       }
     }
@@ -51,6 +75,10 @@ export class MatchUiHooker extends Hooker {
   unhook() {
     this._reactRoot.unmount()
     this._root.remove()
+
+    if (this._overrideTab !== null) {
+      this._overrideTab.close()
+    }
   }
 
   _makeProps() {

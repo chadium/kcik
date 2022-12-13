@@ -4,17 +4,13 @@ import Box from "./Box.jsx"
 import { hhmmss, seconds } from "../duration-format.mjs"
 import { useTimeUpdate } from "../use-time-update.mjs"
 
-export default function CustomTagMatchUi({ players, meName, it, state, created }) {
+export default function CustomTagMatchUi({ players, meName, it, state, created, showRanking }) {
   useEffect(() => {
     styles.use()
   }, [])
 
   const isWaiting = useMemo(() => {
     return state === 'waiting'
-  }, [state])
-
-  const showPlayers = useMemo(() => {
-    return state === 'playing'
   }, [state])
 
   const remainingTime = useTimeUpdate(() => {
@@ -25,9 +21,18 @@ export default function CustomTagMatchUi({ players, meName, it, state, created }
     return Date.now()
   }, players.length > 0)
 
-  const finalPlayers = useMemo(() => {
+  const showKillIt = useMemo(() => {
+    return state === 'playing' && it !== null && it.name !== meName
+  }, [state, it, meName])
+
+  const showYouAreIt = useMemo(() => {
+    return state === 'playing' && it !== null && it.name === meName
+  }, [state, it, meName])
+
+  const ranking = useMemo(() => {
     let results = players.map(player => {
       let time = player.time
+      let me = false
 
       if (it !== null) {
         if (it.name === player.name) {
@@ -35,38 +40,21 @@ export default function CustomTagMatchUi({ players, meName, it, state, created }
         }
       }
 
+      if (player.name === meName) {
+        me = true
+      }
+
       return {
         name: player.name,
         it: player.it,
+        me,
         time
       }
     })
 
     results.sort((a, b) => b.time - a.time)
 
-    let playerEntry = null
-
-    results.forEach((player, i) => {
-      player.position = i + 1
-
-      if (player.name === meName) {
-        playerEntry = player
-      }
-    })
-
-    let sliced = results.slice(0, 4)
-
-    if (playerEntry !== null) {
-      if (!sliced.find(r => r.name === playerEntry.name)) {
-        sliced.push(playerEntry)
-
-        if (sliced.length === 5) {
-          sliced.splice(3, 1)
-        }
-      }
-    }
-
-    return sliced
+    return results
   }, [players, it, meName, now])
 
   return (
@@ -92,14 +80,29 @@ export default function CustomTagMatchUi({ players, meName, it, state, created }
         </>
       )}
 
-      {showPlayers && (
+      {showKillIt && (
+        <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
+          <div>Kill</div>
+          <div className={styles.locals.itName}>{it.name}</div>
+        </div>
+      )}
+
+      {showYouAreIt && (
+        <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
+          <div>You're it</div>
+          <div className={styles.locals.itName}>STAY ALIVE</div>
+        </div>
+      )}
+
+      {showRanking && (
         <div className={styles.locals.players}>
           <Box>
             <div className={styles.locals.playersContent}>
-              {finalPlayers.map(player => {
+              {ranking.map(player => {
                 return (
-                  <div className={[styles.locals.playersEntry, player.name === meName ? styles.locals.playersEntryMe : ''].join(' ')} key={player.name}>
-                    #{player.position} {player.name}: {hhmmss(player.time)} {player.it ? "(it)" : ""}
+                  <div className={[styles.locals.playersEntry, player.me ? styles.locals.playersEntryMe : ''].join(' ')} key={player.name}>
+                    <span className={[styles.locals.playersEntryIt, player.it ? styles.locals.show : ''].join(' ')}>➤</span>
+                    #{player.position} {player.name}: {hhmmss(player.time)}
                   </div>
                 )
               })}
