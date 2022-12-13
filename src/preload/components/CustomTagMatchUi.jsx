@@ -4,7 +4,7 @@ import Box from "./Box.jsx"
 import { hhmmss, seconds } from "../duration-format.mjs"
 import { useTimeUpdate } from "../use-time-update.mjs"
 
-export default function CustomTagMatchUi({ players, it, state, created }) {
+export default function CustomTagMatchUi({ players, meName, it, state, created }) {
   useEffect(() => {
     styles.use()
   }, [])
@@ -44,12 +44,30 @@ export default function CustomTagMatchUi({ players, it, state, created }) {
 
     results.sort((a, b) => b.time - a.time)
 
+    let playerEntry = null
+
     results.forEach((player, i) => {
       player.position = i + 1
+
+      if (player.name === meName) {
+        playerEntry = player
+      }
     })
 
-    return results.slice(0, 3)
-  }, [players, it, now])
+    let sliced = results.slice(0, 4)
+
+    if (playerEntry !== null) {
+      if (!sliced.find(r => r.name === playerEntry.name)) {
+        sliced.push(playerEntry)
+
+        if (sliced.length === 5) {
+          sliced.splice(3, 1)
+        }
+      }
+    }
+
+    return sliced
+  }, [players, it, meName, now])
 
   return (
     <div>
@@ -77,11 +95,15 @@ export default function CustomTagMatchUi({ players, it, state, created }) {
       {showPlayers && (
         <div className={styles.locals.players}>
           <Box>
-            {finalPlayers.map(player => {
-              return (
-                <div key={player.name}>#{player.position} {player.name}: {hhmmss(player.time)} {player.it ? "(it)" : ""}</div>
-              )
-            })}
+            <div className={styles.locals.playersContent}>
+              {finalPlayers.map(player => {
+                return (
+                  <div className={[styles.locals.playersEntry, player.name === meName ? styles.locals.playersEntryMe : ''].join(' ')} key={player.name}>
+                    #{player.position} {player.name}: {hhmmss(player.time)} {player.it ? "(it)" : ""}
+                  </div>
+                )
+              })}
+            </div>
           </Box>
         </div>
       )}

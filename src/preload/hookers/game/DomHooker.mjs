@@ -15,8 +15,12 @@ class StateWaiting extends MachineState {
   constructor() {
     super()
     this._onLoaded = (e) => {
-      log.info('Dom', 'DOMContentLoaded')
-      this.machine.next(new StateLoaded())
+      try {
+        log.info('Dom', 'DOMContentLoaded')
+        this.machine.next(new StateLoaded())
+      } catch (e) {
+        log.bad('Dom', e)
+      }
     }
   }
 

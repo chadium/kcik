@@ -5,7 +5,6 @@ import * as log from '../../log.mjs'
 export class MatchHooker extends Hooker {
   constructor() {
     super()
-    this._matchObject = null
     this._found = {}
     this._events = new EventEmitter()
   }

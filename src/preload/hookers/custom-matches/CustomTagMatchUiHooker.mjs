@@ -13,6 +13,12 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._reactRoot = null
     this._state = null
     this._created = null
+    this._meName = null
+    this._onPlayerAvailable = () => {
+      let playerApi = this.pimp.getApi('player')
+      this._meName = playerApi.getName()
+      this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+    }
     this._onStateChange = ({ state }) => {
       this._state = state
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
@@ -51,6 +57,9 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
 
+    let playerApi = this.pimp.getApi('player')
+    playerApi.on('available', this._onPlayerAvailable)
+
     let customTagMatchApi = this.pimp.getApi('customTagMatch')
 
     this._created = customTagMatchApi.getCreatedTimestamp()
@@ -78,6 +87,9 @@ export class CustomTagMatchUiHooker extends Hooker {
     customTagMatchApi.off('playersChange', this._onPlayersChange)
     customTagMatchApi.off('itChange', this._onItChange)
 
+    let playerApi = this.pimp.getApi('player')
+    playerApi.off('available', this._onPlayerAvailable)
+
     this._reactRoot.unmount()
     this._root.remove()
   }
@@ -85,6 +97,7 @@ export class CustomTagMatchUiHooker extends Hooker {
   _makeProps() {
     return {
       players: this._players,
+      meName: this._meName,
       it: this._it,
       state: this._state,
       created: this._created

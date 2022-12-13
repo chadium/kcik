@@ -50,6 +50,23 @@
   z-index: 1;
 }
 
+.playersContent {
+  padding: var(--boomer-safe-space);
+}
+
+.playersEntry {
+  font-size: 1.5rem;
+  margin-top: var(--boomer-safe-space);
+}
+
+.playersEntry {
+  margin-top: auto;
+}
+
+.playersEntryMe {
+  color: var(--boomer-special-text-color);
+}
+
 .title {
   font-weight: bold;
   text-align: center;
