@@ -80,6 +80,7 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('mapName', false)
     matchUiApi.show('inviteAndSpectate', BOOMER_ADMIN)
     matchUiApi.show('killMessage', false)
+    matchUiApi.show('chat', false)
     matchUiApi.overrideTab(this._onTab)
 
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
@@ -93,6 +94,7 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('mapName', true)
     matchUiApi.show('inviteAndSpectate', true)
     matchUiApi.show('killMessage', true)
+    matchUiApi.show('chat', true)
     matchUiApi.overrideTab(null)
 
     let customTagMatchApi = this.pimp.getApi('customTagMatch')

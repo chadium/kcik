@@ -41,7 +41,16 @@ export class MatchUiHooker extends Hooker {
           display: none !important;
         }
       `,
-      
+      chat: `
+        .desktop-game-interface > .chat {
+          display: none !important;
+        }
+      `,
+      chatMessageBox: `
+        .messages.messages-cont {
+          visibility: hidden !important;
+        }
+      `
     }
     this._hide = {}
     this._overrideTab = null
