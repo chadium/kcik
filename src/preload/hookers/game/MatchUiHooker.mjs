@@ -36,6 +36,12 @@ export class MatchUiHooker extends Hooker {
           display: none !important;
         }
       `,
+      killMessage: `
+        .game-interface > .ach-cont {
+          display: none !important;
+        }
+      `,
+      
     }
     this._hide = {}
     this._overrideTab = null
