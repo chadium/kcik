@@ -172,6 +172,9 @@ export class MatchHooker extends Hooker {
               sessionId: p.sessionId,
             }))
         },
+        showRankingScreen: (state) => {
+          pimp.getApi('vueApp').getVueApp().$store.commit('app/WNnMwm', state)
+        },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }
