@@ -1,15 +1,18 @@
 import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
+import { ElapsedServerTime } from '../../elapsed-server-time.mjs'
 
 export class MatchHooker extends Hooker {
   constructor() {
     super()
     this._found = {}
     this._events = new EventEmitter()
+    this._elapsedTime = new ElapsedServerTime()
   }
 
   hook() {
+    let vueAppApi = this.pimp.getApi('vueApp')
     let playerApi = this.pimp.getApi('player')
     let roomApi = this.pimp.getApi('room')
     let ecsApi = this.pimp.getApi('ecs')
@@ -33,6 +36,8 @@ export class MatchHooker extends Hooker {
 
         room.onStateChange((e) => {
           try {
+            this._elapsedTime.setServerTime(e.serverTime)
+
             let found = Object.assign({}, this._found)
 
             for (let player of e.players.values()) {
@@ -173,7 +178,13 @@ export class MatchHooker extends Hooker {
             }))
         },
         showRankingScreen: (state) => {
-          pimp.getApi('vueApp').getVueApp().$store.commit('app/WNnMwm', state)
+          vueAppApi.getVueApp().$store.commit('app/WNnMwm', state)
+        },
+        getDuration: () => {
+          return vueAppApi.getGameObject().metadata.minutes * 60 * 1000
+        },
+        getElapsedTime: () => {
+          return this._elapsedTime.getElapsed()
         },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
