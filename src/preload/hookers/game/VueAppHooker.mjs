@@ -51,8 +51,10 @@ export class VueAppHooker extends Hooker {
           return onMutation(this._vueApp.$store, name, fn)
         },
         getVueApp: () => this._vueApp,
-        getGameObject: () => this._vueApp.$store.state.game,
-        getUserObject: () => this._vueApp.$store.state.user,
+        getModuleState: (name) => {
+          log.info('VueApp', `Accessing ${name} state`)
+          return this._vueApp.$store.state[name]
+        },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }

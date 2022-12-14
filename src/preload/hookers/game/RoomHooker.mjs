@@ -90,7 +90,7 @@ export class RoomHooker extends Hooker {
     let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
-      this._state.available(vueAppApi.getGameObject())
+      this._state.available(vueAppApi.getModuleState('game'))
     })
 
     this._events.on('newListener', (name, listener) => {
@@ -146,7 +146,7 @@ export class RoomHooker extends Hooker {
           }
         },
         createRoom: async (options) => {
-          options.applyToKirkaGame(vueAppApi.getGameObject())
+          options.applyToKirkaGame(vueAppApi.getModuleState('game'))
 
           if (this._game.room) {
             // Must leave current room otherwise game/enterGame will do nothing.

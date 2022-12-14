@@ -10,7 +10,7 @@ export class WorldMapHooker extends Hooker {
     let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
-      this._game = vueAppApi.getGameObject()
+      this._game = vueAppApi.getModuleState('game')
     })
 
     return {

@@ -26,8 +26,8 @@ export class PlayerHooker extends Hooker {
     let roomApi = this.pimp.getApi('room')
 
     roomApi.on('available', () => {
-      this._userObject = vueAppApi.getUserObject()
-      this._gameObject = vueAppApi.getGameObject()
+      this._userObject = vueAppApi.getModuleState('user', )
+      this._gameObject = vueAppApi.getModuleState('game')
 
       this._setWorldMutationHooker = vueAppApi.onceMutation('game/setPlayers', (players) => {
         log.info('Player', 'Got players')

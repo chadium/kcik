@@ -25,7 +25,7 @@ export class WorldHooker extends Hooker {
     let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
-      let gameObject = vueAppApi.getGameObject()
+      let gameObject = vueAppApi.getModuleState('game')
 
       for (let value of Object.values(gameObject)) {
         if (isObject(value) && value.renderer !== undefined) {

@@ -26,7 +26,7 @@ export class CreateCustomMatchHooker extends Hooker {
 
     ipcRenderer.on('menu.create-custom-match.click', async () => {
       try {
-        let gameObject = vueAppApi.getGameObject()
+        let gameObject = vueAppApi.getModuleState('game')
         let maps = Object.values(gameObject.maps).map(w => ({
           label: w.name,
           value: w.type

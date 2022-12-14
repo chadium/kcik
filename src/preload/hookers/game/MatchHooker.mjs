@@ -181,7 +181,7 @@ export class MatchHooker extends Hooker {
           vueAppApi.storeCommit('app/WNnMwm', state)
         },
         getDuration: () => {
-          return vueAppApi.getGameObject().metadata.minutes * 60 * 1000
+          return vueAppApi.getModuleState('game').metadata.minutes * 60 * 1000
         },
         getElapsedTime: () => {
           return this._elapsedTime.getElapsed()

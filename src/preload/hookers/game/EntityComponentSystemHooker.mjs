@@ -29,7 +29,7 @@ export class EntityComponentSystemHooker extends Hooker {
     let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
-      let world = findFirstValueByPredicate(vueAppApi.getGameObject(), {
+      let world = findFirstValueByPredicate(vueAppApi.getModuleState('game'), {
         predicate(o) {
           return 'unregisterSystem' in o
         },
