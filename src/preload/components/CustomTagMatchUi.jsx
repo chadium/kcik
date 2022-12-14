@@ -94,7 +94,7 @@ export default function CustomTagMatchUi({ players, meName, it, state, created, 
         </div>
       )}
 
-      {showRanking && (
+      {showRanking && !isWaiting && (
         <div className={styles.locals.players}>
           <Box>
             <div className={styles.locals.playersContent}>
