@@ -19,7 +19,7 @@ When the match ends some message is sent to the room which will then
 
 remove some system
 
-Call game/setPreEndScreen with true
+Call `game/setPreEndScreen` with true
 
 Stops rendering canvas
 

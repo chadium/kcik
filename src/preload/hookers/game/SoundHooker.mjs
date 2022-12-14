@@ -16,14 +16,14 @@ export class SoundHooker extends Hooker {
       api: {
         playSound: ({ name }) => {
           log.info('Sound', `Playing sound: ${name}`)
-          return vueAppApi.getVueApp().$store.dispatch('sounds/playSound')
+          return vueAppApi.storeDispatch('sounds/playSound')
         },
         startAmbient: ({ name }) => {
           // TODO
-          return vueAppApi.getVueApp().$store.dispatch('sounds/startAmbient', name)
+          return vueAppApi.storeDispatch('sounds/startAmbient', name)
         },
         stopAmbient: ({ name }) => {
-          return vueAppApi.getVueApp().$store.dispatch('sounds/stopAmbient', name)
+          return vueAppApi.storeDispatch('sounds/stopAmbient', name)
         },
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),

@@ -178,7 +178,7 @@ export class MatchHooker extends Hooker {
             }))
         },
         showRankingScreen: (state) => {
-          vueAppApi.getVueApp().$store.commit('app/WNnMwm', state)
+          vueAppApi.storeCommit('app/WNnMwm', state)
         },
         getDuration: () => {
           return vueAppApi.getGameObject().metadata.minutes * 60 * 1000

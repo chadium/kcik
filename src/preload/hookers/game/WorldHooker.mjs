@@ -37,7 +37,7 @@ export class WorldHooker extends Hooker {
       }
 
       log.warn('World', 'Could not find renderer. Will hook into setWorld and wait for it.')
-      this._setWorldMutationHooker = onceMutation(vueAppApi.getVueApp().$store, 'game/setWorld', (world) => {
+      this._setWorldMutationHooker = vueAppApi.onceMutation('game/setWorld', (world) => {
         log.info('World', 'World was set world. Saving it.')
         this._world = world
         this._events.emit('available', this._world)

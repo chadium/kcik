@@ -6,24 +6,7 @@ import * as arrayUtils from '../../array-utils.mjs'
 export class KillBarHooker extends Hooker {
   constructor() {
     super()
-    this._f = (e) => {
-      if (e.killer === undefined) {
-        log.info('KillBar', `${e.dead} has killed himself`)
-
-        this._events.emit('suicide', {
-          deadPlayerName: e.dead
-        })
-      } else {
-        log.info('KillBar', `${e.killer} killed ${e.dead} ${e.head ? '(headshot)' : ''}`)
-
-        this._events.emit('kill', {
-          deadPlayerName: e.dead,
-          killerPlayerName: e.killer,
-          headshot: e.head,
-          weaponName: e.weapon,
-        })
-      }
-    }
+    this._killbarMutation = 
 
     this._events = new EventEmitter()
   }
@@ -32,9 +15,24 @@ export class KillBarHooker extends Hooker {
     let vueAppApi = this.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
-      let app = vueAppApi.getVueApp()
-
-      app.$store._mutations['game/setKillBar'].push(this._f)
+      vueAppApi.onMutation('game/setKillBar', (e) => {
+        if (e.killer === undefined) {
+          log.info('KillBar', `${e.dead} has killed himself`)
+  
+          this._events.emit('suicide', {
+            deadPlayerName: e.dead
+          })
+        } else {
+          log.info('KillBar', `${e.killer} killed ${e.dead} ${e.head ? '(headshot)' : ''}`)
+  
+          this._events.emit('kill', {
+            deadPlayerName: e.dead,
+            killerPlayerName: e.killer,
+            headshot: e.head,
+            weaponName: e.weapon,
+          })
+        }
+      })
     })
 
     return {
@@ -47,14 +45,9 @@ export class KillBarHooker extends Hooker {
   }
 
   unhook() {
-    let vueAppApi = this.pimp.getApi('vueApp')
-
-    let app = vueAppApi.getVueApp()
-
-    if (app !== null) {
-      let mutations = app.$store._mutations['game/setKillBar']
-
-      arrayUtils.removeFirstByValue(mutations, this._f)
+    if (this._killbarMutation !== null) {
+      this._killbarMutation.close()
+      this._killbarMutation = null
     }
   }
 }

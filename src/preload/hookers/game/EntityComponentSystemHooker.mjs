@@ -42,7 +42,7 @@ export class EntityComponentSystemHooker extends Hooker {
         this._events.emit('available', this._world)
       } else {
         log.bad('EntityComponentSystem', 'Could not find ECSY world. Will hook into setWorld and wait for it.')
-        this._setWorldMutationHooker = onceMutation(vueAppApi.getVueApp().$store, 'game/setWorld', (world) => {
+        this._setWorldMutationHooker = vueAppApi.onceMutation('game/setWorld', (world) => {
           log.info('EntityComponentSystem', 'World was set world. Will search for ECSY world...')
 
           world = findFirstValueByPredicate(world, {

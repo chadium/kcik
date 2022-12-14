@@ -81,7 +81,7 @@ export class MatchUiHooker extends Hooker {
             return
           }
 
-          this._overrideTab = overrideMutation(vueAppApi.getVueApp().$store, 'game/setTabVisible', fn)
+          this._overrideTab = vueAppApi.onMutation('game/setTabVisible', fn)
         }
       }
     }
@@ -93,6 +93,7 @@ export class MatchUiHooker extends Hooker {
 
     if (this._overrideTab !== null) {
       this._overrideTab.close()
+      this._overrideTab = null
     }
   }
 

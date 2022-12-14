@@ -29,7 +29,7 @@ export class PlayerHooker extends Hooker {
       this._userObject = vueAppApi.getUserObject()
       this._gameObject = vueAppApi.getGameObject()
 
-      this._setWorldMutationHooker = onceMutation(vueAppApi.getVueApp().$store, 'game/setPlayers', (players) => {
+      this._setWorldMutationHooker = vueAppApi.onceMutation('game/setPlayers', (players) => {
         log.info('Player', 'Got players')
         this._gotSet = true
         this._events.emit('available')

@@ -117,8 +117,7 @@ export class RoomHooker extends Hooker {
             return
           }
 
-          let vueApp = vueAppApi.getVueApp()
-          await vueApp.$store.dispatch('game/exitGame')
+          await vueAppApi.storeDispatch('game/exitGame')
 
           // We could also call the leave method but unlike game/exitGame it
           // just sends a message to the server and does not wait for the
@@ -132,8 +131,7 @@ export class RoomHooker extends Hooker {
 
           let id = `${regionId}~${roomId}`
 
-          let vueApp = vueAppApi.getVueApp()
-          await vueApp.$store.dispatch('game/connectByIdRoom', id)
+          await vueAppApi.storeDispatch('game/connectByIdRoom', id)
           if (this._game.room) {
             return {
               roomId: this._game.room.id,
@@ -148,16 +146,14 @@ export class RoomHooker extends Hooker {
           }
         },
         createRoom: async (options) => {
-          let vueApp = vueAppApi.getVueApp()
-
           options.applyToKirkaGame(vueAppApi.getGameObject())
 
           if (this._game.room) {
             // Must leave current room otherwise game/enterGame will do nothing.
-            await vueApp.$store.dispatch('game/exitGame')
+            await vueAppApi.storeDispatch('game/exitGame')
           }
 
-          await vueApp.$store.dispatch('game/enterGame')
+          await vueAppApi.storeDispatch('game/enterGame')
           if (this._game.room) {
             return {
               roomId: this._game.room.id,

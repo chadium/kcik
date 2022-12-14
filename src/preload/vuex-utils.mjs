@@ -34,3 +34,16 @@ export function overrideMutation(store, mutationName, cb) {
     close
   }
 }
+
+export function onMutation(store, mutationName, cb) {
+  function close() {
+    let mutations = store._mutations[mutationName]
+    arrayUtils.removeFirstByValue(mutations, cb)
+  }
+
+  store._mutations[mutationName].push(cb)
+
+  return {
+    close
+  }
+}

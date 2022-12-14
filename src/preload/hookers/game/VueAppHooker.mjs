@@ -2,6 +2,7 @@ import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import { waitForElm } from '../../dom-utils.mjs'
 import { waitForProperty } from '../../object-utils.mjs'
+import { onMutation, onceMutation } from '../../vuex-utils.mjs'
 import * as log from '../../log.mjs'
 
 export class VueAppHooker extends Hooker {
@@ -33,6 +34,22 @@ export class VueAppHooker extends Hooker {
     return {
       name: 'vueApp',
       api: {
+        storeDispatch: (name, ...args) => {
+          log.info('VueApp', `Dispatch ${name}`)
+          return this._vueApp.$store.dispatch(name, ...args)
+        },
+        storeCommit: (name, ...args) => {
+          log.info('VueApp', `Commit ${name}`)
+          return this._vueApp.$store.commit(name, ...args)
+        },
+        onceMutation: (name, fn) => {
+          log.info('VueApp', `Hook once into mutation ${name}`)
+          return onceMutation(this._vueApp.$store, name, fn)
+        },
+        onMutation: (name, fn) => {
+          log.info('VueApp', `Hook into mutation ${name}`)
+          return onMutation(this._vueApp.$store, name, fn)
+        },
         getVueApp: () => this._vueApp,
         getGameObject: () => this._vueApp.$store.state.game,
         getUserObject: () => this._vueApp.$store.state.user,
