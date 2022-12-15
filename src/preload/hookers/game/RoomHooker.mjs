@@ -25,7 +25,8 @@ class StateWaitingForRoom extends State {
     this.hooker = hooker
 
     if (this.hooker._game.room) {
-      // Already has room.
+      // Looks like we're in a room but we have to make sure we have
+      // received the ROOM_DATA message.
       this.hooker._currentRoom = this.hooker._game.room
       this.hooker._state = new StateInRoom(this.hooker)
     } else {
@@ -53,6 +54,10 @@ class StateInRoom extends State {
 
     this.hooker._events.emit('joined', { room: this.hooker._currentRoom })
     this.hooker._events.emit('available', { room: this.hooker._currentRoom })
+
+    this.hooker._currentRoom.onStateChange((e) => {
+      this.hooker._events.emit('stateChange', e)
+    })
 
     {
       (async () => {
@@ -107,6 +112,9 @@ export class RoomHooker extends Hooker {
       api: {
         getRoom: () => {
           return this._currentRoom
+        },
+        addOnStateChange: (fn) => {
+
         },
         getPlayerBySessionId: (sessionId) => {
           // TODO

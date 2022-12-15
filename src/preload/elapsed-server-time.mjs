@@ -1,7 +1,12 @@
 export class ElapsedServerTime {
-  constructor() {
-    this._serverTime = 0
-    this._when = 0
+  constructor(other) {
+    if (other instanceof ElapsedServerTime) {
+      this._serverTime = other._serverTime
+      this._when = other._when
+    } else {
+      this._serverTime = 0
+      this._when = 0
+    }
   }
 
   setServerTime(serverTime) {
@@ -9,7 +14,11 @@ export class ElapsedServerTime {
     this._when = Date.now()
   }
 
-  getElapsed(relativeTo = Date.now()) {
-    return this._serverTime - (relativeTo - this._when)
+  getLastUpdate() {
+    return this._when
+  }
+
+  getTweened(relativeTo = Date.now()) {
+    return this._serverTime + (relativeTo - this._when)
   }
 }

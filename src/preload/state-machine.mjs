@@ -3,11 +3,14 @@ import PQueue from 'p-queue';
 const SET_MACHINE = Symbol()
 const ON_ENTER = Symbol()
 const ON_LEAVE = Symbol()
+const ON_STOP = Symbol()
 
 export class MachineState {
   static ON_ENTER = ON_ENTER
 
   static ON_LEAVE = ON_LEAVE
+
+  static ON_STOP = ON_STOP
 
   constructor() {
     this.machine = null
@@ -21,6 +24,9 @@ export class MachineState {
   }
 
   async [ON_LEAVE]() {
+  }
+
+  async [ON_STOP]() {
   }
 }
 
@@ -80,6 +86,7 @@ export class Machine {
       }
 
       await this._state[MachineState.ON_LEAVE]()
+      await this._state[MachineState.ON_STOP]()
 
       this._state = null
     })

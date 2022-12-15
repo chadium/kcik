@@ -50,6 +50,11 @@ export class MatchUiHooker extends Hooker {
         .messages.messages-cont {
           visibility: hidden !important;
         }
+      `,
+      time: `
+        .state-cont > .left {
+          display: none !important;
+        }
       `
     }
     this._hide = {}

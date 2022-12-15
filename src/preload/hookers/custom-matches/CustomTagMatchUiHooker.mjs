@@ -2,6 +2,7 @@ import { Hooker } from '../../Pimp.mjs'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import CustomTagMatchUi from '../../components/CustomTagMatchUi.jsx'
+import { ElapsedServerTime } from '../../elapsed-server-time.mjs'
 import * as log from '../../log.mjs'
 
 export class CustomTagMatchUiHooker extends Hooker {
@@ -15,6 +16,8 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._created = null
     this._meName = null
     this._showRanking = false
+    this._serverTime = null
+    this._duration = 0
     this._onTab = (state) => {
       this._showRanking = state
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
@@ -62,6 +65,10 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
 
+    let matchApi = this.pimp.getApi('match')
+    this._serverTime = matchApi.getServerTime()
+    this._duration = matchApi.getDuration()
+
     let playerApi = this.pimp.getApi('player')
     playerApi.on('available', this._onPlayerAvailable)
 
@@ -81,6 +88,7 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('inviteAndSpectate', BOOMER_ADMIN)
     matchUiApi.show('killMessage', false)
     matchUiApi.show('chat', false)
+    matchUiApi.show('time', false)
     matchUiApi.overrideTab(this._onTab)
 
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
@@ -95,6 +103,7 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('inviteAndSpectate', true)
     matchUiApi.show('killMessage', true)
     matchUiApi.show('chat', true)
+    matchUiApi.show('true', false)
     matchUiApi.overrideTab(null)
 
     let customTagMatchApi = this.pimp.getApi('customTagMatch')
@@ -116,7 +125,9 @@ export class CustomTagMatchUiHooker extends Hooker {
       it: this._it,
       state: this._state,
       created: this._created,
-      showRanking: this._showRanking
+      showRanking: this._showRanking,
+      serverTime: this._serverTime,
+      duration: this._duration,
     }
   }
 }

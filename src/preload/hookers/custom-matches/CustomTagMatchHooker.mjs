@@ -5,6 +5,7 @@ import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
 import * as randUtils from '../../rand-utils.mjs'
 import * as arrayUtils from '../../array-utils.mjs'
+import { CustomTagMatchUiHooker } from './CustomTagMatchUiHooker.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
 
 class State extends MachineState {
@@ -21,6 +22,8 @@ class StateUnknown extends State {
 
   async matchJoin() {
     log.info('CustomTagMatch', `Joined tag game.`)
+    this.machine.hooker._ui = new CustomTagMatchUiHooker()
+    this.machine.hooker.pimp.register(this.machine.hooker._ui)
     this.machine.next(new StateMatchWait())
   }
 
@@ -50,6 +53,11 @@ class StateMatchWait extends State {
     clearTimeout(this._timeout)
   }
 
+  async [MachineState.ON_STOP]() {
+    this.machine.hooker.pimp.unregister(this.machine.hooker._ui)
+    this.machine.hooker._ui = false
+  }
+
   getState() {
     return 'waiting'
   }
@@ -62,6 +70,11 @@ class StateMatchActive extends State {
     log.info('CustomTagMatch', `Game started`)
   }
 
+  async [MachineState.ON_LEAVE]() {
+    this.machine.hooker.pimp.unregister(this.machine.hooker._ui)
+    this.machine.hooker._ui = false
+  }
+
   getState() {
     return 'playing'
   }
@@ -70,6 +83,7 @@ class StateMatchActive extends State {
 export class CustomTagMatchHooker extends Hooker {
   constructor(match) {
     super()
+    this._ui = null
     this._events = new EventEmitter()
     this._state = new Machine({ base: State })
     this._state.hooker = this

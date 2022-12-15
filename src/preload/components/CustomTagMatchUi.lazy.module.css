@@ -26,7 +26,7 @@
 .it {
   pointer-events: none;
   position: fixed;
-  top: 5%;
+  top: 2rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
@@ -51,8 +51,9 @@
 .rules {
   pointer-events: none;
   position: fixed;
-  top: 6rem;
+  top: 50%;
   left: 2rem;
+  transform: translateY(-50%);
   z-index: 1;
   font-size: 1.5rem;
 }
@@ -67,12 +68,29 @@
   margin-bottom: var(--boomer-safe-space);
 }
 
-.players {
+.leftSide {
+  top: 2rem;
+  left: 2rem;
   pointer-events: none;
   position: fixed;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--boomer-safe-space);
+}
+
+.time {
+  font-size: 2rem;
+}
+
+.timeContent {
+  padding: var(--boomer-safe-space);
+}
+
+.players {
   top: 6rem;
   left: 2rem;
-  z-index: 1;
 }
 
 .playersContent {

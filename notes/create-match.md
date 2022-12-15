@@ -10,6 +10,13 @@ The whole file is minified and obfuscated. Luckily, dispatch method name are kep
 
 The "game/enterGame" dispatch will eventually call "game/connectRoom". 
 
+## game/enterGame
+
+- ...
+- At the end it places `setTimeout` with 1500 that will call `app/WNnwmM` with true and `app/WNnwMm` with false
+- Places a `setTimeout` for 9000 that will call `app/WNnwmM` with false
+- Places a `setTimeout` for 1510 that will call `setSearchingRoom` with false
+
 
 ## game/connectRoom
 
