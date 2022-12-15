@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export KIRKA_BOOMER_USER_API_PREFIX=https://kirka.the28yearoldboomer.com:12345
+export KIRKA_BOOMER_USER_WS_API_PREFIX=wss://kirka.the28yearoldboomer.com:12345
+export NODE_ENV=production
+
+npm run build-user
+npm run make-user

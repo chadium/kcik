@@ -5,9 +5,11 @@
   "main": "dist/user/electron/index.js",
   "scripts": {
     "start-user": "electron dist/user/electron/index.js",
+    "package-user": "pushd dist/user && NODE_ENV= npm install && npm run package",
+    "make-user": "pushd dist/user && NODE_ENV= npm install && npm run make",
+    "build-user": "webpack build -c webpack.user.config.js",
     "start-admin": "electron dist/admin/electron/index.js",
-    "build": "webpack build -c webpack.user.config.js && webpack build -c webpack.admin.config.js",
-    "package-user": "pushd dist/user && npm install && npx electron-forge package",
+    "build-admin": "webpack build -c webpack.admin.config.js",
     "postinstall": "pushd node_modules/dynamic-buffer && npm install && npm run build"
   },
   "author": "",
