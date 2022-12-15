@@ -7,6 +7,7 @@
     "start-user": "electron dist/user/electron/index.js",
     "start-admin": "electron dist/admin/electron/index.js",
     "build": "webpack build -c webpack.user.config.js && webpack build -c webpack.admin.config.js",
+    "package-user": "pushd dist/user && npm install && npx electron-forge package",
     "postinstall": "pushd node_modules/dynamic-buffer && npm install && npm run build"
   },
   "author": "",
