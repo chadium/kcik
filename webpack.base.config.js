@@ -41,6 +41,11 @@ const mainConfig = {
     usedExports: true, // Removes unused code.
     minimizer: [
       new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
         extractComments: false,
       }),
     ],
@@ -101,6 +106,11 @@ const rendererConfig = {
     usedExports: true, // Removes unused code.
     minimizer: [
       new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
         extractComments: false,
       }),
     ],
