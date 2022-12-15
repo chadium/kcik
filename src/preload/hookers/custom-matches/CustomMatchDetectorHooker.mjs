@@ -132,7 +132,7 @@ export class CustomMatchDetectorHooker extends Hooker {
       this._state.call('onRoomJoin', room)
     })
 
-    roomApi.on('leaved', ({ room }) => {
+    roomApi.on('leave', ({ room }) => {
       this._state.call('onRoomLeave', room)
     })
 

@@ -70,13 +70,13 @@ class StateWaitingForFirstState extends State {
   async [MachineState.ON_ENTER]() {
     let roomApi = this.machine.hooker.pimp.getApi('room')
     roomApi.on('stateChange', this._onStateChange)
-    roomApi.on('leaved', this._onLeave)
+    roomApi.on('leave', this._onLeave)
   }
 
   async [MachineState.ON_LEAVE]() {
     let roomApi = this.machine.hooker.pimp.getApi('room')
     roomApi.off('stateChange', this._onStateChange)
-    roomApi.off('leaved', this._onLeave)
+    roomApi.off('leave', this._onLeave)
   }
 }
 
@@ -178,7 +178,7 @@ class StatePlaying extends State {
 
     let roomApi = this.machine.hooker.pimp.getApi('room')
 
-    roomApi.on('leaved', this._onLeave)
+    roomApi.on('leave', this._onLeave)
     roomApi.on('stateChange', this._onStateChange)
   }
 
@@ -206,7 +206,7 @@ class StatePlaying extends State {
 
     let roomApi = this.machine.hooker.pimp.getApi('room')
 
-    roomApi.off('leaved', this._onLeave)
+    roomApi.off('leave', this._onLeave)
     roomApi.off('stateChange', this._onStateChange)
 
     this.machine.hooker._events.emit('matchLeave')

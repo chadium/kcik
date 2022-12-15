@@ -2,108 +2,115 @@ import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import { waitForProperty } from '../../object-utils.mjs'
 import * as log from '../../log.mjs'
+import { Machine, MachineState } from '../../state-machine.mjs'
 
-class State {
-  available(game) {}
+class State extends MachineState {
+  onAvailableListener(listener) {
+  }
 }
 
 class StateUnknown extends State {
-  constructor(hooker) {
-    super()
-    this.hooker = hooker
-  }
+  async [MachineState.ON_ENTER]() {
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
 
-  available(game) {
-    this.hooker._game = game
-    this.hooker._state = new StateWaitingForRoom(this.hooker)
+    vueAppApi.on('available', () => {
+      let gameState = vueAppApi.getModuleState('game')
+      
+      if (gameState.room) {
+        log.info('RoomHooker', 'Already in a room.')
+        this.machine.hooker._currentRoom = gameState.room
+        this.machine.next(new StateInRoom())
+      } else {
+        this.machine.next(new StateWaitingForRoom())
+      }
+    })
   }
 }
 
 class StateWaitingForRoom extends State {
-  constructor(hooker) {
+  constructor() {
     super()
-    this.hooker = hooker
+    this._onMutation = null
+  }
 
-    if (this.hooker._game.room) {
-      // Looks like we're in a room but we have to make sure we have
-      // received the ROOM_DATA message.
-      this.hooker._currentRoom = this.hooker._game.room
-      this.hooker._state = new StateInRoom(this.hooker)
-    } else {
-      (async () => {
-        log.info('RoomHooker', 'Will be waiting for room')
-        try {
-          this.hooker._currentRoom = await waitForProperty(this.hooker._game, 'room', {
-            nullable: false
-          })
-          this.hooker._state = new StateInRoom(this.hooker)
-        } catch (e) {
-          log.bad('RoomHooker', e)
-        }
-      })()
-    }
+  async [MachineState.ON_ENTER]() {
+    log.info('RoomHooker', 'Will be waiting for room')
+
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
+
+    this._onMutation = vueAppApi.onMutation('game/setRoom', (room) => {
+      if (room !== null) {
+        this.machine.hooker._currentRoom = room
+        this.machine.next(new StateInRoom())
+      }
+    })
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    this._onMutation.close()
+    this._onMutation = null
   }
 }
 
 class StateInRoom extends State {
-  constructor(hooker) {
+  constructor() {
     super()
-    this.hooker = hooker
+    this._onMutation = null
+  }
 
+  async [MachineState.ON_ENTER]() {
     log.info('RoomHooker', 'Found room')
 
-    this.hooker._events.emit('joined', { room: this.hooker._currentRoom })
-    this.hooker._events.emit('available', { room: this.hooker._currentRoom })
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
 
-    this.hooker._currentRoom.onStateChange((e) => {
-      this.hooker._events.emit('stateChange', e)
+    this.machine.hooker._events.emit('join', { room: this.machine.hooker._currentRoom })
+    this.machine.hooker._events.emit('available', { room: this.machine.hooker._currentRoom })
+
+    this.machine.hooker._currentRoom.onStateChange((e) => {
+      this.machine.hooker._events.emit('stateChange', e)
     })
 
-    {
-      (async () => {
-        log.info('RoomHooker', 'Will be waiting for room to be removed')
-        try {
-          await waitForProperty(this.hooker._game, 'room', {
-            accept(value) { return value === null }
-          })
+    this._onMutation = vueAppApi.onMutation('game/setRoom', (room) => {
+      if (room === null) {
+        let room = this.machine.hooker._currentRoom
 
-          let room = this.hooker._currentRoom
+        this.machine.hooker._currentRoom = null
 
-          this.hooker._currentRoom = null
+        this.machine.hooker._events.emit('leave', { room })
 
-          this.hooker._events.emit('leaved', { room })
+        this.machine.hooker._state = new StateWaitingForRoom()
+      }
+    })
+  }
 
-          this.hooker._state = new StateWaitingForRoom(this.hooker)
-        } catch (e) {
-          log.bad('RoomHooker', e)
-        }
-      })()
-    }
+  async [MachineState.ON_LEAVE]() {
+    this._onMutation.close()
+    this._onMutation = null
+  }
+
+  onAvailableListener(listener) {
+    listener()
   }
 }
 
 export class RoomHooker extends Hooker {
   constructor() {
     super()
-    this._game = null
     this._currentRoom = null
-    this._state = new StateUnknown(this)
+    this._state = new Machine({ base: State })
+    this._state.hooker = this
     this._events = new EventEmitter()
   }
 
-  hook() {
+  async hook() {
     let vueAppApi = this.pimp.getApi('vueApp')
 
-    vueAppApi.on('available', () => {
-      this._state.available(vueAppApi.getModuleState('game'))
-    })
+    await this._state.start(new StateUnknown())
 
-    this._events.on('newListener', (name, listener) => {
+    this._events.on('newListener', async (name, listener) => {
       if (name === 'available') {
-        if (this._currentRoom !== null) {
-          // Already joined. Call it.
-          listener({ room: this._currentRoom })
-        }
+        let state = await this._state.state()
+        state.onAvailableListener(listener)
       }
     })
 
@@ -112,12 +119,6 @@ export class RoomHooker extends Hooker {
       api: {
         getRoom: () => {
           return this._currentRoom
-        },
-        addOnStateChange: (fn) => {
-
-        },
-        getPlayerBySessionId: (sessionId) => {
-          // TODO
         },
         exitRoom: async () => {
           if (this._currentRoom === null) {
@@ -137,13 +138,15 @@ export class RoomHooker extends Hooker {
             throw new Error('Cannot join room while already in a room')
           }
 
+          let gameState = vueAppApi.getModuleState('game')
+
           let id = `${regionId}~${roomId}`
 
           await vueAppApi.storeDispatch('game/connectByIdRoom', id)
-          if (this._game.room) {
+          if (gameState.room) {
             return {
-              roomId: this._game.room.id,
-              regionId: this._game.selectedRegion
+              roomId: gameState.room.id,
+              regionId: gameState.selectedRegion
             }
           } else {
             // Unfortunately the error message is sent to a notification
@@ -154,18 +157,20 @@ export class RoomHooker extends Hooker {
           }
         },
         createRoom: async (options) => {
-          options.applyToKirkaGame(vueAppApi.getModuleState('game'))
+          let gameState = vueAppApi.getModuleState('game')
 
-          if (this._game.room) {
+          options.applyToKirkaGame(gameState)
+
+          if (gameState.room) {
             // Must leave current room otherwise game/enterGame will do nothing.
             await vueAppApi.storeDispatch('game/exitGame')
           }
 
           await vueAppApi.storeDispatch('game/enterGame')
-          if (this._game.room) {
+          if (gameState.room) {
             return {
-              roomId: this._game.room.id,
-              regionId: this._game.selectedRegion
+              roomId: gameState.room.id,
+              regionId: gameState.selectedRegion
             }
           } else {
             // Unfortunately the error message is sent to a notification
@@ -181,6 +186,7 @@ export class RoomHooker extends Hooker {
     }
   }
 
-  unhook() {
+  async unhook() {
+    await this._state.stop()
   }
 }

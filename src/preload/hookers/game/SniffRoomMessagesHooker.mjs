@@ -27,7 +27,7 @@ export class SniffRoomMessagesHooker extends Hooker {
   constructor() {
     super()
     this._registered = {}
-    this._onJoined = ({ room }) => {
+    this._onJoin = ({ room }) => {
       log.info('SniffRoom', 'hook sniff')
       for (let [name, value] of Object.entries(known)) {
         log.info('SniffRoom', `Registering ${name}`)
@@ -37,7 +37,7 @@ export class SniffRoomMessagesHooker extends Hooker {
         room.onMessageHandlers.on(room.getMessageHandlerKey(value), this._registered[name])
       }
     }
-    this._onLeaved = ({ room }) => {
+    this._onLeave = ({ room }) => {
       for (let [name, cb] of Object.entries(this._registered)) {
         // There is no off method. What can I do?
         //room.onMessageHandlers.off(room.getMessageHandlerKey(known[name]), cb)
@@ -49,21 +49,21 @@ export class SniffRoomMessagesHooker extends Hooker {
   hook() {
     let roomApi = this.pimp.getApi('room')
 
-    roomApi.on('available', this._onJoined)
-    roomApi.on('leaved', this._onLeaved)
+    roomApi.on('available', this._onJoin)
+    roomApi.on('leave', this._onLeave)
   }
 
   unhook() {
     let roomApi = this.pimp.getApi('room')
 
-    roomApi.off('available', this._onJoined)
-    roomApi.off('leaved', this._onLeaved)
+    roomApi.off('available', this._onJoin)
+    roomApi.off('leave', this._onLeave)
 
     let room = roomApi.getRoom()
 
     if (room !== null) {
-      // All the login is in this callback.
-      this._onLeaved({ room })
+      // All the logic is in this callback.
+      this._onLeave({ room })
     }
 
     // Sanity check

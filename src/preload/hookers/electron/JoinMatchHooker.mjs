@@ -15,11 +15,11 @@ export class JoinMatchHooker extends Hooker {
 
     ipcRenderer.send('menu.join-match.enable', roomApi.getRoom() === null)
 
-    roomApi.on('joined', () => {
+    roomApi.on('join', () => {
       ipcRenderer.send('menu.join-match.enable', false)
     })
 
-    roomApi.on('leaved', () => {
+    roomApi.on('leave', () => {
       ipcRenderer.send('menu.join-match.enable', true)
     })
 
