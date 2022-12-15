@@ -1,4 +1,5 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const TerserPlugin = require("terser-webpack-plugin");
 const pkg = require('./package.json')
 const Dotenv = require('dotenv-webpack')
 const { DefinePlugin } = require('webpack')
@@ -38,6 +39,11 @@ const mainConfig = {
   optimization: {
     minimize: true,
     usedExports: true, // Removes unused code.
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
   }
 }
 
@@ -93,6 +99,11 @@ const rendererConfig = {
   optimization: {
     minimize: true,
     usedExports: true, // Removes unused code.
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
   }
 }
 
