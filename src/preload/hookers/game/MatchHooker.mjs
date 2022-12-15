@@ -28,10 +28,15 @@ class StateUnknown extends State {
 }
 
 class StateIdle extends State {
+  constructor() {
+    super()
+    this._onMutation = null
+  }
+
   async [MachineState.ON_ENTER]() {
     let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
 
-    vueAppApi.onMutation('game/setSearchingRoom', (searchingRoom) => {
+    this._onMutation = vueAppApi.onMutation('game/setSearchingRoom', (searchingRoom) => {
       if (searchingRoom === false) {
         let gameState = vueAppApi.getModuleState('game')
 
@@ -41,8 +46,11 @@ class StateIdle extends State {
         }
       }
     })
+  }
 
-    this.machine.hooker
+  async [MachineState.ON_LEAVE]() {
+    this._onMutation.close()
+    this._onMutation = null
   }
 }
 
