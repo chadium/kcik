@@ -56,7 +56,7 @@ let packageJson = {
     "make": "electron-forge make",
   },
   devDependencies: {
-    "electron": "^21.3.0",
+    "electron": pkg.devDependencies.electron,
     "@electron-forge/cli": "^6.0.3",
     "@electron-forge/maker-deb": "^6.0.3",
     "@electron-forge/maker-rpm": "^6.0.3",
