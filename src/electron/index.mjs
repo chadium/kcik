@@ -32,7 +32,7 @@ class WinMan {
         // bank here.
         allowRunningInsecureContent: process.env.NODE_ENV !== 'production',
 
-        devTools: BOOMER_ADMIN
+        devTools: process.env.NODE_ENV !== 'production'
       }
     })
 
@@ -201,7 +201,9 @@ async function main() {
 
   if (!BOOMER_ADMIN) {
     menu.getMenuItemById('create-custom-match').visible = false
-    menu.getMenuItemById('dev-tools').visible = false
+    if (process.env.NODE_ENV === 'production') {
+      menu.getMenuItemById('dev-tools').visible = false
+    }
   }
 
   ipcMain.on('menu.join-match.enable', (e, state) => {
