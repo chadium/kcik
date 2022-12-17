@@ -20,11 +20,8 @@ export class TurnCustomMatchHooker extends Hooker {
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
 
-    ipcRenderer.send('menu.turn-custom-match.visible', false)
-
     roomApi.on('available', () => {
       ipcRenderer.send('menu.turn-custom-match.visible', true)
-      ipcRenderer.send('menu.end-custom-match.visible', false)
     })
 
     roomApi.on('leave', () => {
@@ -55,14 +52,15 @@ export class TurnCustomMatchHooker extends Hooker {
     })
 
     const customMatchMDetectorApi = this.pimp.getApi('customMatchMDetector')
-    customMatchMDetectorApi.on('isPlayingCustomMatch', (isPlayingCustomMatch) => {
-      ipcRenderer.send('menu.end-custom-match.visible', isPlayingCustomMatch)
-      ipcRenderer.send('menu.turn-custom-match.visible', !isPlayingCustomMatch)
+    customMatchMDetectorApi.on('isPlayingCustomMatch', () => {
+      this._updateCustomMatch()
     })
 
     ipcRenderer.on('menu.end-custom-match.click', async () => {
       await adminApi.matchEnd()
     })
+
+    this._updateCustomMatch()
   }
 
   unhook() {
@@ -70,5 +68,20 @@ export class TurnCustomMatchHooker extends Hooker {
     this._root.remove()
 
     throw new Error('TODO')
+  }
+
+  _updateCustomMatch() {
+    const roomApi = this.pimp.getApi('room')
+
+    if (roomApi.isInRoom()) {
+      const customMatchMDetectorApi = this.pimp.getApi('customMatchMDetector')
+      const isPlayingCustomMatch = customMatchMDetectorApi.isPlayingCustomMatch()
+
+      ipcRenderer.send('menu.end-custom-match.visible', isPlayingCustomMatch)
+      ipcRenderer.send('menu.turn-custom-match.visible', !isPlayingCustomMatch)
+    } else {
+      ipcRenderer.send('menu.end-custom-match.visible', false)
+      ipcRenderer.send('menu.turn-custom-match.visible', false)
+    }
   }
 }

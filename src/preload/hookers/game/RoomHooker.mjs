@@ -117,6 +117,9 @@ export class RoomHooker extends Hooker {
     return {
       name: 'room',
       api: {
+        isInRoom: () => {
+          return this._currentRoom !== null
+        },
         getRoom: () => {
           return this._currentRoom
         },

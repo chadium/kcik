@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styles from "./CustomTagMatchUi.lazy.module.css"
 import Box from "./Box.jsx"
+import BouncingText from "./BouncingText.jsx"
 import { mmss, seconds } from "../duration-format.mjs"
 import { useTimeUpdate } from "../use-time-update.mjs"
 
@@ -33,6 +34,10 @@ export default function CustomTagMatchUi({
   const remainingPlayingTime = useTimeUpdate(() => {
     return duration - serverTime.getTweened()
   }, isPlaying)
+
+  const itSurvivingTime = useTimeUpdate(() => {
+    return Date.now() - it.started
+  }, it !== null)
 
   const now = useTimeUpdate(() => {
     return Date.now()
@@ -130,13 +135,15 @@ export default function CustomTagMatchUi({
         <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
           <div>Kill</div>
           <div className={styles.locals.itName}>{it.name}</div>
+          <div className={styles.locals.itDuration}>survived {mmss(itSurvivingTime)}</div>
         </div>
       )}
 
       {showYouAreIt && (
         <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
           <div>You're it</div>
-          <div className={styles.locals.itName}>STAY ALIVE</div>
+          <div className={styles.locals.itName}><BouncingText text={"STAY ALIVE"}/></div>
+          <div className={styles.locals.itDuration}>survived {mmss(itSurvivingTime)}</div>
         </div>
       )}
     </div>

@@ -37,6 +37,11 @@
 
 .itName {
   font-size: 3rem;
+  -webkit-box-reflect: below -1ex linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+}
+
+.itDuration {
+  font-size: 1.5rem;
 }
 
 .playersEntryIt {
