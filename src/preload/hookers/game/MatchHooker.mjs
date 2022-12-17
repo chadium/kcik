@@ -111,13 +111,15 @@ class StatePlaying extends State {
 
         // New player.
         this.machine.hooker._found[player.sessionId] = player
+        log.info('Match', `Found player ${player.name}. They must have joined the match.`)
 
         try {
           this.machine.hooker._events.emit('playerJoin', {
             playerName: player.name
           })
+          this.machine.hooker._events.emit('playersChange')
         } catch (e) {
-          log.bad('MatchHooker', e)
+          log.bad('Match', e)
         }
 
         player.listen('deaths', (current, previous) => {
@@ -150,6 +152,7 @@ class StatePlaying extends State {
         // Player left.
 
         let player = this.machine.hooker._found[sessionId]
+        log.info('Match', `Player ${player.name} not found. They must have left the match.`)
 
         try {
           this.machine.hooker._events.emit('playerLeave', {
@@ -157,16 +160,18 @@ class StatePlaying extends State {
             playerName: player.name
           })
         } catch (e) {
-          log.bad('MatchHooker', e)
+          log.bad('Match', e)
         }
 
         delete this.machine.hooker._found[sessionId]
+
+        this.machine.hooker._events.emit('playersChange')
       }
     }
   }
 
   async [MachineState.ON_ENTER]() {
-    log.info('MatchHooker', 'Entering match')
+    log.info('Match', 'Entering match')
 
     this.machine.hooker._events.emit('matchJoin')
     this.machine.hooker._events.emit('matchAvailable')
@@ -183,17 +188,18 @@ class StatePlaying extends State {
   }
 
   async [MachineState.ON_LEAVE]() {
-    log.info('MatchHooker', 'Leaving match')
+    log.info('Match', 'Leaving match')
 
     for (let sessionId in this.machine.hooker._found) {
       let player = this.machine.hooker._found[sessionId]
+      log.info('Match', `Making ${player.name} leave the match.`)
 
       try {
         this.machine.hooker._events.emit('playerLeave', {
           playerName: player.name
         })
       } catch (e) {
-        log.bad('MatchHooker', e)
+        log.bad('Match', e)
       }
 
       delete this.machine.hooker._found[sessionId]

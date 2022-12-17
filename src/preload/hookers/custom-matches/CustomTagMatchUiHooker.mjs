@@ -18,6 +18,10 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._showRanking = false
     this._serverTime = null
     this._duration = 0
+    this._onMatchPlayersChange = () => {
+      log.info('CustomTagMatchUi', 'Match got new players. Will update labels.')
+      this._updateLabel()
+    }
     this._onTab = (state) => {
       this._showRanking = state
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
@@ -32,30 +36,14 @@ export class CustomTagMatchUiHooker extends Hooker {
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
     }
     this._onPlayersChange = (players) => {
+      log.info('CustomTagMatchUi', 'Got new players')
       this._players = players
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
     }
     this._onItChange = (it) => {
       this._it = it
+      this._updateLabel()
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
-
-      const playerNameVisibilityApi = this.pimp.getApi('playerNameVisibility')
-      playerNameVisibilityApi.clear()
-
-      if (this._it) {
-        const playerApi = this.pimp.getApi('player')
-
-        if (this._it.name === playerApi.getName()) {
-          // No label to place.
-        } else {
-          const matchApi = this.pimp.getApi('match')
-          let sessionId = matchApi.getSessionIdByName(this._it.name)
-
-          if (sessionId) {
-            playerNameVisibilityApi.takeControl(sessionId, true)
-          }
-        }
-      }
     }
   }
 
@@ -68,6 +56,7 @@ export class CustomTagMatchUiHooker extends Hooker {
     let matchApi = this.pimp.getApi('match')
     this._serverTime = matchApi.getServerTime()
     this._duration = matchApi.getDuration()
+    matchApi.on('playersChange', this._onMatchPlayersChange)
 
     let playerApi = this.pimp.getApi('player')
     playerApi.on('available', this._onPlayerAvailable)
@@ -75,10 +64,15 @@ export class CustomTagMatchUiHooker extends Hooker {
     let customTagMatchApi = this.pimp.getApi('customTagMatch')
 
     this._created = customTagMatchApi.getCreatedTimestamp()
-    this._state = await customTagMatchApi.getState()
+
     customTagMatchApi.on('stateChange', this._onStateChange)
+    this._state = customTagMatchApi.getState()
+
     customTagMatchApi.on('playersChange', this._onPlayersChange)
+    this._players = customTagMatchApi.getPlayers()
+
     customTagMatchApi.on('itChange', this._onItChange)
+    this._it = customTagMatchApi.getIt()
 
     let matchUiApi = this.pimp.getApi('matchUi')
     matchUiApi.show('killDeathCounter', false)
@@ -91,6 +85,7 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('time', false)
     matchUiApi.overrideTab(this._onTab)
 
+    this._updateLabel()
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
   }
 
@@ -114,8 +109,12 @@ export class CustomTagMatchUiHooker extends Hooker {
     let playerApi = this.pimp.getApi('player')
     playerApi.off('available', this._onPlayerAvailable)
 
+    let matchApi = this.pimp.getApi('match')
+    matchApi.off('playersChange', this._onMatchPlayersChange)
+
     this._reactRoot.unmount()
     this._root.remove()
+      this._updateLabel()
   }
 
   _makeProps() {
@@ -128,6 +127,28 @@ export class CustomTagMatchUiHooker extends Hooker {
       showRanking: this._showRanking,
       serverTime: this._serverTime,
       duration: this._duration,
+    }
+  }
+
+  _updateLabel() {
+    const playerNameVisibilityApi = this.pimp.getApi('playerNameVisibility')
+    playerNameVisibilityApi.clear()
+
+    if (this._it) {
+      const playerApi = this.pimp.getApi('player')
+
+      if (this._it.name === playerApi.getName()) {
+        // No label to place.
+      } else {
+        const matchApi = this.pimp.getApi('match')
+        let sessionId = matchApi.getSessionIdByName(this._it.name)
+
+        if (sessionId) {
+          playerNameVisibilityApi.takeControl(sessionId, true)
+        } else {
+          log.warn('CustomTagMatchUi', `Failed to find sessionId for player ${this._it.name}`)
+        }
+      }
     }
   }
 }
