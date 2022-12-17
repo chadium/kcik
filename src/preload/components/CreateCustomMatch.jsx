@@ -3,6 +3,7 @@ import ModalBox from "./ModalBox.jsx"
 import ComboBox from "./ComboBox.jsx"
 import InputText from "./InputText.jsx"
 import InputNumber from "./InputNumber.jsx"
+import InputCheck from './InputCheck.jsx'
 import Button from "./Button.jsx"
 import CheckMulti from './CheckMulti.jsx'
 import FormCategory from './FormCategory.jsx'
@@ -33,7 +34,8 @@ export default function CreateCustomMatch({ show, maps = [], weapons = [], onCre
     minutes: 8,
     map: maps?.[0]?.value,
     weapons: weapons.map(w => w.value),
-    name: ''
+    name: '',
+    privacy: true,
     //name: 'Yeehaw'
   })
 
@@ -41,7 +43,7 @@ export default function CreateCustomMatch({ show, maps = [], weapons = [], onCre
     let kirkaOptions = new CreateMatchOptions()
 
     if (data.type === 'tag') {
-      kirkaOptions.setPrivacy('private')
+      kirkaOptions.setPrivacy(data.privacy ? 'private' : 'public')
       kirkaOptions.setMode('DeathmatchRoom')
       kirkaOptions.setPlayers(data.players)
       kirkaOptions.setMinutes(data.minutes)
@@ -49,7 +51,7 @@ export default function CreateCustomMatch({ show, maps = [], weapons = [], onCre
       kirkaOptions.setWeapons(data.weapons)
       kirkaOptions.setName(data.name)
     } else if (data.type === 'multi-team-deathmatch') {
-      kirkaOptions.setPrivacy('private')
+      kirkaOptions.setPrivacy(data.privacy ? 'private' : 'public')
       kirkaOptions.setMode('DeathmatchRoom')
       kirkaOptions.setPlayers(data.players)
       kirkaOptions.setMinutes(data.minutes)
@@ -77,6 +79,10 @@ export default function CreateCustomMatch({ show, maps = [], weapons = [], onCre
       </FormCategory>
 
       <FormCategory label="Settings">
+        <FormField
+          label="Public"
+          control={<InputCheck value={!data.privacy} onChange={(privacy) => setData({ ...data, privacy: !privacy })}/>}
+        />
         <FormField
           label="Players"
           control={<InputNumber value={data.players} onChange={(players) => setData({ ...data, players })}/>}
