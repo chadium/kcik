@@ -134,16 +134,14 @@ export default function CustomTagMatchUi({
       {showKillIt && (
         <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
           <div>Kill</div>
-          <div className={styles.locals.itName}>{it.name}</div>
-          <div className={styles.locals.itDuration}>survived {mmss(itSurvivingTime)}</div>
+          <div key={it.name} className={styles.locals.itName}>{it.name}</div>
         </div>
       )}
 
       {showYouAreIt && (
         <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
           <div>You're it</div>
-          <div className={styles.locals.itName}><BouncingText text={"STAY ALIVE"}/></div>
-          <div className={styles.locals.itDuration}>survived {mmss(itSurvivingTime)}</div>
+          <div className={styles.locals.itFlashy}><BouncingText text={"STAY ALIVE"}/></div>
         </div>
       )}
     </div>

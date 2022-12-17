@@ -37,7 +37,12 @@
 
 .itName {
   font-size: 3rem;
+  animation: 2s appear-red ease;
+}
+
+.itFlashy {
   -webkit-box-reflect: below -1ex linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+  animation: 2s appear-green ease;
 }
 
 .itDuration {
@@ -120,4 +125,50 @@
   text-align: center;
   padding: 10px;
   padding-bottom: 0;
+}
+
+@keyframes appear-red {
+  0% {
+    color: black;
+    transform: scale(0);
+    opacity: 0;
+  }
+  25% {
+    color: rgb(255, 51, 0);
+    transform: scale(2);
+    opacity: 1;
+  }
+  50% {
+    color: black;
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    /* animate nothing to add pause at the end of animation */
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes appear-green {
+  0% {
+    color: black;
+    transform: scale(0);
+    opacity: 0;
+  }
+  25% {
+    color: rgb(0, 255, 128);
+    transform: scale(2);
+    opacity: 1;
+  }
+  50% {
+    color: black;
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    /* animate nothing to add pause at the end of animation */
+    transform: scale(1);
+    opacity: 1;
+  }
 }
