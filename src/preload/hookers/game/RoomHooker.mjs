@@ -120,6 +120,13 @@ export class RoomHooker extends Hooker {
         getRoom: () => {
           return this._currentRoom
         },
+        getRoomIdentification: () => {
+          let gameState = vueAppApi.getModuleState('game')
+          return {
+            roomId: gameState.room.id,
+            regionId: gameState.selectedRegion
+          }
+        },
         exitRoom: async () => {
           if (this._currentRoom === null) {
             // There is nothing to do.

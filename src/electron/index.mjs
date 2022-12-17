@@ -129,8 +129,17 @@ function buildMenu(wm) {
         {
           id: 'create-custom-match',
           label: 'Create custom match',
+          visible: false,
           click: () => {
             wm.menuClickSend('create-custom-match')
+          }
+        },
+        {
+          id: 'turn-custom-match',
+          label: 'Turn into custom match',
+          visible: false,
+          click: () => {
+            wm.menuClickSend('turn-custom-match')
           }
         },
         { type: 'separator' },
@@ -199,15 +208,20 @@ async function main() {
 
   let menu = buildMenu(wm)
 
-  if (!BOOMER_ADMIN) {
-    menu.getMenuItemById('create-custom-match').visible = false
-    if (process.env.NODE_ENV === 'production') {
-      menu.getMenuItemById('dev-tools').visible = false
-    }
+  if (process.env.NODE_ENV === 'production') {
+    menu.getMenuItemById('dev-tools').visible = false
   }
 
   ipcMain.on('menu.join-match.enable', (e, state) => {
     menu.getMenuItemById('join-match').enabled = Boolean(state)
+  })
+
+  ipcMain.on('menu.create-custom-match.visible', (e, state) => {
+    menu.getMenuItemById('create-custom-match').visible = Boolean(state)
+  })
+
+  ipcMain.on('menu.turn-custom-match.visible', (e, state) => {
+    menu.getMenuItemById('turn-custom-match').visible = Boolean(state)
   })
 
   Menu.setApplicationMenu(menu)

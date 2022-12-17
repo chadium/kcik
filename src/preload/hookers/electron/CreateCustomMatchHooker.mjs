@@ -3,9 +3,6 @@ import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import CreateCustomMatch from '../../components/CreateCustomMatch.jsx'
-import { CustomTeamDeathMatchHooker } from '../custom-matches/CustomTeamDeathMatchHooker.mjs'
-import { CustomTagMatchHooker } from '../custom-matches/CustomTagMatchHooker.mjs'
-import { CustomTagMatchUiHooker } from '../custom-matches/CustomTagMatchUiHooker.mjs'
 import * as adminApi from '../../admin-api.mjs'
 import * as log from '../../log.mjs'
 
@@ -23,6 +20,14 @@ export class CreateCustomMatchHooker extends Hooker {
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
+
+    roomApi.on('available', () => {
+      ipcRenderer.send('menu.create-custom-match.visible', false)
+    })
+
+    roomApi.on('leave', () => {
+      ipcRenderer.send('menu.create-custom-match.visible', true)
+    })
 
     ipcRenderer.on('menu.create-custom-match.click', async () => {
       try {
@@ -50,10 +55,8 @@ export class CreateCustomMatchHooker extends Hooker {
 
         let { roomId, regionId } = await roomApi.createRoom(options.kirkaOptions)
 
-        if (BOOMER_ADMIN) {
-          log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
-          await adminApi.matchSet(regionId, roomId, options.type)
-        }
+        log.info('CreateCustomMatch', `Creating custom match in room ${roomId}`)
+        await adminApi.matchSet(regionId, roomId, options.type)
       } finally {
         this._reactRoot.render(React.createElement(CreateCustomMatch, { show: false }, null))
       }
@@ -63,5 +66,7 @@ export class CreateCustomMatchHooker extends Hooker {
   unhook() {
     this._reactRoot.unmount()
     this._root.remove()
+
+    throw new Error('TODO')
   }
 }

@@ -16,6 +16,7 @@ import { SniffRoomMessagesHooker } from './hookers/game/SniffRoomMessagesHooker.
 import { SoundHooker } from './hookers/game/SoundHooker.mjs'
 import { KillBarHooker } from './hookers/game/KillBarHooker.mjs'
 import { CustomMatchDetectorHooker } from './hookers/custom-matches/CustomMatchDetectorHooker.mjs'
+import { TurnCustomMatchHooker } from './hookers/electron/TurnCustomMatchHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
 import { PlayerNameVisibilityHooker } from './hookers/mods/PlayerNameVisibilityHooker.mjs'
 import { pathsToKey, pathsToValue, debugAccess } from './object-utils.mjs'
@@ -59,10 +60,14 @@ async function main() {
     new MatchHooker(),
     new MatchUiHooker(),
     new CustomMatchDetectorHooker(),
-    new CreateCustomMatchHooker(),
     new PlayerNameVisibilityHooker(),
     //new SniffRoomMessagesHooker(),
   ]
+
+  if (BOOMER_ADMIN) {
+    hookers.push(new CreateCustomMatchHooker())
+    hookers.push(new TurnCustomMatchHooker())
+  }
 
   for (let hooker of hookers) {
     try {
