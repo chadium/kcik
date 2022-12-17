@@ -1,63 +1,171 @@
 import EventEmitter from 'events'
 import { Hooker } from '../../Pimp.mjs'
-import { pathsToKey, getByPath, findFirstValueByPredicate } from '../../object-utils.mjs'
-import { onceMutation } from '../../vuex-utils.mjs'
+import { waitForProperty, findFirstValueByPredicate } from '../../object-utils.mjs'
 import * as log from '../../log.mjs'
+import { Machine, MachineState } from '../../state-machine.mjs'
 
-export class EntityComponentSystemHooker extends Hooker {
-  constructor() {
-    super()
-    this._world = null
-    this._events = new EventEmitter()
-    this._setWorldMutationHooker = null
+const blacklistedKeys = new Set([
+  'pointerLockHelper',
+  'renderer',
+  'renderingSystem',
+  'useMainloop'
+])
+
+function guessEmptyEcsyWorldKey(kirkaWorld) {
+  let keys = Object.keys(kirkaWorld)
+
+  for (let i = keys.length; i >= 0; i++) {
+    let key = keys[i]
+
+    if (kirkaWorld[key] !== null) {
+      keys.splice(i, 1)
+    }
   }
 
-  hook() {
-    this._events.on('newListener', (name, listener) => {
-      if (name === 'available') {
-        if (this._world !== null) {
-          // Already available. Call it.
-          listener(this._world)
-        }
-      }
-    })
+  keys = keys.filter(k => !blacklistedKeys.has(k))
 
-    this._events.on('created', () => {
-      // TODO: Figure out how to detect when it's destroyed
-    })
+  if (keys.length !== 1) {
+    throw new Error(`Failed to guess key. Got: ${keys}`)
+  }
 
-    let vueAppApi = this.pimp.getApi('vueApp')
+  return keys[0]
+}
+
+class State extends MachineState {
+  onAvailableListener(listener) {
+  }
+}
+
+class StateUnknown extends State {
+  async [MachineState.ON_ENTER]() {
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
 
     vueAppApi.on('available', () => {
-      let world = findFirstValueByPredicate(vueAppApi.getModuleState('game'), {
+      let gameState = vueAppApi.getModuleState('game')
+
+      let ecsyWorld = findFirstValueByPredicate(gameState, {
         predicate(o) {
           return 'unregisterSystem' in o
         },
         maxLevel: 3
       })
-      if (world !== undefined) {
-        log.info('EntityComponentSystem', 'Found ECSY world.')
-        this._world = world
-        this._events.emit('created', this._world)
-        this._events.emit('available', this._world)
-      } else {
-        log.bad('EntityComponentSystem', 'Could not find ECSY world. Will hook into setWorld and wait for it.')
-        this._setWorldMutationHooker = vueAppApi.onceMutation('game/setWorld', (world) => {
-          log.info('EntityComponentSystem', 'World was set world. Will search for ECSY world...')
 
-          world = findFirstValueByPredicate(world, {
-            predicate(o) {
-              return 'unregisterSystem' in o
-            },
-            maxLevel: 1
-          })
-          if (world !== undefined) {
-            log.info('EntityComponentSystem', 'Found ECSY world.')
-            this._world = world
-            this._events.emit('created', this._world)
-            this._events.emit('available', this._world)
-          }
+      if (ecsyWorld !== undefined) {
+        log.info('EntityComponentSystem', 'Found ECSY world.')
+        this.machine.hooker._world = ecsyWorld
+        this.machine.next(new StateFoundEcsy())
+      } else {
+        log.warn('EntityComponentSystem', 'Could not find ECSY world.')
+
+        let kirkaWorld = findFirstValueByPredicate(gameState, {
+          predicate(o) {
+            return 'renderingSystem' in o
+          },
+          maxLevel: 3
         })
+
+        if (kirkaWorld !== undefined) {
+          this.machine.next(new StateWaitingForEcsyWorld())
+        } else {
+          this.machine.next(new StateWaitingForWorld())
+        }
+      }
+    })
+  }
+}
+
+class StateWaitingForWorld extends State {
+  constructor() {
+    super()
+    this._onMutation = null
+  }
+
+  async [MachineState.ON_ENTER]() {
+    log.info('EntityComponentSystem', 'Will be waiting for Kirka world.')
+
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
+
+    this._onMutation = vueAppApi.onceMutation('game/setWorld', (world) => {
+      log.info('EntityComponentSystem', 'World was set world. Will search for ECSY world...')
+
+      let ecsyWorld = findFirstValueByPredicate(world, {
+        predicate(o) {
+          return 'unregisterSystem' in o
+        },
+        maxLevel: 1
+      })
+
+      if (ecsyWorld !== undefined) {
+        log.info('EntityComponentSystem', 'Found ECSY world.')
+        this.machine.hooker._world = ecsyWorld
+        this.machine.next(new StateFoundEcsy())
+      } else {
+        log.bad('EntityComponentSystem', 'Was not expecting to not find anything.')
+        this.machine.next(new StateUnknown())
+      }
+    })
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    this._onMutation.close()
+    this._onMutation = null
+  }
+}
+
+class StateWaitingForEcsyWorld extends State {
+  async [MachineState.ON_ENTER]() {
+    log.info('EntityComponentSystem', 'Will be waiting for ECSY world.')
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
+    let gameState = vueAppApi.getModuleState('game')
+
+    let kirkaWorld = findFirstValueByPredicate(gameState, {
+      predicate(o) {
+        return 'renderingSystem' in o
+      },
+      maxLevel: 3
+    })
+
+    if (kirkaWorld === undefined) {
+      log.bad('EntityComponentSystem', 'Was not expecting to not find kirka world.')
+      this.machine.next(new StateUnknown())
+      return
+    }
+
+    let key = guessEmptyEcsyWorldKey(kirkaWorld)
+
+    let ecsyWorld = await waitForProperty(kirkaWorld, key, {
+      nullable: false
+    })
+
+    log.info('EntityComponentSystem', 'Found ECSY world.')
+    this.machine.hooker._world = ecsyWorld
+    this.machine.next(new StateFoundEcsy())
+  }
+}
+
+class StateFoundEcsy extends State {
+  async [MachineState.ON_ENTER]() {
+    this.machine.hooker._events.emit('created', this.machine.hooker._world)
+    this.machine.hooker._events.emit('available', this.machine.hooker._world)
+  }
+}
+
+export class EntityComponentSystemHooker extends Hooker {
+  constructor() {
+    super()
+    this._world = null
+    this._state = new Machine({ base: State })
+    this._state.hooker = this
+    this._events = new EventEmitter()
+  }
+
+  async hook() {
+    await this._state.start(new StateUnknown())
+
+    this._events.on('newListener', async (name, listener) => {
+      if (name === 'available') {
+        let state = await this._state.state()
+        state.onAvailableListener(listener)
       }
     })
 
@@ -104,8 +212,8 @@ export class EntityComponentSystemHooker extends Hooker {
     }
   }
 
-  unhook() {
-    throw new Error('To be implemented.')
+  async unhook() {
+    await this._state.stop()
   }
 
   _getPlayerSystem() {
