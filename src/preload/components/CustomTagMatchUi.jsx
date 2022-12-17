@@ -37,7 +37,7 @@ export default function CustomTagMatchUi({
 
   const itSurvivingTime = useTimeUpdate(() => {
     return Date.now() - it.started
-  }, it !== null)
+  }, it !== null, [it])
 
   const now = useTimeUpdate(() => {
     return Date.now()

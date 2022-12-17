@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-export function useTimeUpdate(callback, condition) {
+export function useTimeUpdate(callback, condition, dependencies = [condition]) {
   const [lastResult, setLastResult] = useState()
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export function useTimeUpdate(callback, condition) {
     }, 1000)
 
     return () => clearInterval(id)
-  }, [condition])
+  }, [dependencies])
 
   return lastResult
 }
