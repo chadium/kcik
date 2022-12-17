@@ -24,6 +24,7 @@ export class TurnCustomMatchHooker extends Hooker {
 
     roomApi.on('available', () => {
       ipcRenderer.send('menu.turn-custom-match.visible', true)
+      ipcRenderer.send('menu.end-custom-match.visible', false)
     })
 
     roomApi.on('leave', () => {
@@ -51,6 +52,16 @@ export class TurnCustomMatchHooker extends Hooker {
       } finally {
         this._reactRoot.render(React.createElement(TurnCustomMatch, { show: false }, null))
       }
+    })
+
+    const customMatchMDetectorApi = this.pimp.getApi('customMatchMDetector')
+    customMatchMDetectorApi.on('isPlayingCustomMatch', (isPlayingCustomMatch) => {
+      ipcRenderer.send('menu.end-custom-match.visible', isPlayingCustomMatch)
+      ipcRenderer.send('menu.turn-custom-match.visible', !isPlayingCustomMatch)
+    })
+
+    ipcRenderer.on('menu.end-custom-match.click', async () => {
+      await adminApi.matchEnd()
     })
   }
 

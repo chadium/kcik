@@ -1,3 +1,4 @@
+import EventEmitter from 'events'
 import deepEqual from 'deep-equal'
 import { Hooker } from '../../Pimp.mjs'
 import { CustomTeamDeathMatchHooker } from './CustomTeamDeathMatchHooker.mjs'
@@ -67,6 +68,8 @@ class StatePlayingCustomMatch extends State {
   }
 
   async [MachineState.ON_ENTER]() {
+    this.machine.hooker._isPlayingCustomMatch = true
+
     if (this.match.type === 'tag') {
       this.hookers.push(new CustomTagMatchHooker(this.match))
       if (BOOMER_ADMIN) {
@@ -81,6 +84,8 @@ class StatePlayingCustomMatch extends State {
     for (let hooker of this.hookers) {
       await this.machine.hooker.pimp.register(hooker)
     }
+
+    this.machine.hooker._events.emit('isPlayingCustomMatch', true)
   }
 
   async [MachineState.ON_LEAVE]() {
@@ -89,6 +94,10 @@ class StatePlayingCustomMatch extends State {
     }
 
     this.hookers.length = 0
+
+    this.machine.hooker._isPlayingCustomMatch = false
+
+    this.machine.hooker._events.emit('isPlayingCustomMatch', false)
   }
 
   onRoomLeave() {
@@ -116,9 +125,11 @@ class StatePlayingCustomMatch extends State {
 export class CustomMatchDetectorHooker extends Hooker {
   constructor() {
     super()
+    this._events = new EventEmitter()
     this._hookers = []
     this._matchSocket = null
     this._match = null
+    this._isPlayingCustomMatch = false
     this._state = new Machine({ base: State })
     this._state.hooker = this
   }
@@ -144,6 +155,17 @@ export class CustomMatchDetectorHooker extends Hooker {
         this._changeMatch(match)
       }
     })
+
+    return {
+      name: 'customMatchMDetector',
+      api: {
+        isPlayingCustomMatch: () => {
+          return this._isPlayingCustomMatch
+        },
+        on: this._events.on.bind(this._events),
+        off: this._events.off.bind(this._events),
+      }
+    }
   }
 
   async unhook() {

@@ -12,6 +12,13 @@ export async function matchSet(regionId, roomId, type) {
   })
 }
 
+export async function matchEnd() {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.KIRKA_BOOMER_ADMIN_API_PREFIX + '/match/end'
+  })
+}
+
 export async function teamDeathmatchAddKill(name, amount) {
   await apiFetch({
     method: 'POST',

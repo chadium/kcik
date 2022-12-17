@@ -21,6 +21,8 @@ export class CreateCustomMatchHooker extends Hooker {
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
 
+    ipcRenderer.send('menu.create-custom-match.visible', true)
+
     roomApi.on('available', () => {
       ipcRenderer.send('menu.create-custom-match.visible', false)
     })

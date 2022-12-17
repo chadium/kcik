@@ -142,6 +142,14 @@ function buildMenu(wm) {
             wm.menuClickSend('turn-custom-match')
           }
         },
+        {
+          id: 'end-custom-match',
+          label: 'End custom match',
+          visible: false,
+          click: () => {
+            wm.menuClickSend('end-custom-match')
+          }
+        },
         { type: 'separator' },
         {
           label: 'Restart',
@@ -222,6 +230,10 @@ async function main() {
 
   ipcMain.on('menu.turn-custom-match.visible', (e, state) => {
     menu.getMenuItemById('turn-custom-match').visible = Boolean(state)
+  })
+
+  ipcMain.on('menu.end-custom-match.visible', (e, state) => {
+    menu.getMenuItemById('end-custom-match').visible = Boolean(state)
   })
 
   Menu.setApplicationMenu(menu)
