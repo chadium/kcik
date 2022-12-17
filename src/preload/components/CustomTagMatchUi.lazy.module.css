@@ -101,6 +101,7 @@
 .players {
   top: 6rem;
   left: 2rem;
+  animation: var(--boomer-quick-transition-duration) appear-left ease;
 }
 
 .playersContent {
@@ -144,7 +145,6 @@
     opacity: 1;
   }
   100% {
-    /* animate nothing to add pause at the end of animation */
     transform: scale(1);
     opacity: 1;
   }
@@ -167,8 +167,21 @@
     opacity: 1;
   }
   100% {
-    /* animate nothing to add pause at the end of animation */
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes appear-left {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0%);
     opacity: 1;
   }
 }

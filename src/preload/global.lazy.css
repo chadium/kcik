@@ -22,6 +22,8 @@
 
   --boomer-action-other-text-color: white;
   --boomer-action-other-bg-color: #777777;
+
+  --boomer-quick-transition-duration: 100ms;
 }
 
 .boomer-bright {
