@@ -78,7 +78,7 @@ class StateInRoom extends State {
 
         this.machine.hooker._events.emit('leave', { room })
 
-        this.machine.hooker._state = new StateWaitingForRoom()
+        this.machine.hooker._state.next(new StateWaitingForRoom())
       }
     })
   }
