@@ -27,9 +27,9 @@ export class CreateCustomMatchHooker extends Hooker {
     ipcRenderer.on('menu.create-custom-match.click', async () => {
       try {
         let gameObject = vueAppApi.getModuleState('game')
-        let maps = Object.values(gameObject.maps).map(w => ({
-          label: w.name,
-          value: w.type
+        let maps = Object.values(gameObject.mods.DeathmatchRoom.maps).map(map => ({
+          label: map,
+          value: map
         }))
         let weapons = Object.values(gameObject.weapons).map(w => ({
           label: w.name,
