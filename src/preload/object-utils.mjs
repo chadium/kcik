@@ -130,6 +130,29 @@ export async function waitForProperty(o, propName, {
   })
 }
 
+export function onPropertyChange(o, propName, onChange) {
+  let storage = o[propName]
+
+  Object.defineProperty(o, propName, {
+    configurable: true,
+    set(v) {
+      storage = v
+
+      onChange(v)
+    },
+    get() {
+      return storage
+    }
+  })
+
+  return {
+    close() {
+      delete o[propName]
+      o[propName] = storage
+    }
+  }
+}
+
 export function pathsToValue(obj, value) {
   let seen = new Set()
   let found = []

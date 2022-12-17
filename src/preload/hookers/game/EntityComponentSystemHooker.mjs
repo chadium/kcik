@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { Hooker } from '../../Pimp.mjs'
-import { waitForProperty, findFirstValueByPredicate } from '../../object-utils.mjs'
+import { getByPath, findFirstValueByPredicate, pathsToValue, onPropertyChange } from '../../object-utils.mjs'
 import * as log from '../../log.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
 
@@ -14,7 +14,7 @@ const blacklistedKeys = new Set([
 function guessEmptyEcsyWorldKey(kirkaWorld) {
   let keys = Object.keys(kirkaWorld)
 
-  for (let i = keys.length; i >= 0; i++) {
+  for (let i = keys.length; i >= 0; i--) {
     let key = keys[i]
 
     if (kirkaWorld[key] !== null) {
@@ -113,6 +113,11 @@ class StateWaitingForWorld extends State {
 }
 
 class StateWaitingForEcsyWorld extends State {
+  constructor() {
+    super()
+    this._onPropertyChange = null
+  }
+
   async [MachineState.ON_ENTER]() {
     log.info('EntityComponentSystem', 'Will be waiting for ECSY world.')
     let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
@@ -133,20 +138,55 @@ class StateWaitingForEcsyWorld extends State {
 
     let key = guessEmptyEcsyWorldKey(kirkaWorld)
 
-    let ecsyWorld = await waitForProperty(kirkaWorld, key, {
-      nullable: false
+    this._onPropertyChange = await onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
+      if (ecsyWorld !== null) {
+        log.info('EntityComponentSystem', 'Found ECSY world.')
+        this.machine.hooker._world = ecsyWorld
+        this.machine.next(new StateFoundEcsy())
+      }
     })
+  }
 
-    log.info('EntityComponentSystem', 'Found ECSY world.')
-    this.machine.hooker._world = ecsyWorld
-    this.machine.next(new StateFoundEcsy())
+  async [MachineState.ON_LEAVE]() {
+    this._onPropertyChange.close()
   }
 }
 
 class StateFoundEcsy extends State {
+  constructor() {
+    super()
+    this._onPropertyChange = null
+  }
+
   async [MachineState.ON_ENTER]() {
     this.machine.hooker._events.emit('created', this.machine.hooker._world)
     this.machine.hooker._events.emit('available', this.machine.hooker._world)
+
+    let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
+    let gameState = vueAppApi.getModuleState('game')
+
+    let path = pathsToValue(gameState, this.machine.hooker._world)[0]
+
+    if (path === undefined) {
+      throw new Error('Was expecting to find a path.')
+    }
+
+    let kirkaWorldPath = path.concat()
+    let key = kirkaWorldPath.pop()
+
+    let kirkaWorld = getByPath(gameState, kirkaWorldPath)
+
+    this._onPropertyChange = await onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
+      if (ecsyWorld === null) {
+        log.info('EntityComponentSystem', 'Lost ECSY world.')
+        this.machine.hooker._world = null
+        this.machine.next(new StateWaitingForEcsyWorld())
+      }
+    })
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    this._onPropertyChange.close()
   }
 }
 
