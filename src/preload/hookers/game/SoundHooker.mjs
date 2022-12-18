@@ -2,6 +2,31 @@ import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 
+const availableSounds = [
+  "hover",
+  "click",
+  "lobby",
+  "open-chest",
+  "coin",
+  "bell-store",
+  "error",
+  "quickTransition",
+  "buttonSpecial",
+  "success",
+  "quickTransitionMini",
+  "Temple",
+  "Mirage",
+  "Village",
+  "dev",
+  "Pool",
+  "Skull",
+  "kill1",
+  "kill2",
+  "kill3",
+  "kill4",
+  "kill5",
+]
+
 export class SoundHooker extends Hooker {
   constructor() {
     super()
