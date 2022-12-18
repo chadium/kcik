@@ -121,11 +121,41 @@
   color: var(--boomer-special-text-color);
 }
 
-.title {
-  font-weight: bold;
+.endScreen {
+  position: fixed;
+  inset: 0;
   text-align: center;
-  padding: 10px;
-  padding-bottom: 0;
+  color: white;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: 300ms appear-top ease;
+  z-index: 4;
+}
+
+.endScreenPlayers {
+  margin-top: var(--boomer-safe-space);
+}
+
+.endScreenPlayersItem {
+  font-size: 3rem;
+  padding: var(--boomer-safe-space);
+}
+
+@keyframes appear-top {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
 }
 
 @keyframes appear-red {

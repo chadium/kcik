@@ -64,19 +64,56 @@ class StateMatchWait extends State {
 }
 
 class StateMatchActive extends State {
+  constructor() {
+    super()
+    this._endTimeout = null
+  }
+
   async [MachineState.ON_ENTER]() {
+    log.info('CustomTagMatch', `Game started`)
+
     this.machine.hooker._emitStateChange()
 
-    log.info('CustomTagMatch', `Game started`)
+    const matchApi = this.machine.hooker.pimp.getApi('match')
+
+    const timeLeft = matchApi.getDuration() - matchApi.getElapsedTime()
+
+    this._endTimeout = setTimeout(() => {
+      this.machine.next(new StateMatchActiveEndScreen())
+    }, timeLeft)
   }
 
   async [MachineState.ON_LEAVE]() {
+    clearTimeout(this._endTimeout)
+  }
+
+  async [MachineState.ON_STOP]() {
     this.machine.hooker.pimp.unregister(this.machine.hooker._ui)
     this.machine.hooker._ui = false
   }
 
   getState() {
     return 'playing'
+  }
+}
+
+class StateMatchActiveEndScreen extends State {
+  constructor() {
+    super()
+  }
+
+  async [MachineState.ON_ENTER]() {
+    log.info('CustomTagMatch', `End screen`)    
+    this.machine.hooker._emitStateChange()
+  }
+
+  async [MachineState.ON_STOP]() {
+    this.machine.hooker.pimp.unregister(this.machine.hooker._ui)
+    this.machine.hooker._ui = false
+  }
+
+  getState() {
+    return 'endScreen'
   }
 }
 

@@ -27,6 +27,10 @@ export default function CustomTagMatchUi({
     return state === 'playing'
   }, [state])
 
+  const isEnd = useMemo(() => {
+    return state === 'endScreen'
+  }, [state])
+
   const remainingWaitingTime = useTimeUpdate(() => {
     return (created + 30000) - Date.now()
   }, isWaiting)
@@ -75,6 +79,8 @@ export default function CustomTagMatchUi({
     })
 
     results.sort((a, b) => b.time - a.time)
+
+    results.forEach((e, i) => e.position = i + 1)
 
     return results
   }, [players, it, meName, now])
@@ -142,6 +148,22 @@ export default function CustomTagMatchUi({
         <div className={[styles.locals.it, 'boomer-text-shadow'].join(' ')}>
           <div>You're it</div>
           <div className={styles.locals.itFlashy}><BouncingText text={"STAY ALIVE"}/></div>
+        </div>
+      )}
+
+      {isEnd && (
+        <div className={styles.locals.endScreen}>
+          <div className={styles.locals.endScreenTitle}>Thank you for playing!</div>
+
+          <div className={styles.locals.endScreenPlayers}>
+            {ranking.map(player => {
+              return (
+                <div className={[styles.locals.endScreenPlayersItem, player.me ? styles.locals.endScreenPlayersItemMe : ''].join(' ')} key={player.name}>
+                  #{player.position} {player.name}: {mmss(player.time)}
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
     </div>

@@ -82,6 +82,14 @@ class StateMatchActive extends State {
   async [MachineState.ON_ENTER]() {
     log.info('CustomTagMatchAdmin', `Game started`)
     await this.machine.hooker._makeSomebodyIt()
+
+    const matchApi = this.machine.hooker.pimp.getApi('match')
+
+    const timeLeft = matchApi.getDuration() - matchApi.getElapsedTime()
+
+    this._endTimeout = setTimeout(() => {
+      this.machine.next(new StateMatchActiveEndScreen())
+    }, timeLeft)
   }
 
   getState() {
@@ -141,6 +149,17 @@ class StateMatchActive extends State {
       await adminApi.tagRemoveIt()
       await this.machine.hooker._makeSomebodyIt(deadPlayerName)
     }
+  }
+}
+
+class StateMatchActiveEndScreen extends State {
+  async [MachineState.ON_ENTER]() {
+    log.info('CustomTagMatchAdmin', `End screen`)
+    await adminApi.tagRemoveIt()
+  }
+
+  getState() {
+    return 'endScreen'
   }
 }
 
