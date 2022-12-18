@@ -9,8 +9,7 @@
     "make-user": "pushd dist/user && NODE_ENV= npm install && npm run make",
     "build-user": "webpack build -c webpack.user.config.js",
     "start-admin": "electron dist/admin/electron/index.js",
-    "build-admin": "webpack build -c webpack.admin.config.js",
-    "postinstall": "pushd node_modules/dynamic-buffer && npm install && npm run build"
+    "build-admin": "webpack build -c webpack.admin.config.js"
   },
   "author": "",
   "license": "ISC",
