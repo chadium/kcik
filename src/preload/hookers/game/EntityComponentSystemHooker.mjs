@@ -138,7 +138,7 @@ class StateWaitingForEcsyWorld extends State {
 
     let key = guessEmptyEcsyWorldKey(kirkaWorld)
 
-    this._onPropertyChange = await onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
+    this._onPropertyChange = onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
       if (ecsyWorld !== null) {
         log.info('EntityComponentSystem', 'Found ECSY world.')
         this.machine.hooker._world = ecsyWorld
@@ -176,7 +176,7 @@ class StateFoundEcsy extends State {
 
     let kirkaWorld = getByPath(gameState, kirkaWorldPath)
 
-    this._onPropertyChange = await onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
+    this._onPropertyChange = onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
       if (ecsyWorld === null) {
         log.info('EntityComponentSystem', 'Lost ECSY world.')
         this.machine.hooker._world = null
