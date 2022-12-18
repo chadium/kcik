@@ -165,13 +165,7 @@ class StateFoundEcsy extends State {
     let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
     let gameState = vueAppApi.getModuleState('game')
 
-    let path = pathsToValue(gameState, this.machine.hooker._world)[0]
-
-    if (path === undefined) {
-      throw new Error('Was expecting to find a path.')
-    }
-
-    let kirkaWorldPath = path.concat()
+    let kirkaWorldPath = this.pathToEcsyWorld(gameState)
     let key = kirkaWorldPath.pop()
 
     let kirkaWorld = getByPath(gameState, kirkaWorldPath)
@@ -187,6 +181,31 @@ class StateFoundEcsy extends State {
 
   async [MachineState.ON_LEAVE]() {
     this._onPropertyChange.close()
+  }
+
+  pathToEcsyWorld(gameState) {
+    let paths = pathsToValue(gameState, this.machine.hooker._world)
+
+    if (paths.length === 0) {
+      throw new Error('Was expecting to find a path to ecsy world. Found none. Do not know what to do.')
+    }
+
+    // Remove any paths that contain the property parent. These seem to come from the renderer.
+    paths = paths.filter(path => !path.includes('parent'))
+
+    // Remove any paths that contain the property _entityManager. The entity manager seems to have
+    // a reference to the kirka world.
+    paths = paths.filter(path => !path.includes('_entityManager'))
+
+    if (paths.length === 0) {
+      throw new Error('No paths left after filtering. Do not know what to do.')
+    }
+
+    if (paths.length !== 1) {
+      log.warn('EntityComponentSystem', 'Got more than 1 path to ecsy world object. This might cause problems.')
+    }
+
+    return paths[0]
   }
 }
 
