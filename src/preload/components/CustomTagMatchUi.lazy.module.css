@@ -49,6 +49,10 @@
   font-size: 1.5rem;
 }
 
+.playersEntryPosition {
+  margin-right: var(--boomer-safe-space);
+}
+
 .playersEntryIt {
   opacity: 0;
   margin-right: var(--boomer-safe-space);

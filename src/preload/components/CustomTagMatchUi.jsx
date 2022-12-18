@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styles from "./CustomTagMatchUi.lazy.module.css"
 import Box from "./Box.jsx"
 import BouncingText from "./BouncingText.jsx"
+import PosLabel from "./PosLabel.jsx"
 import { mmss, seconds } from "../duration-format.mjs"
 import { useTimeUpdate } from "../use-time-update.mjs"
 
@@ -127,7 +128,7 @@ export default function CustomTagMatchUi({
                   return (
                     <div className={[styles.locals.playersEntry, player.me ? styles.locals.playersEntryMe : ''].join(' ')} key={player.name}>
                       <span className={[styles.locals.playersEntryIt, player.it ? styles.locals.show : ''].join(' ')}>➤</span>
-                      #{player.position} {player.name}: {mmss(player.time)}
+                      <span className={styles.locals.playersEntryPosition}><PosLabel position={player.position}/></span>{player.name}: {mmss(player.time)}
                     </div>
                   )
                 })}
@@ -159,7 +160,7 @@ export default function CustomTagMatchUi({
             {ranking.map(player => {
               return (
                 <div className={[styles.locals.endScreenPlayersItem, player.me ? styles.locals.endScreenPlayersItemMe : ''].join(' ')} key={player.name}>
-                  #{player.position} {player.name}: {mmss(player.time)}
+                  <PosLabel position={player.position}/> {player.name}: {mmss(player.time)}
                 </div>
               )
             })}
