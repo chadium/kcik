@@ -17,7 +17,7 @@ class StateUnknown extends State {
       let gameState = vueAppApi.getModuleState('game')
       
       if (gameState.room) {
-        log.info('RoomHooker', 'Already in a room.')
+        log.info('Room', 'Already in a room.')
         this.machine.hooker._currentRoom = gameState.room
         this.machine.next(new StateInRoom())
       } else {
@@ -34,7 +34,7 @@ class StateWaitingForRoom extends State {
   }
 
   async [MachineState.ON_ENTER]() {
-    log.info('RoomHooker', 'Will be waiting for room')
+    log.info('Room', 'Will be waiting for room')
 
     let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
 
@@ -59,7 +59,7 @@ class StateInRoom extends State {
   }
 
   async [MachineState.ON_ENTER]() {
-    log.info('RoomHooker', 'Found room')
+    log.info('Room', 'Found room')
 
     let vueAppApi = this.machine.hooker.pimp.getApi('vueApp')
 
