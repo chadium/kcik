@@ -11,7 +11,7 @@
     "start-admin": "electron dist/admin/electron/index.js",
     "build-admin": "webpack build -c webpack.admin.config.js"
   },
-  "author": "",
+  "author": "the28yearoldboomer",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.20.2",
