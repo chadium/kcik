@@ -11,7 +11,7 @@ const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development
 
 const version = (() => {
   if (mode === 'production') {
-    return JSON.stringify('v' + pkg.version)
+    return JSON.stringify('v' + pkg.version.replaceAll(/(\.0)+$/g, ""))
   } else {
     return JSON.stringify('DEV BUILD ' + new Date().toISOString())
   }
