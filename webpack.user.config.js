@@ -50,6 +50,7 @@ let packageJson = {
   name: pkg.name,
   description: pkg.description,
   version: pkg.version,
+  author: pkg.author,
   main: "electron/index.js",
   scripts: {
     "package": "electron-forge package",
