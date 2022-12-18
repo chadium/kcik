@@ -8,9 +8,13 @@ export function useTimeUpdate(callback, condition, dependencies = [condition]) {
       return
     }
 
-    let id = setInterval(() => {
+    function onUpdate() {
       setLastResult(callback())
-    }, 1000)
+    }
+
+    onUpdate()
+
+    let id = setInterval(onUpdate, 1000)
 
     return () => clearInterval(id)
   }, [dependencies])
