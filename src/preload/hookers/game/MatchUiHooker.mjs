@@ -59,6 +59,8 @@ export class MatchUiHooker extends Hooker {
     }
     this._hide = {}
     this._overrideTab = null
+    this._tabState = false
+    this._setTabVisible = null
   }
 
   async hook() {
@@ -70,6 +72,20 @@ export class MatchUiHooker extends Hooker {
 
     this._reactRoot.render(React.createElement(StyleToggle, this._makeProps(), null))
 
+    vueAppApi.on('available', () => {
+      // The game seems to call setTabVisible repeatedly when you keep the key
+      // pressed. We can do better by only calling our function when the value
+      // changes.
+      this._setTabVisible = vueAppApi.onMutation('game/setTabVisible', (state) => {
+        if (state !== this._tabState) {
+          this._tabState = state
+          if (this._overrideTab) {
+            this._overrideTab(this._tabState)
+          }
+        }
+      })
+    })
+
     return {
       name: 'matchUi',
       api: {
@@ -77,16 +93,11 @@ export class MatchUiHooker extends Hooker {
           this._hide[name] = !state
           this._reactRoot.render(React.createElement(StyleToggle, this._makeProps(), null))
         },
+        getTabState: () => {
+          return this._tabState
+        },
         overrideTab: (fn) => {
-          if (this._overrideTab !== null) {
-            this._overrideTab.close()
-          }
-
-          if (fn === null) {
-            return
-          }
-
-          this._overrideTab = vueAppApi.onMutation('game/setTabVisible', fn)
+          this._overrideTab = fn
         }
       }
     }
@@ -96,9 +107,9 @@ export class MatchUiHooker extends Hooker {
     this._reactRoot.unmount()
     this._root.remove()
 
-    if (this._overrideTab !== null) {
-      this._overrideTab.close()
-      this._overrideTab = null
+    if (this._setTabVisible !== null) {
+      this._setTabVisible.close()
+      this._setTabVisible = null
     }
   }
 

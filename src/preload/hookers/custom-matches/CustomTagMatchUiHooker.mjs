@@ -24,6 +24,10 @@ export class CustomTagMatchUiHooker extends Hooker {
     }
     this._onTab = (state) => {
       this._showRanking = state
+      if (state) {
+        let soundApi = this.pimp.getApi('sound')
+        soundApi.playSound({ name: 'hover' })
+      }
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
     },
     this._onPlayerAvailable = () => {
