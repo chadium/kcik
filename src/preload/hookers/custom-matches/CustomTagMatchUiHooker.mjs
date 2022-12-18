@@ -26,7 +26,7 @@ export class CustomTagMatchUiHooker extends Hooker {
       this._showRanking = state
       if (state) {
         let soundApi = this.pimp.getApi('sound')
-        soundApi.playSound({ name: 'quickTransitionMini' })
+        soundApi.playSound({ name: 'quickTransitionMini', volume: 0.5 })
       }
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
     },
@@ -48,6 +48,9 @@ export class CustomTagMatchUiHooker extends Hooker {
       this._it = it
       this._updateLabel()
       this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
+      if (this._it !== null) {
+        pimp.getApi('sound').playSound({ name: "error", volume: 0.75 })
+      }
     }
   }
 
