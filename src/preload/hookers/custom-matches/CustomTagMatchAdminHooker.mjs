@@ -79,6 +79,11 @@ class StateMatchWait extends State {
 }
 
 class StateMatchActive extends State {
+  constructor() {
+    super()
+    this._endTimeout = null
+  }
+
   async [MachineState.ON_ENTER]() {
     log.info('CustomTagMatchAdmin', `Game started`)
     await this.machine.hooker._makeSomebodyIt()
@@ -90,6 +95,10 @@ class StateMatchActive extends State {
     this._endTimeout = setTimeout(() => {
       this.machine.next(new StateMatchActiveEndScreen())
     }, timeLeft)
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    clearTimeout(this._endTimeout)
   }
 
   getState() {
