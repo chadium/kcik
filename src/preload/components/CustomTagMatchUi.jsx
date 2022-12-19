@@ -7,6 +7,7 @@ import { mmss, seconds } from "../duration-format.mjs"
 import { useTimeUpdate } from "../use-time-update.mjs"
 
 export default function CustomTagMatchUi({
+  now,
   players,
   meName,
   it,
@@ -33,7 +34,7 @@ export default function CustomTagMatchUi({
   }, [state])
 
   const remainingWaitingTime = useTimeUpdate(() => {
-    return (created + 30000) - Date.now()
+    return (created + 30000) - now()
   }, isWaiting)
 
   const remainingPlayingTime = useTimeUpdate(() => {
@@ -41,11 +42,11 @@ export default function CustomTagMatchUi({
   }, isPlaying)
 
   const itSurvivingTime = useTimeUpdate(() => {
-    return Date.now() - it.started
+    return now() - it.started
   }, it !== null, [it])
 
-  const now = useTimeUpdate(() => {
-    return Date.now()
+  const updateTime = useTimeUpdate(() => {
+    return now()
   }, players.length > 0)
 
   const showKillIt = useMemo(() => {
@@ -63,7 +64,7 @@ export default function CustomTagMatchUi({
 
       if (it !== null) {
         if (it.name === player.name) {
-          time += now - it.started
+          time += updateTime - it.started
         }
       }
 
@@ -84,7 +85,7 @@ export default function CustomTagMatchUi({
     results.forEach((e, i) => e.position = i + 1)
 
     return results
-  }, [players, it, meName, now])
+  }, [players, it, meName, updateTime])
 
   return (
     <div>

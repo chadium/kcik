@@ -51,7 +51,9 @@ class StateMatchWait extends State {
       await adminApi.tagPlayerAdd(playerName)
     }
 
-    const remaining = (this.machine.hooker._match.timestamp + 30000) - Date.now()
+    let now = this.machine.hooker.pimp.getApi('time').now()
+
+    const remaining = (this.machine.hooker._match.timestamp + 30000) - now
 
     log.info('CustomTagMatchAdmin', `Waiting for game to start...`)
     this._timeout = setTimeout(() => {

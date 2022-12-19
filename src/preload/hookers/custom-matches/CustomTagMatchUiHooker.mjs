@@ -126,6 +126,7 @@ export class CustomTagMatchUiHooker extends Hooker {
 
   _makeProps() {
     return {
+      now: this.pimp.getApi('time').now,
       players: this._players,
       meName: this._meName,
       it: this._it,

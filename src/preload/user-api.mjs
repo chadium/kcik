@@ -33,6 +33,14 @@ export async function matchGet() {
   return data.match
 }
 
+export async function timeGet() {
+  let { data } = await apiFetch({
+    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/time'
+  })
+
+  return data.time
+}
+
 export async function wsTeamDeathmatchRanking({ onConnect, onUpdate }) {
   const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match/ranking`);
 

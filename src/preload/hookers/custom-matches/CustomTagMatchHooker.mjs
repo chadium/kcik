@@ -41,7 +41,9 @@ class StateMatchWait extends State {
   async [MachineState.ON_ENTER]() {
     this.machine.hooker._emitStateChange()
 
-    const remaining = (this.machine.hooker._match.timestamp + 30000) - Date.now()
+    let now = this.machine.hooker.pimp.getApi('time').now()
+
+    const remaining = (this.machine.hooker._match.timestamp + 30000) - now
 
     log.info('CustomTagMatch', `Waiting for game to start...`)
     this._timeout = setTimeout(() => {

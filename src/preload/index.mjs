@@ -19,6 +19,7 @@ import { CustomMatchDetectorHooker } from './hookers/custom-matches/CustomMatchD
 import { TurnCustomMatchHooker } from './hookers/electron/TurnCustomMatchHooker.mjs'
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
 import { PlayerNameVisibilityHooker } from './hookers/mods/PlayerNameVisibilityHooker.mjs'
+import { BoomerTimeHooker } from './hookers/boomer/BoomerTimeHooker.mjs'
 import { pathsToKey, pathsToValue, debugAccess } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
@@ -61,6 +62,7 @@ async function main() {
     new MatchUiHooker(),
     new CustomMatchDetectorHooker(),
     new PlayerNameVisibilityHooker(),
+    new BoomerTimeHooker(),
     //new SniffRoomMessagesHooker(),
   ]
 
