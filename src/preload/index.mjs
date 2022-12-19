@@ -20,7 +20,7 @@ import { TurnCustomMatchHooker } from './hookers/electron/TurnCustomMatchHooker.
 import { CreateCustomMatchHooker } from './hookers/electron/CreateCustomMatchHooker.mjs'
 import { PlayerNameVisibilityHooker } from './hookers/mods/PlayerNameVisibilityHooker.mjs'
 import { BoomerTimeHooker } from './hookers/boomer/BoomerTimeHooker.mjs'
-import { pathsToKey, pathsToValue, debugAccess } from './object-utils.mjs'
+import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
 
@@ -82,7 +82,9 @@ async function main() {
   // Useful tools.
   window.pathsToKey = pathsToKey
   window.pathsToValue = pathsToValue
-  window.debugAccess = debugAccess
+  window.breakOnSet = breakOnSet
+  window.breakOnGet = breakOnGet
+  window.freezeProperty = freezeProperty
   window.pimp = pimp
 
   pimp.getApi('dom').on('headAvailable', () => {

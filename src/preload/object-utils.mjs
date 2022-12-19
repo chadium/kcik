@@ -313,7 +313,7 @@ export function findFirstValueByPredicate(obj, {
   return found
 }
 
-export function debugAccess(o, propName) {
+export function breakOnSet(o, propName) {
   let storage = o[propName]
 
   Object.defineProperty(o, propName, {
@@ -326,6 +326,56 @@ export function debugAccess(o, propName) {
       return storage
     }
   })
+
+  return {
+    close() {
+      delete o[propName]
+      o[propName] = storage
+    }
+  }
+}
+
+export function breakOnGet(o, propName) {
+  let storage = o[propName]
+
+  Object.defineProperty(o, propName, {
+    configurable: true,
+    set(v) {
+      storage = v
+    },
+    get() {
+      debugger
+      return storage
+    }
+  })
+
+  return {
+    close() {
+      delete o[propName]
+      o[propName] = storage
+    }
+  }
+}
+
+export function freezeProperty(o, propName) {
+  let storage = o[propName]
+
+  Object.defineProperty(o, propName, {
+    configurable: true,
+    set(v) {
+      // Ignore.
+    },
+    get() {
+      return storage
+    }
+  })
+
+  return {
+    close() {
+      delete o[propName]
+      o[propName] = storage
+    }
+  }
 }
 
 export function isObject(o) {
