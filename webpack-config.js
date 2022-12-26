@@ -6,6 +6,7 @@ const Dotenv = require('dotenv-webpack')
 const { DefinePlugin } = require('webpack')
 const WebpackObfuscator = require('webpack-obfuscator');
 const generate = require('generate-file-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 // Used by dotenv-webpack during compilation but turns out I need some of
 // those variables here. So I use the same module to stay consistent.
 require('dotenv-defaults').config()
@@ -289,6 +290,14 @@ exports.generateChromeBackgroundConfig = ({
       // new BundleAnalyzerPlugin({
       //   openAnalyzer: false
       // }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.join(__dirname, 'src', 'icon128.png'),
+            to: path.join(__dirname, 'dist', outputDir, 'icon128.png')
+          },
+        ],
+      }),
     ],
     optimization: {
       minimize: production,
@@ -322,6 +331,9 @@ exports.generateChromeBackgroundConfig = ({
     version: pkg.version,
     author: pkg.author,
     permissions: ["activeTab", "scripting"],
+    icons: {
+      "128": "icon128.png",
+    },
     content_scripts: [
       {
         matches: ["https://kirka.io/*"],
