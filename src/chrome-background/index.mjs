@@ -1,1 +1,3 @@
-setTimeout(() => chrome.runtime.reload(), 2500)
+if (process.env.NODE_ENV !== 'production') {
+  setTimeout(() => chrome.runtime.reload(), 2500)
+}
