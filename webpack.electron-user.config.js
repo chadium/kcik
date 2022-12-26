@@ -20,7 +20,7 @@ for (let config of configs) {
     )
   }
 
-  config.output.path = config.output.path.replace('[REPLACE]', path.join(__dirname, 'dist', 'user'))
+  config.output.path = config.output.path.replace('[REPLACE]', path.join(__dirname, 'dist', 'electron-user'))
 }
 
 let forgeConfig = {
@@ -42,7 +42,7 @@ let forgeConfig = {
 };
 
 configs[0].plugins.push(generate({
-    file: path.join(__dirname, 'dist', 'user', 'forge.config.js'),
+    file: path.join(__dirname, 'dist', 'electron-user', 'forge.config.js'),
     content: `module.exports = ${JSON.stringify(forgeConfig)}`
 }))
 
@@ -67,7 +67,7 @@ let packageJson = {
 }
 
 configs[0].plugins.push(generate({
-    file: path.join(__dirname, 'dist', 'user', 'package.json'),
+    file: path.join(__dirname, 'dist', 'electron-user', 'package.json'),
     content: JSON.stringify(packageJson)
 }))
 

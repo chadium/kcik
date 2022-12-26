@@ -49,12 +49,10 @@ async function main() {
 
   let hookers = [
     new VueAppHooker(),
-    new LoadingHooker(),
     new EntityComponentSystemHooker(),
     new WorldHooker(),
     new WorldMapHooker(),
     new RoomHooker(),
-    new JoinMatchHooker(prompter, messenger),
     new PlayerHooker(),
     new SoundHooker(),
     new KillBarHooker(),
@@ -66,9 +64,16 @@ async function main() {
     //new SniffRoomMessagesHooker(),
   ]
 
+  if (!BOOMER_CHROME_EXTENSION) {
+    hookers.push(new LoadingHooker())
+    hookers.push(new JoinMatchHooker(prompter, messenger))
+  }
+
   if (BOOMER_ADMIN) {
-    hookers.push(new CreateCustomMatchHooker())
-    hookers.push(new TurnCustomMatchHooker())
+    if (!BOOMER_CHROME_EXTENSION) {
+      hookers.p21ush(new CreateCustomMatchHooker())
+      hookers.push(new TurnCustomMatchHooker())
+    }
   }
 
   for (let hooker of hookers) {

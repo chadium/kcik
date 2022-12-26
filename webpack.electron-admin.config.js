@@ -9,7 +9,7 @@ for (let config of configs) {
     })
   )
 
-  config.output.path = config.output.path.replace('[REPLACE]', path.join(__dirname, 'dist', 'admin'))
+  config.output.path = config.output.path.replace('[REPLACE]', path.join(__dirname, 'dist', 'electron-admin'))
 }
 
 module.exports = configs

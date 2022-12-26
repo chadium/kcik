@@ -102,7 +102,7 @@ const rendererConfig = {
     filename: 'index.js'
   },
   optimization: {
-    minimize: true,
+    minimize: mode === 'production',
     usedExports: true, // Removes unused code.
     minimizer: [
       new TerserPlugin({
@@ -114,7 +114,8 @@ const rendererConfig = {
         extractComments: false,
       }),
     ],
-  }
+  },
+  devtool: 'cheap-module-source-map'
 }
 
 module.exports = [mainConfig, rendererConfig]

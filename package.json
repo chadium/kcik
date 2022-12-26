@@ -4,12 +4,14 @@
   "description": "Best Kirka Client.",
   "main": "dist/user/electron/index.js",
   "scripts": {
-    "start-user": "electron dist/user/electron/index.js",
-    "package-user": "pushd dist/user && NODE_ENV= npm install && npm run package",
-    "make-user": "pushd dist/user && NODE_ENV= npm install && npm run make",
-    "build-user": "webpack build -c webpack.user.config.js",
-    "start-admin": "electron dist/admin/electron/index.js",
-    "build-admin": "webpack build -c webpack.admin.config.js"
+    "start": "electron dist/electron-admin/electron/index.js",
+    "build": "webpack build -c webpack.electron-admin.config.js",
+    "watch": "webpack watch -c webpack.electron-admin.config.js",
+    "start-electron-user": "electron dist/user/electron/index.js",
+    "build-electron-user": "webpack build -c webpack.electron-user.config.js",
+    "watch-electron-user": "webpack watch -c webpack.electron-user.config.js",
+    "build-chrome-user": "webpack build -c webpack.chrome-user.config.js",
+    "watch-chrome-user": "webpack watch -c webpack.chrome-user.config.js"
   },
   "author": "the28yearoldboomer",
   "license": "ISC",
