@@ -1,74 +1,17 @@
-const path = require('path')
-const { DefinePlugin } = require('webpack')
-const configs = require('./webpack.base.config.js')
-const WebpackObfuscator = require('webpack-obfuscator');
-const pkg = require('./package.json')
-const generate = require('generate-file-webpack-plugin');
+const {
+  generatePreloadConfig,
+  generateElectronConfig
+} = require('./webpack-config')
 
-for (let config of configs) {
-  config.plugins.push(
-    new DefinePlugin({
-      BOOMER_ADMIN: false
-    })
-  )
+let production = process.env.NODE_ENV === 'production'
 
-  if (config.mode === 'production') {
-    config.plugins.push(
-      new WebpackObfuscator({
-        stringArray: true
-      })
-    )
-  }
-
-  config.output.path = config.output.path.replace('[REPLACE]', path.join(__dirname, 'dist', 'electron-user'))
-}
-
-let forgeConfig = {
-  packagerConfig: {
-    asar: true,
-    prune: true
-  },
-  rebuildConfig: {},
-  makers: [
-    {
-      name: '@electron-forge/maker-squirrel',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-zip',
-      platforms: ['linux'],
-    }
-  ],
-};
-
-configs[0].plugins.push(generate({
-    file: path.join(__dirname, 'dist', 'electron-user', 'forge.config.js'),
-    content: `module.exports = ${JSON.stringify(forgeConfig)}`
-}))
-
-let packageJson = {
-  name: pkg.name,
-  description: pkg.description,
-  version: pkg.version,
-  author: pkg.author,
-  main: "electron/index.js",
-  scripts: {
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-  },
-  devDependencies: {
-    "electron": pkg.devDependencies.electron,
-    "@electron-forge/cli": "^6.0.3",
-    "@electron-forge/maker-deb": "^6.0.3",
-    "@electron-forge/maker-rpm": "^6.0.3",
-    "@electron-forge/maker-squirrel": "^6.0.3",
-    "@electron-forge/maker-zip": "^6.0.3",
-  }
-}
-
-configs[0].plugins.push(generate({
-    file: path.join(__dirname, 'dist', 'electron-user', 'package.json'),
-    content: JSON.stringify(packageJson)
-}))
-
-module.exports = configs
+module.exports = [
+  generatePreloadConfig({
+    production,
+    outputDir: 'electron-user',
+  }),
+  generateElectronConfig({
+    production,
+    outputDir: 'electron-user',
+  })
+]

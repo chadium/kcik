@@ -1,15 +1,19 @@
-const path = require('path')
-const { DefinePlugin } = require('webpack')
-const configs = require('./webpack.base.config.js')
+const {
+  generatePreloadConfig,
+  generateElectronConfig
+} = require('./webpack-config')
 
-for (let config of configs) {
-  config.plugins.push(
-    new DefinePlugin({
-      BOOMER_ADMIN: true
-    })
-  )
+let production = process.env.NODE_ENV === 'production'
 
-  config.output.path = config.output.path.replace('[REPLACE]', path.join(__dirname, 'dist', 'electron-admin'))
-}
-
-module.exports = configs
+module.exports = [
+  generatePreloadConfig({
+    production,
+    outputDir: 'electron-admin',
+    admin: true,
+  }),
+  generateElectronConfig({
+    production,
+    outputDir: 'electron-admin',
+    admin: true,
+  })
+]
