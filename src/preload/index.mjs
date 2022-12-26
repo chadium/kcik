@@ -71,7 +71,7 @@ async function main() {
 
   if (BOOMER_ADMIN) {
     if (!BOOMER_CHROME_EXTENSION) {
-      hookers.p21ush(new CreateCustomMatchHooker())
+      hookers.push(new CreateCustomMatchHooker())
       hookers.push(new TurnCustomMatchHooker())
     }
   }
