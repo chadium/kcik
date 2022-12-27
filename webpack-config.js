@@ -330,7 +330,6 @@ exports.generateChromeBackgroundConfig = ({
     description: pkg.description,
     version: pkg.version,
     author: pkg.author,
-    permissions: ["activeTab", "scripting"],
     icons: {
       "128": "icon128.png",
     },
