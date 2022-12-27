@@ -24,7 +24,6 @@ import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
 
-
 function patchSoftlock() {
   const original = Function.prototype.constructor
   Function.prototype.constructor = function (...args) {
@@ -38,7 +37,9 @@ function patchSoftlock() {
 }
 
 async function main() {
-  patchSoftlock()
+  if (!BOOMER_CHROME_EXTENSION) {
+    patchSoftlock()
+  }
 
   let pimp = new Pimp()
 
