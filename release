@@ -3,8 +3,6 @@
 set -e
 set -u
 
-pem_file="${1}"
-
 export KIRKA_BOOMER_USER_API_PREFIX=https://kirka.the28yearoldboomer.com:12345
 export KIRKA_BOOMER_USER_WS_API_PREFIX=wss://kirka.the28yearoldboomer.com:12345
 export KIRKA_BOOMER_ADMIN_API_PREFIX=http://192.168.1.12:54038
@@ -14,8 +12,9 @@ export NODE_ENV=production
 npm run build
 
 # User chrome extension.
-npm run build-chrome-user
-chromium --pack-extension=dist/chrome-user --pack-extension-key="$(pem_file)"
+# npm run build-chrome-user
+rm -f dist/chrome-user/chrome-user.zip
+eval cd dist/chrome-user && zip -r chrome-user.zip .
 
 # User electron client.
 npm run build-electron-user
