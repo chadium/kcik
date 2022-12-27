@@ -1,6 +1,9 @@
 #!/bin/bash
 
 set -e
+set -u
+
+pem_file="${1}"
 
 export KIRKA_BOOMER_USER_API_PREFIX=https://kirka.the28yearoldboomer.com:12345
 export KIRKA_BOOMER_USER_WS_API_PREFIX=wss://kirka.the28yearoldboomer.com:12345
@@ -12,7 +15,8 @@ npm run build
 
 # User chrome extension.
 npm run build-chrome-user
+chromium --pack-extension=dist/chrome-user --pack-extension-key="$(pem_file)"
 
 # User electron client.
 npm run build-electron-user
-pushd dist/electron-user && NODE_ENV= npm install && npm run ma
+pushd dist/electron-user && NODE_ENV= npm install && npm run make
