@@ -261,14 +261,6 @@ exports.generateChromeContentConfig = ({
     devtool: "inline-source-map"
   }
 
-  if (production) {
-    config.plugins.push(
-      new WebpackObfuscator({
-        stringArray: true
-      })
-    )
-  }
-
   return config
 }
 
@@ -320,14 +312,6 @@ exports.generateChromeBackgroundConfig = ({
       ],
     },
     devtool: "inline-source-map"
-  }
-
-  if (production) {
-    config.plugins.push(
-      new WebpackObfuscator({
-        stringArray: true
-      })
-    )
   }
 
   let manifestJson = {
