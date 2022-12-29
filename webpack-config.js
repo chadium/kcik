@@ -349,9 +349,6 @@ exports.generateChromeBackgroundConfig = ({
         run_at: 'document_idle'
       }
     ],
-    background: {
-      service_worker: "chrome-background/index.js"
-    },
     web_accessible_resources: [
       {
         resources: ["preload/index.js"],

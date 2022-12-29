@@ -18,11 +18,6 @@ module.exports = [
     outputDir: 'chrome-user',
     chrome: true
   }),
-  generateChromeBackgroundConfig({
-    production,
-    outputDir: 'chrome-user',
-    chrome: true
-  }),
   generateChromePopupConfig({
     production,
     outputDir: 'chrome-user',
