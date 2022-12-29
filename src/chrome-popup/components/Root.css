@@ -1,0 +1,79 @@
+:root {
+  --text-color: white;
+  min-width: 220px;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  color: var(--text-color);
+}
+
+p {
+  margin: 0;
+}
+
+body > div {
+  height: 100%;
+}
+
+.text-big {
+  font-size: 60px;
+}
+
+.bold-and-strong {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-link {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.padding {
+  padding: 10px;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  color: var(--text-color);
+  width: 220px;
+  height: 220px;
+}
+
+.page__content {
+  flex: 1;
+}
+
+.page__footer {
+  flex: 0;
+}
+
+html,
+.bg-info {
+  background: linear-gradient(#4f94f1, #222aa0);
+}
+
+.bg-good {
+  background: linear-gradient(#5df14f, #31a022);
+}
+
+.bg-bad {
+  background: linear-gradient(#f14f4f, #a02222);
+}
+
+.bg-warn {
+  background: linear-gradient(#f1b64f, #a07222);
+}

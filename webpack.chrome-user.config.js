@@ -1,7 +1,8 @@
 const {
   generatePreloadConfig,
   generateChromeContentConfig,
-  generateChromeBackgroundConfig
+  generateChromeBackgroundConfig,
+  generateChromePopupConfig
 } = require('./webpack-config')
 
 let production = process.env.NODE_ENV === 'production'
@@ -18,6 +19,11 @@ module.exports = [
     chrome: true
   }),
   generateChromeBackgroundConfig({
+    production,
+    outputDir: 'chrome-user',
+    chrome: true
+  }),
+  generateChromePopupConfig({
     production,
     outputDir: 'chrome-user',
     chrome: true

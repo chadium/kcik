@@ -7,6 +7,7 @@ const { DefinePlugin } = require('webpack')
 const WebpackObfuscator = require('webpack-obfuscator');
 const generate = require('generate-file-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 // Used by dotenv-webpack during compilation but turns out I need some of
 // those variables here. So I use the same module to stay consistent.
 require('dotenv-defaults').config()
@@ -18,6 +19,40 @@ function makeVersion(production) {
     return JSON.stringify('DEV BUILD ' + new Date().toISOString())
   }
 }
+
+const uiRules = [
+  {
+    test: /\.css$/i,
+    exclude: [/\.lazy\.css$/i, /\.lazy\.module\.css$/i],
+    use: ["style-loader", "css-loader"],
+    sideEffects: true,
+  },
+  {
+    test: /\.lazy\.css$/i,
+    exclude: /\.lazy\.module\.css$/i,
+    use: [
+      { loader: "style-loader", options: { injectType: "lazySingletonStyleTag" } },
+      "css-loader",
+    ],
+  },
+  {
+    test: /\.lazy\.module\.css$/i,
+    use: [
+      { loader: "style-loader", options: { injectType: "lazySingletonStyleTag" } },
+      "css-loader",
+    ],
+  },
+  {
+    test: /\.?jsx$/,
+    exclude: /node_modules/,
+    use: {
+      loader: "babel-loader",
+      options: {
+        presets: ['@babel/preset-react']
+      }
+    }
+  },
+]
 
 exports.generateElectronConfig = ({
   production = false,
@@ -130,36 +165,7 @@ exports.generatePreloadConfig = ({
     target: chrome ? 'web' : 'electron-renderer',
     module: {
       rules: [
-        {
-          test: /\.css$/i,
-          exclude: [/\.lazy\.css$/i, /\.lazy\.module\.css$/i],
-          use: ["style-loader", "css-loader"],
-        },
-        {
-          test: /\.lazy\.css$/i,
-          exclude: /\.lazy\.module\.css$/i,
-          use: [
-            { loader: "style-loader", options: { injectType: "lazySingletonStyleTag" } },
-            "css-loader",
-          ],
-        },
-        {
-          test: /\.lazy\.module\.css$/i,
-          use: [
-            { loader: "style-loader", options: { injectType: "lazySingletonStyleTag" } },
-            "css-loader",
-          ],
-        },
-        {
-          test: /\.?jsx$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-            options: {
-              presets: ['@babel/preset-react']
-            }
-          }
-        },
+        ...uiRules,
       ]
     },
     plugins: [
@@ -333,6 +339,9 @@ exports.generateChromeBackgroundConfig = ({
     icons: {
       "128": "icon128.png",
     },
+    action: {
+      default_popup: "chrome-popup/index.html",
+    },
     content_scripts: [
       {
         matches: ["https://kirka.io/*"],
@@ -355,6 +364,66 @@ exports.generateChromeBackgroundConfig = ({
     file: path.join(__dirname, 'dist', outputDir, 'manifest.json'),
     content: JSON.stringify(manifestJson)
   }))
+
+  return config
+}
+
+
+exports.generateChromePopupConfig = ({
+  production = false,
+  outputDir,
+  chrome = true,
+  admin = false
+}) => {
+  const config = {
+    mode: production ? 'production' : 'development',
+    entry: './src/chrome-popup/index.mjs',
+    target: 'web',
+    output: {
+      path: path.join(__dirname, 'dist', outputDir, 'chrome-popup'),
+      filename: 'index.js'
+    },
+    module: {
+      rules: [
+        ...uiRules,
+      ]
+    },
+    plugins: [
+      new HtmlWebpackPlugin(),
+      new DefinePlugin({
+        BOOMER_ADMIN: admin,
+        BOOMER_VERSION: makeVersion(production),
+        BOOMER_CHROME_EXTENSION: chrome
+      }),
+      new Dotenv(),
+      // new BundleAnalyzerPlugin({
+      //   openAnalyzer: false
+      // }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.join(__dirname, 'src', 'icon128.png'),
+            to: path.join(__dirname, 'dist', outputDir, 'icon128.png')
+          },
+        ],
+      }),
+    ],
+    optimization: {
+      minimize: production,
+      usedExports: true, // Removes onions.
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              comments: false,
+            },
+          },
+          extractComments: false,
+        }),
+      ],
+    },
+    devtool: "inline-source-map"
+  }
 
   return config
 }

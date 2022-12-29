@@ -26,6 +26,7 @@
     "dotenv-webpack": "^8.0.1",
     "electron": "^21.3.0",
     "generate-file-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^5.5.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "style-loader": "^3.3.1",
