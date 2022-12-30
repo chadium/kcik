@@ -30,7 +30,7 @@ class WinMan {
 
         // The API endpoints are not encrypted because we're not running a
         // bank here.
-        allowRunningInsecureContent: process.env.NODE_ENV !== 'production',
+        allowRunningInsecureContent: process.env.NODE_ENV !== 'production' || BOOMER_ADMIN,
 
         devTools: process.env.NODE_ENV !== 'production'
       }
