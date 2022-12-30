@@ -68,7 +68,9 @@ exports.generateElectronConfig = ({
         BOOMER_ADMIN: admin,
         BOOMER_VERSION: makeVersion(production)
       }),
-      new Dotenv(),
+      new Dotenv({
+        systemvars: true
+      }),
       // new BundleAnalyzerPlugin({
       //   openAnalyzer: false
       // })
@@ -166,7 +168,9 @@ exports.generatePreloadConfig = ({
         BOOMER_VERSION: makeVersion(production),
         BOOMER_CHROME_EXTENSION: chrome
       }),
-      new Dotenv(),
+      new Dotenv({
+        systemvars: true
+      }),
       // new BundleAnalyzerPlugin({
       //   openAnalyzer: false
       // }),
@@ -223,7 +227,9 @@ exports.generateChromeContentConfig = ({
         BOOMER_VERSION: makeVersion(production),
         BOOMER_CHROME_EXTENSION: chrome
       }),
-      new Dotenv(),
+      new Dotenv({
+        systemvars: true
+      }),
       // new BundleAnalyzerPlugin({
       //   openAnalyzer: false
       // }),
@@ -309,7 +315,9 @@ exports.generateChromeBackgroundConfig = ({
         BOOMER_VERSION: makeVersion(production),
         BOOMER_CHROME_EXTENSION: chrome
       }),
-      new Dotenv(),
+      new Dotenv({
+        systemvars: true
+      }),
       // new BundleAnalyzerPlugin({
       //   openAnalyzer: false
       // }),
@@ -369,7 +377,9 @@ exports.generateChromePopupConfig = ({
         BOOMER_VERSION: makeVersion(production),
         BOOMER_CHROME_EXTENSION: chrome
       }),
-      new Dotenv(),
+      new Dotenv({
+        systemvars: true
+      }),
       // new BundleAnalyzerPlugin({
       //   openAnalyzer: false
       // }),

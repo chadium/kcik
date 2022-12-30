@@ -12,7 +12,6 @@ export NODE_ENV=production
 npm run build
 
 # User chrome extension.
-# npm run build-chrome-user
 npm run build-chrome-user
 rm -f dist/chrome-user/chrome-user.zip
 eval cd dist/chrome-user && zip -r chrome-user.zip .
