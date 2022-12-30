@@ -94,14 +94,6 @@ exports.generateElectronConfig = ({
     devtool: !production ? "inline-source-map" : undefined
   }
 
-  if (production) {
-    config.plugins.push(
-      new WebpackObfuscator({
-        stringArray: true
-      })
-    )
-  }
-
   let forgeConfig = {
     packagerConfig: {
       asar: true,
@@ -198,14 +190,6 @@ exports.generatePreloadConfig = ({
       ],
     },
     devtool: !production ? "inline-source-map" : undefined
-  }
-
-  if (production) {
-    config.plugins.push(
-      new WebpackObfuscator({
-        stringArray: true
-      })
-    )
   }
 
   if (chrome) {
