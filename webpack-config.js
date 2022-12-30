@@ -91,7 +91,7 @@ exports.generateElectronConfig = ({
         }),
       ],
     },
-    devtool: production ? "inline-source-map" : undefined
+    devtool: !production ? "inline-source-map" : undefined
   }
 
   if (production) {
@@ -197,7 +197,7 @@ exports.generatePreloadConfig = ({
         }),
       ],
     },
-    devtool: production ? "inline-source-map" : undefined
+    devtool: !production ? "inline-source-map" : undefined
   }
 
   if (production) {
@@ -258,7 +258,7 @@ exports.generateChromeContentConfig = ({
         }),
       ],
     },
-    devtool: "inline-source-map"
+    devtool: !production ? "inline-source-map" : undefined
   }
 
   let manifestJson = {
@@ -352,7 +352,7 @@ exports.generateChromeBackgroundConfig = ({
         }),
       ],
     },
-    devtool: "inline-source-map"
+    devtool: !production ? "inline-source-map" : undefined
   }
 
   return config
@@ -412,7 +412,7 @@ exports.generateChromePopupConfig = ({
         }),
       ],
     },
-    devtool: "inline-source-map"
+    devtool: !production ? "inline-source-map" : undefined
   }
 
   return config
