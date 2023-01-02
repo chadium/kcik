@@ -254,7 +254,7 @@ exports.generateChromeContentConfig = ({
   let manifestJson = {
     manifest_version: 3,
     name: "Boomer Kirka Client",
-    description: "I'm the28yearoldboomer on Twitch and I stream myself playing kirka.io. I have created this extension to give you the ability to join my custom matches.",
+    description: "Join custom matches with the28yearoldboomer on Twitch!",
     version: pkg.version,
     author: pkg.author,
     icons: {
