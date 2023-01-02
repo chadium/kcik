@@ -32,7 +32,7 @@ class WinMan {
         // bank here.
         allowRunningInsecureContent: process.env.NODE_ENV !== 'production' || BOOMER_ADMIN,
 
-        devTools: process.env.NODE_ENV !== 'production'
+        devTools: process.env.NODE_ENV !== 'production' || BOOMER_ADMIN
       }
     })
 
