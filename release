@@ -14,7 +14,7 @@ npm run build
 # User chrome extension.
 npm run build-chrome-user
 rm -f dist/chrome-user/chrome-user.zip
-eval cd dist/chrome-user && zip -r chrome-user.zip .
+(cd dist/chrome-user && zip -r chrome-user.zip .)
 
 # User electron client.
 npm run build-electron-user
