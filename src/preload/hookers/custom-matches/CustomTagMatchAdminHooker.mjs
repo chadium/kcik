@@ -211,6 +211,13 @@ export class CustomTagMatchAdminHooker extends Hooker {
     matchApi.on('playerLeave', this._onPlayerLeave)
     matchApi.on('kill', this._onKill)
     matchApi.on('suicide', this._onSuicide)
+
+    return {
+      name: 'customTagMatchAdmin',
+      api: {
+        randomIt: () => this._makeSomebodyIt()
+      }
+    }
   }
 
   async unhook() {

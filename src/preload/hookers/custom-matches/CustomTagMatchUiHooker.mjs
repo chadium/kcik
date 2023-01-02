@@ -121,7 +121,7 @@ export class CustomTagMatchUiHooker extends Hooker {
 
     this._reactRoot.unmount()
     this._root.remove()
-      this._updateLabel()
+    this._updateLabel()
   }
 
   _makeProps() {
@@ -152,7 +152,9 @@ export class CustomTagMatchUiHooker extends Hooker {
         let sessionId = matchApi.getSessionIdByName(this._it.name)
 
         if (sessionId) {
-          playerNameVisibilityApi.takeControl(sessionId, true)
+          playerNameVisibilityApi.takeControl(sessionId)
+          playerNameVisibilityApi.setVisible(sessionId, true)
+          playerNameVisibilityApi.setSeeThrough(sessionId, true)
         } else {
           log.warn('CustomTagMatchUi', `Failed to find sessionId for player ${this._it.name}`)
         }

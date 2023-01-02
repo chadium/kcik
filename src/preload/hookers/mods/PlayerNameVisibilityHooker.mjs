@@ -2,24 +2,33 @@ import { Hooker } from '../../Pimp.mjs'
 import { hijackPropertyWithMemory, pathsToPredicate } from '../../object-utils.mjs'
 
 class Modded {
-  constructor(component, field, state) {
+  constructor(component, visibleField) {
     this.component = component
-    this.state = state
-    this.accessorHandle = hijackPropertyWithMemory(component, field, {
-      get: () => this.state
+    this.visible = component[visibleField]
+    this.depthTest = component.elem.material.depthTest
+    this.visibleAccessorHandle = hijackPropertyWithMemory(component, visibleField, {
+      get: () => this.visible
+    })
+    this.depthTestAccessorHandle = hijackPropertyWithMemory(component.elem.material, 'depthTest', {
+      get: () => this.depthTest
     })
   }
 
-  set(value) {
-    this.state = value
+  setSeeThrough(value) {
+    this.depthTest = !value
+  }
+
+  setVisible(value) {
+    this.visible = value
     // Somebody needs to update it. The game only updates
     // the visibility flag under certain circumstances, such as
     // when a player gets hit.
-    this.component.elem.visible = this.state
+    this.component.elem.visible = this.visible
   }
 
   close() {
-    this.accessorHandle.close()
+    this.visibleAccessorHandle.close()
+    this.depthTestAccessorHandle.close()
   }
 }
 
@@ -44,10 +53,9 @@ export class PlayerNameVisibilityHooker extends Hooker {
     return {
       name: 'playerNameVisibility',
       api: {
-        takeControl: (sessionId, state = true) => {
+        takeControl: (sessionId) => {
           if (this._modded[sessionId]) {
             // Already done.
-            this._modded[sessionId].set(state)
             return
           }
 
@@ -67,7 +75,21 @@ export class PlayerNameVisibilityHooker extends Hooker {
             this._findBoolField(component)
           }
 
-          this._modded[sessionId] = new Modded(component, this._boolField, state)
+          this._modded[sessionId] = new Modded(component, this._boolField)
+        },
+        setVisible: (sessionId, state) => {
+          if (!this._modded[sessionId]) {
+            throw new Error('You have not taken control over this label.')
+          }
+
+          this._modded[sessionId].setVisible(state)
+        },
+        setSeeThrough: (sessionId, state) => {
+          if (!this._modded[sessionId]) {
+            throw new Error('You have not taken control over this label.')
+          }
+
+          this._modded[sessionId].setSeeThrough(state)
         },
         clear: () => {
           for (let sessionId in this._modded) {
