@@ -1,6 +1,6 @@
 {
   "name": "boomer-kirka-client",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Best Kirka Client.",
   "main": "dist/user/electron/index.js",
   "scripts": {
