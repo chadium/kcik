@@ -11,16 +11,19 @@ module.exports = [
   generatePreloadConfig({
     production,
     outputDir: 'chrome-user',
-    chrome: true
+    chrome: true,
+    inlineSourceMap: true
   }),
   generateChromeContentConfig({
     production,
     outputDir: 'chrome-user',
-    chrome: true
+    chrome: true,
+    inlineSourceMap: true
   }),
   generateChromePopupConfig({
     production,
     outputDir: 'chrome-user',
-    chrome: true
+    chrome: true,
+    inlineSourceMap: true
   })
 ]

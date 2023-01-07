@@ -20,6 +20,10 @@ function makeVersion(production) {
   }
 }
 
+function chooseSourceMapType(inlineSourceMap) {
+  return inlineSourceMap ? "inline-source-map" : "source-map"
+}
+
 const uiRules = [
   {
     test: /\.css$/i,
@@ -55,6 +59,7 @@ const uiRules = [
 ]
 
 exports.generateElectronConfig = ({
+  inlineSourceMap = false,
   production = false,
   outputDir,
   admin = false
@@ -93,7 +98,7 @@ exports.generateElectronConfig = ({
         }),
       ],
     },
-    devtool: !production ? "inline-source-map" : undefined
+    devtool: !production ? chooseSourceMapType(inlineSourceMap) : false
   }
 
   let forgeConfig = {
@@ -148,6 +153,7 @@ exports.generateElectronConfig = ({
 }
 
 exports.generatePreloadConfig = ({
+  inlineSourceMap = false,
   production = false,
   outputDir,
   chrome = false,
@@ -193,7 +199,7 @@ exports.generatePreloadConfig = ({
         }),
       ],
     },
-    devtool: !production ? "inline-source-map" : undefined
+    devtool: !production ? chooseSourceMapType(inlineSourceMap) : false
   }
 
   if (chrome) {
@@ -208,6 +214,7 @@ exports.generatePreloadConfig = ({
 }
 
 exports.generateChromeContentConfig = ({
+  inlineSourceMap = false,
   production = false,
   outputDir,
   chrome = true,
@@ -248,7 +255,7 @@ exports.generateChromeContentConfig = ({
         }),
       ],
     },
-    devtool: !production ? "inline-source-map" : undefined
+    devtool: !production ? chooseSourceMapType(inlineSourceMap) : false
   }
 
   let manifestJson = {
@@ -296,6 +303,7 @@ exports.generateChromeContentConfig = ({
 }
 
 exports.generateChromeBackgroundConfig = ({
+  inlineSourceMap = false,
   production = false,
   outputDir,
   chrome = true,
@@ -344,7 +352,7 @@ exports.generateChromeBackgroundConfig = ({
         }),
       ],
     },
-    devtool: !production ? "inline-source-map" : undefined
+    devtool: !production ? chooseSourceMapType(inlineSourceMap) : false
   }
 
   return config
@@ -352,6 +360,7 @@ exports.generateChromeBackgroundConfig = ({
 
 
 exports.generateChromePopupConfig = ({
+  inlineSourceMap = false,
   production = false,
   outputDir,
   chrome = true,
@@ -406,7 +415,7 @@ exports.generateChromePopupConfig = ({
         }),
       ],
     },
-    devtool: !production ? "inline-source-map" : undefined
+    devtool: !production ? chooseSourceMapType(inlineSourceMap) : false
   }
 
   return config
