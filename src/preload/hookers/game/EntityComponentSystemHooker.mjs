@@ -2,6 +2,7 @@ import EventEmitter from 'events'
 import { Hooker } from '../../Pimp.mjs'
 import { getByPath, findFirstValueByPredicate, pathsToValue, onPropertyChange } from '../../object-utils.mjs'
 import * as log from '../../log.mjs'
+import * as componentUtils from '../../component-utils.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
 
 const blacklistedKeys = new Set([
@@ -156,6 +157,7 @@ class StateFoundEcsy extends State {
   constructor() {
     super()
     this._onPropertyChange = null
+    this._boomerSystemClass = null
   }
 
   async [MachineState.ON_ENTER]() {
@@ -170,17 +172,20 @@ class StateFoundEcsy extends State {
 
     let kirkaWorld = getByPath(gameState, kirkaWorldPath)
 
+    this.registerBoomerSystem()
+
     this._onPropertyChange = onPropertyChange(kirkaWorld, key, (ecsyWorld) => {
       if (ecsyWorld === null) {
         log.info('EntityComponentSystem', 'Lost ECSY world.')
-        this.machine.hooker._world = null
         this.machine.next(new StateWaitingForEcsyWorld())
       }
     })
   }
 
   async [MachineState.ON_LEAVE]() {
+    this.unregisterBoomerSystem()
     this._onPropertyChange.close()
+    this.machine.hooker._world = null
   }
 
   pathToEcsyWorld(gameState) {
@@ -206,6 +211,78 @@ class StateFoundEcsy extends State {
     }
 
     return paths[0]
+  }
+
+  registerBoomerSystem() {
+    let donor = this.machine.hooker._world.systemManager._systems[0]
+    let systemClass = Object.getPrototypeOf(Object.getPrototypeOf(donor)).constructor
+
+    if (!systemClass.prototype.hasOwnProperty('clearEvents')) {
+      log.warn('EntityComponentSystem', 'The obtained system class does not own clearEvents. That is sus.')
+    }
+
+    if (!systemClass.hasOwnProperty('isSystem')) {
+      log.warn('EntityComponentSystem', 'The obtained system class constructor does not have isSystem set. That is very bad.')
+    }
+
+    let hooker = this.machine.hooker
+
+    class BoomerSystem extends systemClass {
+      constructor(world) {
+        super(world)
+        this.first = true
+      }
+
+      execute(delta) {
+        if (this.first) {
+          this.first = false
+
+          for (let entity of this.queries.players.results) {
+            hooker._events.emit('playerEntityAdded', entity)
+          }
+        }
+
+        if (this.queries.players.added.length > 0) {
+          log.info('EntityComponentSystem', `Added ${this.queries.players.added.length} new players`)
+
+          for (let entity of this.queries.players.added) {
+            hooker._events.emit('playerEntityAdded', entity)
+          }
+        }
+
+        if (this.queries.players.removed.length > 0) {
+          log.info('EntityComponentSystem', `Removed ${this.queries.players.removed.length} new players`)
+
+          for (let entity of this.queries.players.added) {
+            hooker._events.emit('playerEntityRemoved', entity)
+          }
+        }
+
+        // TODO: Need to emit playerEntityRemoved when system is going down.
+      }
+    }
+
+    let CommonPlayerComponent = componentUtils.findCommonPlayerComponent(this.machine.hooker._world.componentsManager)
+
+    if (CommonPlayerComponent !== null) {
+      BoomerSystem.queries = {
+        players: {
+          listen: {
+            added: true,
+            removed: true,
+          },
+          components: [CommonPlayerComponent]
+        }
+      }
+    }
+
+    this._boomerSystemClass = BoomerSystem
+
+    this.machine.hooker._world.registerSystem(this._boomerSystemClass)
+  }
+
+  unregisterBoomerSystem() {
+    this.machine.hooker._world.unregisterSystem(this._boomerSystemClass)
   }
 }
 

@@ -18,10 +18,6 @@ export class CustomTagMatchUiHooker extends Hooker {
     this._showRanking = false
     this._serverTime = null
     this._duration = 0
-    this._onMatchPlayersChange = () => {
-      log.info('CustomTagMatchUi', 'Match got new players. Will update labels.')
-      this._updateLabel()
-    }
     this._onTab = (state) => {
       this._showRanking = state
       if (state) {
@@ -52,6 +48,9 @@ export class CustomTagMatchUiHooker extends Hooker {
         pimp.getApi('sound').playSound({ name: "error", volume: 0.75 })
       }
     }
+    this._onPlayerEntityAdded = () => {
+      this._updateLabel()
+    }
   }
 
   async hook() {
@@ -63,7 +62,6 @@ export class CustomTagMatchUiHooker extends Hooker {
     let matchApi = this.pimp.getApi('match')
     this._serverTime = matchApi.getServerTime()
     this._duration = matchApi.getDuration()
-    matchApi.on('playersChange', this._onMatchPlayersChange)
 
     let playerApi = this.pimp.getApi('player')
     playerApi.on('available', this._onPlayerAvailable)
@@ -92,11 +90,17 @@ export class CustomTagMatchUiHooker extends Hooker {
     matchUiApi.show('time', false)
     matchUiApi.overrideTab(this._onTab)
 
+    let ecsApi = this.pimp.getApi('ecs')
+    ecsApi.on('playerEntityAdded', this._onPlayerEntityAdded)
+
     this._updateLabel()
     this._reactRoot.render(React.createElement(CustomTagMatchUi, this._makeProps(), null))
   }
 
   unhook() {
+    let ecsApi = this.pimp.getApi('ecs')
+    ecsApi.off('playerEntityAdded', this._onPlayerEntityAdded)
+
     let matchUiApi = this.pimp.getApi('matchUi')
     matchUiApi.show('killDeathCounter', true)
     matchUiApi.show('chatInstructions', true)
@@ -115,9 +119,6 @@ export class CustomTagMatchUiHooker extends Hooker {
 
     let playerApi = this.pimp.getApi('player')
     playerApi.off('available', this._onPlayerAvailable)
-
-    let matchApi = this.pimp.getApi('match')
-    matchApi.off('playersChange', this._onMatchPlayersChange)
 
     this._reactRoot.unmount()
     this._root.remove()
