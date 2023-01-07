@@ -1,0 +1,16 @@
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.positionFixed {
+  position: fixed;
+  z-index: 2147483647;
+}
