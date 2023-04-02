@@ -32,3 +32,19 @@ export function waitForElm(id, {
     })
   });
 }
+
+export function lookForElement(elem, fn) {
+  if (fn(elem)) {
+    return elem
+  } else {
+    for (let child of elem.children) {
+      let result = lookForElement(child, fn)
+
+      if (result !== null) {
+        return result
+      }
+    }
+
+    return null
+  }
+}

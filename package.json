@@ -1,20 +1,13 @@
 {
-  "name": "boomer-kirka-client",
-  "version": "7.0.0",
-  "description": "Best Kirka Client.",
+  "name": "kcik",
+  "version": "1.0.0",
+  "description": "The best kick.com extension that you will find out there.",
   "main": "dist/user/electron/index.js",
   "scripts": {
-    "start": "electron dist/electron-admin/electron/index.js",
-    "build": "webpack build -c webpack.electron-admin.config.js",
-    "watch": "webpack watch -c webpack.electron-admin.config.js",
-    "start-electron-user": "electron dist/electron-user/electron/index.js",
-    "build-electron-user": "webpack build -c webpack.electron-user.config.js",
-    "watch-electron-user": "webpack watch -c webpack.electron-user.config.js",
-    "build-chrome-user": "webpack build -c webpack.chrome-user.config.js",
-    "watch-chrome-user": "webpack watch -c webpack.chrome-user.config.js"
+    "build": "webpack build -c webpack.chrome-user.config.js",
+    "watch": "webpack watch -c webpack.chrome-user.config.js"
   },
-  "author": "the28yearoldboomer",
-  "license": "ISC",
+  "author": "chadium",
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@babel/preset-env": "^7.20.2",

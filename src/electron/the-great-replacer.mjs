@@ -11,7 +11,7 @@ export class TheGreatReplacer {
     this._replaceStorage = replaceStorage
 
     const filter = {
-      urls: ['https://kirka.io/*.js']
+      urls: ['https://kick.com/*.js']
     }
 
     session.defaultSession.webRequest.onBeforeRequest(filter, async (details, callback) => {

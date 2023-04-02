@@ -260,8 +260,8 @@ exports.generateChromeContentConfig = ({
 
   let manifestJson = {
     manifest_version: 3,
-    name: "Boomer Kirka Client",
-    description: "Join custom matches with the28yearoldboomer on Twitch!",
+    name: "Kcik",
+    description: "The best kick.com extension that you will find out there.",
     version: pkg.version,
     author: pkg.author,
     icons: {
@@ -272,7 +272,7 @@ exports.generateChromeContentConfig = ({
     },
     content_scripts: [
       {
-        matches: ["https://kirka.io/*"],
+        matches: ["https://kick.com/*"],
         js: ["chrome-content/index.js"],
         run_at: 'document_idle'
       }
@@ -280,18 +280,10 @@ exports.generateChromeContentConfig = ({
     web_accessible_resources: [
       {
         resources: ["preload/index.js"],
-        matches: ["https://kirka.io/*"]
+        matches: ["https://kick.com/*"]
       }
     ],
-    key: `
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgD0+4qpIsQnmpTZm8PBh
-      zZz4yKA5IbOTGFIkemplSc8ExWIvmX9nFloal7MJHNZCky8LgNHdFop0ucI3+LCk
-      fSZ83R560FNxI/ZvBNDs0QBW9Sy5B+IaRi78ego3LGnbk8D36a6/tOWvoyi33J8E
-      T+vhtLwv5bTp5Bf6b9zrwIzFBs991QdZvVtcfi+x7PORdzQIn+QqhXWRvlK9f2XA
-      01znfw5HCmKKT/8v4vkOtMWByt55VUorvhONLjRRCDvVcUb0AUd6kcbh8vZnRRa6
-      LWCZEM/AQyYAp3qb1qRX70JnBqmhPg3Y6496kSQlA1qlUjKIgeYrQ8Sg+9YQX08V
-      kwIDAQAB
-`.replaceAll(/\s+/g, '')
+    //key: ``.replaceAll(/\s+/g, '')
   }
 
   config.plugins.push(generate({

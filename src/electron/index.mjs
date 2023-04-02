@@ -40,7 +40,7 @@ class WinMan {
       e.preventDefault()
     })
 
-    this._win.loadURL('https://kirka.io/')
+    this._win.loadURL('https://kick.com/')
 
     this._registerShortcuts()
   }
