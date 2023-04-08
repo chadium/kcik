@@ -62,8 +62,21 @@ class StateChatting extends MachineState {
 
                 findUsernameElement() {
                   let usernameElement = addedNode.querySelector('span[style^=color]')
-    
+
                   return usernameElement
+                },
+
+                findMessageElement() {
+                  let candidates = addedNode.querySelectorAll('span.break-words')
+
+                  for (let candidate of candidates) {
+                    if (candidate.firstChild.classList.contains('align-middle')) {
+                      // Found it.
+                      return candidate.firstChild
+                    }
+                  }
+
+                  return null
                 }
               })
             }

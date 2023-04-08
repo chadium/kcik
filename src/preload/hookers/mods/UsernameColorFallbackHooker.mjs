@@ -1,7 +1,5 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
-import { Machine, MachineState } from '../../state-machine.mjs'
-import { lookForElement } from '../../dom-utils.mjs'
 
 export class UsernameColorFallbackHooker extends Hooker {
   constructor() {
