@@ -8,6 +8,7 @@ export class StateHooker extends Hooker {
 
     this.colorsByUser = {}
     this.masterport = null
+    this.authenticationChatroomId = null
   }
 
   async hook() {
@@ -25,6 +26,10 @@ export class StateHooker extends Hooker {
       log.info('Got list of colors. Contains:', Object.keys(this.colorsByUser).length)
     })
 
+    userApi.authenticationChatroomId().then((chatroomId) => {
+      this.authenticationChatroomId = chatroomId
+    })
+
     return {
       name: 'state',
       api: {
@@ -34,6 +39,9 @@ export class StateHooker extends Hooker {
           } else {
             return null
           }
+        },
+        getAuthenticationChatroomId: () => {
+          return this.authenticationChatroomId
         }
       }
     }

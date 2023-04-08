@@ -53,8 +53,8 @@ export async function apiFetch({
 
 
   if (bodyData) {
-    headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    body = `d=${encodeURIComponent(JSON.stringify(bodyData))}`
+    headers['Content-Type'] = 'application/json'
+    body = JSON.stringify(bodyData)
   }
 
   try {

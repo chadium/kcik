@@ -3,7 +3,9 @@ import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
+import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbackHooker.mjs'
+import { UsernameSetColorFallbackHooker } from './hookers/mods/UsernameSetColorFallbackHooker.mjs'
 import { StateHooker } from './hookers/mods/StateHooker.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
 import * as log from './log.mjs'
@@ -17,7 +19,9 @@ async function main() {
   let hookers = [
     new VueAppHooker(),
     new StateHooker(),
+    new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),
+    new UsernameSetColorFallbackHooker()
   ]
 
   for (let hooker of hookers) {

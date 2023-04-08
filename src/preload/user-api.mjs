@@ -20,6 +20,14 @@ export async function setColor({ username, color }) {
   })
 }
 
+export async function authenticationChatroomId() {
+  let { data } = await apiFetch({
+    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/authentication-chatroom'
+  })
+
+  return data.chatroomId
+}
+
 export function masterport({ onNewUserColor }) {
   const socket = new ReconnectingWebSocket(`${process.env.BACKEND_API_WS_PREFIX}/v1/masterport`);
 
