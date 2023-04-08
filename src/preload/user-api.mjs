@@ -20,14 +20,29 @@ export async function setColor({ username, color }) {
   })
 }
 
-export function ws({ onNewColor }) {
+export function masterport({ onNewUserColor }) {
   const socket = new ReconnectingWebSocket(`${process.env.BACKEND_API_WS_PREFIX}/v1/masterport`);
 
   socket.addEventListener('open', () => {
   })
 
   socket.addEventListener('message', ({ data }) => {
-    // TODO
+    data = JSON.parse(data)
+
+    switch (data.type) {
+      case 'newUserColor':
+        if (onNewUserColor) {
+          onNewUserColor({
+            username: data.username,
+            timestamp: data.timestamp,
+            color: data.color
+          })
+        }
+        break
+
+      default:
+        break
+    }
   });
 
   return {

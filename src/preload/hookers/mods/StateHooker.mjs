@@ -7,9 +7,16 @@ export class StateHooker extends Hooker {
     super()
 
     this.colorsByUser = {}
+    this.masterport = null
   }
 
   async hook() {
+    this.masterport = userApi.masterport({
+      onNewUserColor: ({ username, color }) => {
+        this.colorsByUser[username] = color
+      }
+    })
+
     userApi.listColors().then((list) => {
       for (const info of list) {
         this.colorsByUser[info.username] = info.color
@@ -30,5 +37,9 @@ export class StateHooker extends Hooker {
         }
       }
     }
+  }
+
+  async unhook() {
+    this.masterport.close()
   }
 }
