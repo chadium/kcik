@@ -1,109 +1,33 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { apiFetch } from './api-fetch.mjs'
 
-export async function getTeamDeathmatchRanking() {
+export async function listColors() {
   let { data } = await apiFetch({
-    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/match/ranking'
+    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/list-colors'
   })
 
-  return data.ranking
+  return data.data
 }
 
-export async function getTagRanking() {
-  let { data } = await apiFetch({
-    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/tag/ranking'
-  })
-
-  return data.ranking
-}
-
-export async function tagGetIt() {
-  let { data } = await apiFetch({
-    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/tag/players/it'
-  })
-
-  return data.it
-}
-
-export async function matchGet() {
-  let { data } = await apiFetch({
-    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/match'
-  })
-
-  return data.match
-}
-
-export async function timeGet() {
-  let { data } = await apiFetch({
-    url: process.env.KIRKA_BOOMER_USER_API_PREFIX + '/time'
-  })
-
-  return data.time
-}
-
-export async function wsTeamDeathmatchRanking({ onConnect, onUpdate }) {
-  const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match/ranking`);
-
-  socket.addEventListener('open', () => {
-    onConnect()
-  })
-
-  socket.addEventListener('message', ({ data }) => {
-    onUpdate(JSON.parse(data))
-  });
-
-  return {
-    close() {
-      socket.close()
+export async function setColor({ username, color }) {
+  await apiFetch({
+    method: 'POST',
+    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/set-color',
+    bodyData: {
+      username,
+      color
     }
-  }
+  })
 }
 
-export function wsTagRanking({ onConnect, onUpdate }) {
-  const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/tag/ranking`);
+export function ws({ onNewColor }) {
+  const socket = new ReconnectingWebSocket(`${process.env.BACKEND_API_WS_PREFIX}/v1/masterport`);
 
   socket.addEventListener('open', () => {
-    onConnect()
   })
 
   socket.addEventListener('message', ({ data }) => {
-    onUpdate(JSON.parse(data))
-  });
-
-  return {
-    close() {
-      socket.close()
-    }
-  }
-}
-
-export function wsTagIt({ onConnect, onUpdate }) {
-  const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/tag/players/it`);
-
-  socket.addEventListener('open', () => {
-    onConnect()
-  })
-
-  socket.addEventListener('message', ({ data }) => {
-    onUpdate(JSON.parse(data))
-  });
-
-  return {
-    close() {
-      socket.close()
-    }
-  }
-}
-
-export function wsMatch({ onConnect, onUpdate }) {
-  const socket = new ReconnectingWebSocket(`${process.env.KIRKA_BOOMER_USER_WS_API_PREFIX}/match`);
-
-  socket.addEventListener('open', () => {
-    onConnect()
-  })
-
-  socket.addEventListener('message', ({ data }) => {
-    onUpdate(JSON.parse(data))
+    // TODO
   });
 
   return {

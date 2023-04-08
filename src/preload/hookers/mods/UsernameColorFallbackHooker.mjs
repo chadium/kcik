@@ -52,9 +52,18 @@ class StateChatting extends MachineState {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
+              let stateApi = this.machine.hooker.pimp.getApi('state')
+
               log.info("UsernameColorFallback", "New message arrived.")
               let usernameElement = addedNode.querySelector('span[style^=color]')
-              usernameElement.style.color = 'red'
+
+              let username = usernameElement.textContent
+
+              let color = stateApi.getUsernameColor(username)
+
+              if (color !== null) {
+                usernameElement.style.color = color
+              }
             }
           }
         }

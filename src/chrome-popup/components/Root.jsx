@@ -4,16 +4,14 @@ import Page from './Page.jsx'
 import TextLink from './TextLink.jsx'
 import { useResource } from '../use-resource.mjs'
 import "./Root.css"
-import { matchGet } from '../../preload/user-api.mjs'
+import * as userApi from '../../preload/user-api.mjs'
 
-async function fetchMatch() {
-  return {
-    match: await matchGet()
-  }
+async function fetchData() {
+  return {}
 }
 
 export default function Root() {
-  let { loading, data, error } = useResource(fetchMatch)
+  let { loading, data, error } = useResource(fetchData)
 
   return (
     <GenericLoading loading={loading} error={error}>
