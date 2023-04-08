@@ -1,6 +1,7 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import * as userApi from '../../user-api.mjs'
+import * as colorUtils from '../../color-utils.mjs'
 
 export class UsernameSetColorFallbackHooker extends Hooker {
   constructor() {
@@ -16,7 +17,11 @@ export class UsernameSetColorFallbackHooker extends Hooker {
 
         let stateApi = this.pimp.getApi('state')
 
-        let color = message.split(' ')[1]
+        let color = colorUtils.toRgbHex(message.split(' ')[1])
+
+        if (color === null) {
+          // Show message to user.
+        }
 
         userApi.setColor({
           username: e.findUsernameElement().textContent,
