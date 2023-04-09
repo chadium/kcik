@@ -9,30 +9,15 @@ export async function listColors() {
   return data.data
 }
 
-export async function setColor({ username, color }) {
+export async function setColor({ token, color }) {
   await apiFetch({
     method: 'POST',
     url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/set-color',
     bodyData: {
-      username,
+      token,
       color
     }
   })
-}
-
-export async function authStart({ username }) {
-  let { data } = await apiFetch({
-    method: 'POST',
-    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/auth/start',
-    bodyData: {
-      username
-    }
-  })
-
-  return {
-    token: data.token,
-    chatroomId: data.chatroomId
-  }
 }
 
 export function masterport({ onNewUserColor }) {
@@ -61,6 +46,10 @@ export function masterport({ onNewUserColor }) {
   });
 
   return {
+    send(message) {
+      socket.send(JSON.stringify(message))
+    },
+
     close() {
       socket.close()
     }

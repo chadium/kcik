@@ -24,16 +24,14 @@ export class UsernameSetColorFallbackHooker extends Hooker {
           // Show message to user.
         }
 
-        let credentialsApi = this.pimp.getApi('credentials')
+        let username = e.findUsernameElement().textContent
 
-        await kickApi.sendChatMessage({
-          chatroomId: stateApi.getAuthenticationChatroomId(),
-          message: "this is a test.",
-          authToken: credentialsApi.getAuthToken()
-        })
+        if (username !== 'chadium') {
+          throw new Error('Not a chad')
+        }
 
-        await userApi.setColor({
-          username: e.findUsernameElement().textContent,
+        await stateApi.setUsernameColor({
+          username,
           color
         })
       }
