@@ -57,6 +57,7 @@ class StateChatting extends MachineState {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
+              // TODO: Ignore temporary messages.
               this.machine.hooker.events.emit('chatMessage', {
                 rootElement: addedNode,
 

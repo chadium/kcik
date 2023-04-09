@@ -14,7 +14,8 @@ export async function sendChatMessage({
     method: "POST",
     url: 'https://kick.com/api/v1/chat-messages',
     headers: {
-      authorization: `Bearer ${authToken}`
+      authorization: `Bearer ${authToken}`,
+      'x-xsrf-token': authToken
     },
     bodyData: {
       chatroom_id: chatroomId,

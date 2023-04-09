@@ -20,12 +20,19 @@ export async function setColor({ username, color }) {
   })
 }
 
-export async function authenticationChatroomId() {
+export async function authStart({ username }) {
   let { data } = await apiFetch({
-    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/authentication-chatroom'
+    method: 'POST',
+    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/auth/start',
+    bodyData: {
+      username
+    }
   })
 
-  return data.chatroomId
+  return {
+    token: data.token,
+    chatroomId: data.chatroomId
+  }
 }
 
 export function masterport({ onNewUserColor }) {

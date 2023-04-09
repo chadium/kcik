@@ -6,6 +6,7 @@ export class StateHooker extends Hooker {
   constructor() {
     super()
 
+    this.authenticationToken = null
     this.colorsByUser = {}
     this.masterport = null
     this.authenticationChatroomId = null
@@ -24,10 +25,6 @@ export class StateHooker extends Hooker {
       }
 
       log.info('Got list of colors. Contains:', Object.keys(this.colorsByUser).length)
-    })
-
-    userApi.authenticationChatroomId().then((chatroomId) => {
-      this.authenticationChatroomId = chatroomId
     })
 
     return {

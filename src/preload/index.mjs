@@ -4,6 +4,7 @@ import { Pimp } from './Pimp.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
 import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
+import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
 import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbackHooker.mjs'
 import { UsernameSetColorFallbackHooker } from './hookers/mods/UsernameSetColorFallbackHooker.mjs'
 import { StateHooker } from './hookers/mods/StateHooker.mjs'
@@ -19,6 +20,7 @@ async function main() {
   let hookers = [
     new VueAppHooker(),
     new StateHooker(),
+    new CredentialsHooker(),
     new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),
     new UsernameSetColorFallbackHooker()
