@@ -28,6 +28,21 @@ describe('ChatroomAuthentication', () => {
     }
   })
 
+  it('start: rejects if masterportSend throws error', async () => {
+    let auth = new ChatroomAuthentication({
+      masterportSend: () => {
+        throw new Error('Expected error')
+      }
+    })
+
+    try {
+      let promise = auth.start('gawbly')
+
+      assert.strict.rejects(promise)
+    } finally {
+      await auth.stop()
+    }
+  })
   it('start: expects to receive authRequestResponse from masterport so that it can send a chat room message', async () => {
     const chatroomSend = createTrackingFunction()
 

@@ -9,12 +9,16 @@ class StateNotAuthenticated extends MachineState {
   start(username) {
     return {
       promise: new Promise((resolve, reject) => {
-        this.machine.chatroomAuthentication[MASTERPORT_SEND]({
-          type: 'authRequest',
-          username
-        })
+        try {
+          this.machine.chatroomAuthentication[MASTERPORT_SEND]({
+            type: 'authRequest',
+            username
+          })
 
-        this.machine.next(new StateWaitingForAuthRequest(resolve, reject, username))
+          this.machine.next(new StateWaitingForAuthRequest(resolve, reject, username))
+        } catch (e) {
+          reject(e)
+        }
       })
     }
   }
