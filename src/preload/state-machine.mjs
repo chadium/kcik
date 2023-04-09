@@ -101,7 +101,7 @@ export class Machine {
   async call(method, ...args) {
     return await this._queue.add(async () => {
       if (typeof this._state[method] !== 'function') {
-        throw new Error(`${method} is not a function in this state.`)
+        return
       }
 
       return this._state[method](...args)
