@@ -13,7 +13,7 @@ class StateNotAuthenticated extends MachineState {
           type: 'authRequest',
           username
         })
-    
+
         this.machine.next(new StateWaitingForAuthRequest(resolve, reject, username))
       })
     }
@@ -46,21 +46,26 @@ class StateWaitingForAuthRequest extends MachineState {
     this.machine.next(new StateNotAuthenticated())
   }
 
-  masterportReceive(message) {
+  async masterportReceive(message) {
     switch (message.type) {
       case 'authRequestResponse':
-        this.machine.chatroomAuthentication[CHATROOM_SEND](
-          message.chatroomId,
-          JSON.stringify({
-            type: 'auth',
-            token: message.token
-          })
-        )
+        try {
+          await this.machine.chatroomAuthentication[CHATROOM_SEND](
+            message.chatroomId,
+            JSON.stringify({
+              type: 'auth',
+              token: message.token
+            })
+          )
 
-        this.machine.next(new StateWaitingForSuccess(
-          this.resolve,
-          this.reject
-        ))
+          this.machine.next(new StateWaitingForSuccess(
+            this.resolve,
+            this.reject
+          ))
+        } catch (e) {
+          this.reject(e)
+          this.machine.next(new StateNotAuthenticated())
+        }
         break
     }
   }

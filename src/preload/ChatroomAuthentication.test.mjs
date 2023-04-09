@@ -60,6 +60,31 @@ describe('ChatroomAuthentication', () => {
     }
   })
 
+  it('start: it rejects promise if chatroomSend throws error', async () => {
+    let auth = new ChatroomAuthentication({
+      masterportSend: () => {},
+      chatroomSend: () => {
+        throw new Error('Testing failure')
+      }
+    })
+
+    try {
+      let promise = auth.start('juliuspringlejp')
+
+      await new Promise((resolve) => setTimeout(resolve, 1))
+
+      await auth.masterportReceive({
+        type: 'authRequestResponse',
+        token: 'one-two-three',
+        chatroomId: 123
+      })
+
+      await assert.strict.rejects(promise)
+    } finally {
+      await auth.stop()
+    }
+  })
+
   it('start: throws error when auth request response takes too long', async () => {
     let auth = new ChatroomAuthentication({
       requestTimeout: 1,
@@ -126,8 +151,6 @@ describe('ChatroomAuthentication', () => {
         token: 'one-two-three',
         chatroomId: 123
       })
-
-      await new Promise((resolve) => setTimeout(resolve, 1))
 
       await assert.strict.rejects(promise)
     } finally {
