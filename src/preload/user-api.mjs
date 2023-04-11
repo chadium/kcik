@@ -20,7 +20,7 @@ export async function setColor({ token, color }) {
   })
 }
 
-export function masterport({ onNewUserColor }) {
+export function masterport({ onMessage }) {
   const socket = new ReconnectingWebSocket(`${process.env.BACKEND_API_WS_PREFIX}/v1/masterport`);
 
   socket.addEventListener('open', () => {
@@ -29,20 +29,7 @@ export function masterport({ onNewUserColor }) {
   socket.addEventListener('message', ({ data }) => {
     data = JSON.parse(data)
 
-    switch (data.type) {
-      case 'newUserColor':
-        if (onNewUserColor) {
-          onNewUserColor({
-            username: data.username,
-            timestamp: data.timestamp,
-            color: data.color
-          })
-        }
-        break
-
-      default:
-        break
-    }
+    onMessage(data)
   });
 
   return {

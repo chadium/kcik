@@ -30,10 +30,10 @@ export class UsernameSetColorFallbackHooker extends Hooker {
           throw new Error('Not a chad')
         }
 
-        await stateApi.setUsernameColor({
+        await stateApi.setUsernameColor(
           username,
           color
-        })
+        )
       }
     }
   }

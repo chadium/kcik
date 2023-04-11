@@ -76,6 +76,7 @@ export async function apiFetch({
                 return request.getResponseHeader(name)
               }
             },
+            text: request.responseText,
             async json() {
               return JSON.parse(request.responseText)
             }

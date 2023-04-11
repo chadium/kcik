@@ -22,7 +22,7 @@ export class StateHooker extends Hooker {
 
         await kickApi.sendChatMessage({
           chatroomId,
-          message,
+          message: btoa(message),
           authToken: credentialsApi.getAuthToken()
         })
       }
@@ -31,8 +31,16 @@ export class StateHooker extends Hooker {
 
   async hook() {
     this.masterport = userApi.masterport({
-      onNewUserColor: ({ username, color }) => {
-        this.colorsByUser[username] = color
+      onMessage: (message) => {
+        switch (message.type) {
+          case 'newUserColor':
+            this.colorsByUser[message.username] = message.color
+            break
+
+          default:
+            this.chatroomAuthentication.masterportReceive(message)
+            break
+        }
       }
     })
 
