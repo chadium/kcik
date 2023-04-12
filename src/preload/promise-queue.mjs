@@ -16,14 +16,13 @@ export class PromiseQueue {
 
   async #processQueue() {
     while (this.queue.length > 0) {
-      const { task, resolve, reject } = this.queue[0]
+      const { task, resolve, reject } = this.queue.shift()
       try {
         const result = await task()
         resolve(result)
       } catch (error) {
         reject(task)
       }
-      this.queue.shift()
     }
     this.running = false
   }
