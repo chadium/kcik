@@ -43,6 +43,7 @@ describe('ChatroomAuthentication', () => {
       await auth.stop()
     }
   })
+
   it('start: expects to receive authRequestResponse from masterport so that it can send a chat room message', async () => {
     const chatroomSend = createTrackingFunction()
 
@@ -168,6 +169,39 @@ describe('ChatroomAuthentication', () => {
       })
 
       await assert.strict.rejects(promise)
+    } finally {
+      await auth.stop()
+    }
+  })
+
+  it('start: bugfix: calling masterportReceive in chatroomSend will have the message sent to the wrong state', async () => {
+    let auth = new ChatroomAuthentication({
+      authSuccessTimeout: 1,
+      masterportSend: () => {},
+      chatroomSend: () => {
+        auth.masterportReceive({
+          type: 'authSuccess',
+          token: 'very-successful-token'
+        })
+      }
+    })
+
+    try {
+      let promise = auth.start('juliuspringlejp')
+
+      await new Promise((resolve) => setTimeout(resolve, 1))
+
+      await auth.masterportReceive({
+        type: 'authRequestResponse',
+        token: 'one-two-three',
+        chatroomId: 123
+      })
+
+      let result = await promise
+
+      assert.strict.deepEqual(result, {
+        token: 'very-successful-token'
+      })
     } finally {
       await auth.stop()
     }

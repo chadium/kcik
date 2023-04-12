@@ -1,4 +1,4 @@
-import PQueue from 'p-queue'; 
+import { PromiseQueue } from "./promise-queue.mjs"
 
 const SET_MACHINE = Symbol()
 const ON_ENTER = Symbol()
@@ -33,7 +33,7 @@ export class MachineState {
 export class Machine {
   constructor({ base = MachineState } = {}) {
     this._state = null
-    this._queue = new PQueue({ concurrency: 1 })
+    this._queue = new PromiseQueue()
     this._base = base
   }
 

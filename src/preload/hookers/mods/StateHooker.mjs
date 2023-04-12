@@ -38,6 +38,7 @@ export class StateHooker extends Hooker {
             break
 
           default:
+            console.log('got', message)
             this.chatroomAuthentication.masterportReceive(message)
             break
         }

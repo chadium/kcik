@@ -35,7 +35,8 @@ export async function apiFetch({
   headers,
   query,
   queryData,
-  bodyData
+  bodyData,
+  forceResponseJsonParse = true
 }) {
   if (queryData) {
     if (!query) {
@@ -86,7 +87,7 @@ export async function apiFetch({
     })
 
     if (response.ok) {
-      if (response.headers.get('content-type') === 'application/json') {
+      if (forceResponseJsonParse || response.headers.get('content-type') === 'application/json') {
         return {
           data: await response.json()
         }
