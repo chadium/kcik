@@ -2,8 +2,32 @@ import assert from 'assert'
 import { createTrackingFunction } from './test-utils.mjs'
 import { ChatroomAuthentication } from './ChatroomAuthentication.mjs'
 
+async function createAuthenticatedObject(username, expectedToken) {
+  let auth = new ChatroomAuthentication({
+    requestTimeout: 1,
+    authSuccessTimeout: 1,
+    masterportSend: async () => {
+      await auth.masterportReceive({
+        type: 'authRequestResponse',
+        token: 'one-two-three',
+        chatroomId: 123
+      })
+    
+      await auth.masterportReceive({
+        type: 'authSuccess',
+        token: expectedToken
+      })
+    },
+    chatroomSend: () => {}
+  })
+
+  await auth.fetch(username)
+
+  return auth
+}
+
 describe('ChatroomAuthentication', () => {
-  it('start: sends authRequest to masterport', async () => {
+  it('fetch: sends authRequest to masterport', async () => {
     const masterportSend = createTrackingFunction()
 
     let auth = new ChatroomAuthentication({
@@ -11,7 +35,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      auth.start('gawbly')
+      auth.fetch('gawbly')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -24,11 +48,11 @@ describe('ChatroomAuthentication', () => {
         ]
       ])
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: rejects if masterportSend throws error', async () => {
+  it('fetch: rejects if masterportSend throws error', async () => {
     let auth = new ChatroomAuthentication({
       masterportSend: () => {
         throw new Error('Expected error')
@@ -36,15 +60,15 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.start('gawbly')
+      let promise = auth.fetch('gawbly')
 
       assert.strict.rejects(promise)
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: expects to receive authRequestResponse from masterport so that it can send a chat room message', async () => {
+  it('fetch: expects to receive authRequestResponse from masterport so that it can send a chat room message', async () => {
     const chatroomSend = createTrackingFunction()
 
     let auth = new ChatroomAuthentication({
@@ -53,7 +77,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      auth.start('juliuspringlejp')
+      auth.fetch('juliuspringlejp')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -72,11 +96,11 @@ describe('ChatroomAuthentication', () => {
         })]
       ])
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: it rejects promise if chatroomSend throws error', async () => {
+  it('fetch: it rejects promise if chatroomSend throws error', async () => {
     let auth = new ChatroomAuthentication({
       masterportSend: () => {},
       chatroomSend: () => {
@@ -85,7 +109,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.start('juliuspringlejp')
+      let promise = auth.fetch('juliuspringlejp')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -97,35 +121,35 @@ describe('ChatroomAuthentication', () => {
 
       await assert.strict.rejects(promise)
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: throws error when auth request response takes too long', async () => {
+  it('fetch: throws error when auth request response takes too long', async () => {
     let auth = new ChatroomAuthentication({
       requestTimeout: 1,
       masterportSend: () => {}
     })
 
     try {
-      let promise = auth.start('juliuspringlejp')
+      let promise = auth.fetch('juliuspringlejp')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
       await assert.strict.rejects(promise)
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: will wait for authSuccess message and resolve', async () => {
+  it('fetch: will wait for authSuccess message and resolve', async () => {
     let auth = new ChatroomAuthentication({
       masterportSend: () => {},
       chatroomSend: () => {}
     })
 
     try {
-      let promise = auth.start('juliuspringlejp')
+      let promise = auth.fetch('juliuspringlejp')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -146,11 +170,11 @@ describe('ChatroomAuthentication', () => {
         token: 'very-successful-token'
       })
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: throws error when auth success takes too long', async () => {
+  it('fetch: throws error when auth success takes too long', async () => {
     let auth = new ChatroomAuthentication({
       authSuccessTimeout: 1,
       masterportSend: () => {},
@@ -158,7 +182,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.start('juliuspringlejp')
+      let promise = auth.fetch('juliuspringlejp')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -170,11 +194,11 @@ describe('ChatroomAuthentication', () => {
 
       await assert.strict.rejects(promise)
     } finally {
-      await auth.stop()
+      await auth.abort()
     }
   })
 
-  it('start: bugfix: calling masterportReceive in chatroomSend will have the message sent to the wrong state', async () => {
+  it('fetch: bugfix: calling masterportReceive in chatroomSend will have the message sent to the wrong state', async () => {
     let auth = new ChatroomAuthentication({
       authSuccessTimeout: 1,
       masterportSend: () => {},
@@ -187,7 +211,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.start('juliuspringlejp')
+      let promise = auth.fetch('juliuspringlejp')
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -203,7 +227,137 @@ describe('ChatroomAuthentication', () => {
         token: 'very-successful-token'
       })
     } finally {
-      await auth.stop()
+      await auth.abort()
+    }
+  })
+
+  it('use: will fetch token if token is not available', async () => {
+    const masterportSend = createTrackingFunction()
+
+    let auth = new ChatroomAuthentication({
+      masterportSend
+    })
+
+    try {
+      auth.use('gawbly', () => {})
+
+      await new Promise((resolve) => setTimeout(resolve, 1))
+
+      assert.strict.deepEqual(masterportSend.tracker, [
+        [
+          {
+            type: 'authRequest',
+            username: 'gawbly'
+          }
+        ]
+      ])
+    } finally {
+      await auth.abort()
+    }
+  })
+
+  it('use: will pass the token to the function after fetching it automatically for the first time', async () => {
+    const useFn = createTrackingFunction()
+
+    let auth = new ChatroomAuthentication({
+      requestTimeout: 1,
+      authSuccessTimeout: 1,
+      masterportSend: async () => {
+        await auth.masterportReceive({
+          type: 'authRequestResponse',
+          token: 'one-two-three',
+          chatroomId: 123
+        })
+      
+        await auth.masterportReceive({
+          type: 'authSuccess',
+          token: 'the-token'
+        })
+      },
+      chatroomSend: () => {}
+    })
+
+    try {
+      await auth.use('gawbly', useFn)
+
+      assert.strict.deepEqual(useFn.tracker, [
+        [
+          {
+            token: 'the-token'
+          }
+        ]
+      ])
+    } finally {
+      await auth.abort()
+    }
+  })
+
+  it('use: will use existing token if already fetched', async () => {
+    const useFn = createTrackingFunction()
+
+    let auth = await createAuthenticatedObject('gawbly', 'the-token')
+
+    try {
+      await auth.use('gawbly', useFn)
+
+      assert.strict.deepEqual(useFn.tracker, [
+        [
+          {
+            token: 'the-token'
+          }
+        ]
+      ])
+    } finally {
+      await auth.abort()
+    }
+  })
+
+  it('use: will fetch and call again if function throws error', async () => {
+    let throws = true
+    const useFn = createTrackingFunction(() => {
+      if (throws) {
+        throws = false
+        throw new Error('Expected error')
+      }
+    })
+
+    let auth = await createAuthenticatedObject('gawbly', 'the-token')
+
+    try {
+      await auth.use('gawbly', useFn)
+
+      assert.strict.deepEqual(useFn.tracker, [
+        [
+          {
+            token: 'the-token'
+          }
+        ],
+        [
+          {
+            token: 'the-token'
+          }
+        ]
+      ])
+    } finally {
+      await auth.abort()
+    }
+  })
+
+  it('use: will fetch and call again if function throws error', async () => {
+    const useFn = createTrackingFunction(() => {
+      throw new Error('Expected error')
+    })
+
+    let auth = await createAuthenticatedObject('gawbly', 'the-token')
+
+    try {
+      let promise = auth.use('gawbly', useFn)
+
+      await assert.strict.rejects(promise)
+
+      assert.strict.deepEqual(useFn.tracker.length, 2)
+    } finally {
+      await auth.abort()
     }
   })
 })

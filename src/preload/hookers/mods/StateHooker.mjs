@@ -38,7 +38,6 @@ export class StateHooker extends Hooker {
             break
 
           default:
-            console.log('got', message)
             this.chatroomAuthentication.masterportReceive(message)
             break
         }
@@ -57,11 +56,11 @@ export class StateHooker extends Hooker {
       name: 'state',
       api: {
         setUsernameColor: async (username, color) => {
-          let { token } = await this.chatroomAuthentication.start(username)
-
-          await userApi.setColor({
-            token,
-            color
+          await this.chatroomAuthentication.use(username, async ({ token }) => {
+            await userApi.setColor({
+              token,
+              color
+            })
           })
         },
         getUsernameColor: (username) => {

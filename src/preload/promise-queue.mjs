@@ -20,8 +20,8 @@ export class PromiseQueue {
       try {
         const result = await task()
         resolve(result)
-      } catch (error) {
-        reject(task)
+      } catch (e) {
+        reject(e)
       }
     }
     this.running = false

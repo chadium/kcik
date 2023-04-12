@@ -9,16 +9,7 @@ class StateNotAuthenticated extends MachineState {
   start(username) {
     return {
       promise: new Promise((resolve, reject) => {
-        try {
-          this.machine.chatroomAuthentication[MASTERPORT_SEND]({
-            type: 'authRequest',
-            username
-          })
-
-          this.machine.next(new StateWaitingForAuthRequest(resolve, reject, username))
-        } catch (e) {
-          reject(e)
-        }
+        this.machine.next(new StateWaitingForAuthRequest(resolve, reject, username))
       })
     }
   }
@@ -33,11 +24,23 @@ class StateWaitingForAuthRequest extends MachineState {
     this.timer = null
   }
 
-  [MachineState.ON_ENTER]() {
+  async [MachineState.ON_ENTER]() {
     this.timer = setTimeout(() => {
       this.reject(new Error('Auth request timeout'))
       this.machine.next(new StateNotAuthenticated())
     }, this.machine.chatroomAuthentication[REQUEST_TIMEOUT])
+
+    ;(async () => {
+      try {
+        await this.machine.chatroomAuthentication[MASTERPORT_SEND]({
+          type: 'authRequest',
+          username: this.username
+        })
+      } catch (e) {
+        this.reject(e)
+        this.machine.next(new StateNotAuthenticated())
+      }
+    })()
   }
 
   [MachineState.ON_LEAVE]() {
@@ -45,7 +48,7 @@ class StateWaitingForAuthRequest extends MachineState {
     this.timer = null
   }
 
-  stop() {
+  abort() {
     this.reject(new Error('Cancelled'))
     this.machine.next(new StateNotAuthenticated())
   }
@@ -53,41 +56,47 @@ class StateWaitingForAuthRequest extends MachineState {
   async masterportReceive(message) {
     switch (message.type) {
       case 'authRequestResponse':
-        try {
-          await this.machine.chatroomAuthentication[CHATROOM_SEND](
-            message.chatroomId,
-            JSON.stringify({
-              type: 'auth',
-              token: message.token
-            })
-          )
-
-          this.machine.next(new StateWaitingForSuccess(
-            this.resolve,
-            this.reject
-          ))
-        } catch (e) {
-          this.reject(e)
-          this.machine.next(new StateNotAuthenticated())
-        }
+        this.machine.next(new StateWaitingForSuccess(
+          this.resolve,
+          this.reject,
+          message.token,
+          message.chatroomId
+        ))
         break
     }
   }
 }
 
 class StateWaitingForSuccess extends MachineState {
-  constructor(resolve, reject) {
+  constructor(resolve, reject, intermediateToken, chatroomId) {
     super()
     this.resolve = resolve
     this.reject = reject
+    this.intermediateToken = intermediateToken
+    this.chatroomId = chatroomId
     this.timer = null
   }
 
-  [MachineState.ON_ENTER]() {
+  async [MachineState.ON_ENTER]() {
     this.timer = setTimeout(() => {
       this.reject(new Error('Auth success timeout'))
       this.machine.next(new StateNotAuthenticated())
     }, this.machine.chatroomAuthentication[AUTH_SUCCESS_TIMEOUT])
+
+    ;(async () => {
+      try {
+        await this.machine.chatroomAuthentication[CHATROOM_SEND](
+          this.chatroomId,
+          JSON.stringify({
+            type: 'auth',
+            token: this.intermediateToken
+          })
+        )
+      } catch (e) {
+        this.reject(e)
+        this.machine.next(new StateNotAuthenticated())
+      }
+    })()
   }
 
   [MachineState.ON_LEAVE]() {
@@ -95,7 +104,7 @@ class StateWaitingForSuccess extends MachineState {
     this.timer = null
   }
 
-  stop() {
+  abort() {
     this.reject(new Error('Cancelled'))
     this.machine.next(new StateNotAuthenticated())
   }
@@ -106,13 +115,25 @@ class StateWaitingForSuccess extends MachineState {
         this.resolve({
           token: message.token
         })
-        this.machine.next(new StateAuthenticated())
+        this.machine.next(new StateAuthenticated(message.token))
         break
     }
   }
 }
 
 class StateAuthenticated extends MachineState {
+  constructor(token) {
+    super()
+    this.token = token
+  }
+
+  abort() {
+    this.machine.next(new StateNotAuthenticated())
+  }
+
+  getToken() {
+    return this.token
+  }
 }
 
 export class ChatroomAuthentication {
@@ -135,7 +156,7 @@ export class ChatroomAuthentication {
     this.#sm.chatroomAuthentication = this
   }
 
-  async start(username) {
+  async fetch(username) {
     let result = await this.#sm.call('start', username)
 
     if (result) {
@@ -145,8 +166,30 @@ export class ChatroomAuthentication {
     }
   }
 
-  async stop() {
-    await this.#sm.call('stop')
+  async use(username, fn) {
+    let result = {
+      token: await this.#sm.call('getToken')
+    }
+
+    if (result.token === undefined) {
+      // Gotta get it.
+      result = await this.fetch(username)
+    }
+
+    try {
+      return await fn(result)
+    } catch (e) {
+      // Try fetching again.
+      await this.abort()
+      result = await this.fetch(username)
+
+      // Now try again.
+      return await fn(result)
+    }
+  }
+
+  async abort() {
+    await this.#sm.call('abort')
   }
 
   masterportReceive(message) {
