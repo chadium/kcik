@@ -22,7 +22,6 @@ export class PromiseQueue {
         resolve(result)
       } catch (error) {
         reject(task)
-        console.error(`Error processing task: ${error}`)
       }
       this.queue.shift()
     }
