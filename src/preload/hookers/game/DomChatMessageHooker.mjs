@@ -60,29 +60,36 @@ class StateChatting extends MachineState {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              // TODO: Ignore temporary messages.
-              this.machine.hooker.events.emit('chatMessage', {
-                rootElement: addedNode,
+              if (addedNode.id.startsWith('message-')) {
+                let e = {
+                  rootElement: addedNode,
 
-                findUsernameElement() {
-                  let usernameElement = addedNode.querySelector('span[style^=color]')
+                  findUsernameElement() {
+                    let usernameElement = addedNode.querySelector('span[style^=color]')
 
-                  return usernameElement
-                },
+                    return usernameElement
+                  },
 
-                findMessageElement() {
-                  let candidates = addedNode.querySelectorAll('span.break-words')
+                  findMessageElement() {
+                    let candidates = addedNode.querySelectorAll('span.break-words')
 
-                  for (let candidate of candidates) {
-                    if (candidate.firstChild.classList.contains('align-middle')) {
-                      // Found it.
-                      return candidate.firstChild
+                    for (let candidate of candidates) {
+                      if (candidate.firstChild.classList.contains('align-middle')) {
+                        // Found it.
+                        return candidate.firstChild
+                      }
                     }
-                  }
 
-                  return null
+                    return null
+                  }
                 }
-              })
+
+                if (addedNode.id.startsWith('message-temp_')) {
+                  this.machine.hooker.events.emit('sentChatMessage', e)
+                }
+
+                this.machine.hooker.events.emit('chatMessage', e)
+              }
             }
           }
         }

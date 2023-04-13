@@ -18,17 +18,13 @@ export class UsernameSetColorFallbackHooker extends Hooker {
 
         let stateApi = this.pimp.getApi('state')
 
-        let color = colorUtils.toRgbHex(message.split(' ')[1])
+        let color = colorUtils.toRgbHex(message.split(/\s+/, 2)[1])
 
         if (color === null) {
           // Show message to user.
         }
 
         let username = e.findUsernameElement().textContent
-
-        if (username !== 'chadium') {
-          throw new Error('Not a chad')
-        }
 
         await stateApi.setUsernameColor(
           username,
@@ -41,12 +37,12 @@ export class UsernameSetColorFallbackHooker extends Hooker {
   async hook() {
     let domChatMessageApi = this.pimp.getApi('domChatMessage')
 
-    domChatMessageApi.on('chatMessage', this.onNewMessage)
+    domChatMessageApi.on('sentChatMessage', this.onNewMessage)
   }
 
   async unhook() {
     let domChatMessageApi = this.pimp.getApi('domChatMessage')
 
-    domChatMessageApi.off('chatMessage', this.onNewMessage)
+    domChatMessageApi.off('sentChatMessage', this.onNewMessage)
   }
 }

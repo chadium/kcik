@@ -24,7 +24,6 @@ export class UsernameColorFallbackHooker extends Hooker {
   async hook() {
     let domChatMessageApi = this.pimp.getApi('domChatMessage')
 
-
     domChatMessageApi.on('chatMessage', this.onNewMessage)
   }
 
