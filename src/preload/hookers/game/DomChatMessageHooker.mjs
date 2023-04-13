@@ -3,8 +3,10 @@ import * as log from '../../log.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
 import { lookForElement } from '../../dom-utils.mjs'
 import EventEmitter from 'events'
+import { DomRemovalDetectorMutationObserverWithId } from '../../DomRemovalDetectorMutationObserverWithId.mjs'
 
 const MESSAGE_CONTAINER_ID = 'messagesContainer'
+const CHECK_INTERVAL = 1000 * 30
 
 class StateWaitForBody extends MachineState {
   constructor() {
@@ -36,10 +38,10 @@ class StateUnknown extends MachineState {
       let messagesContainer = document.getElementById(MESSAGE_CONTAINER_ID)
 
       if (messagesContainer !== null) {
-        log.info("UsernameColorFallback", "Found chat box.")
+        log.info("DomChatMessage", "Found chat box.")
         this.machine.next(new StateChatting())
       } else {
-        log.info("UsernameColorFallback", "Couldn't find chat box. Will wait for it.")
+        log.info("DomChatMessage", "Couldn't find chat box. Will wait for it.")
         this.machine.next(new StateWaitingForChat())
       }
     }
@@ -47,12 +49,13 @@ class StateUnknown extends MachineState {
 }
 
 class StateChatting extends MachineState {
-  #mutationObserver = null
+  #chatMessageObserver = null
+  #chatContainerDetector = null
 
   constructor() {
     super()
 
-    this.#mutationObserver = new MutationObserver((mutationsList, observer) => {
+    this.#chatMessageObserver = new MutationObserver((mutationsList, observer) => {
       for (const mutation of mutationsList) {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
@@ -90,13 +93,21 @@ class StateChatting extends MachineState {
   async [MachineState.ON_ENTER]() {
     let messagesContainer = document.getElementById(MESSAGE_CONTAINER_ID)
 
-    this.#mutationObserver.observe(messagesContainer, {
-      childList: true,
+    let detector = new DomRemovalDetectorMutationObserverWithId()
+
+    this.#chatContainerDetector = detector.connect(messagesContainer, () => {
+      log.info("DomChatMessage", "Chat container gone. Must look for it again.")
+      this.machine.next(new StateWaitingForChat())
+    })
+
+    this.#chatMessageObserver.observe(messagesContainer, {
+      childList: true
     })
   }
 
   async [MachineState.ON_LEAVE]() {
-    this.#mutationObserver.disconnect()
+    this.#chatContainerDetector.disconnect()
+    this.#chatMessageObserver.disconnect()
   }
 }
 
@@ -112,7 +123,7 @@ class StateWaitingForChat extends MachineState {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
               if (lookForElement(addedNode, (el) => el.id === MESSAGE_CONTAINER_ID)) {
-                log.info("UsernameColorFallback", "Found message container.")
+                log.info("DomChatMessage", "Found message container.")
                 this.machine.next(new StateChatting())
                 return
               }
@@ -126,12 +137,22 @@ class StateWaitingForChat extends MachineState {
   }
 
   async [MachineState.ON_ENTER]() {
-    this.#mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["id"]
-    })
+    let messagesContainer = document.getElementById(MESSAGE_CONTAINER_ID)
+
+    if (messagesContainer !== null) {
+      // That means it's already attached. Let's gooo.
+      // And yes, we do need to check again because these
+      // state messages are asynchronous.
+      log.info("DomChatMessage", "Message container was already present.")
+      this.machine.next(new StateChatting())
+    } else {
+      this.#mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["id"]
+      })
+    }
   }
 
   async [MachineState.ON_LEAVE]() {
