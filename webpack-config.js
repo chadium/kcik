@@ -279,7 +279,7 @@ exports.generateChromeContentConfig = ({
     ],
     web_accessible_resources: [
       {
-        resources: ["preload/index.js"],
+        resources: ["preload/index.js", "icon128.png"],
         matches: ["https://kick.com/*"]
       }
     ],

@@ -1,0 +1,16 @@
+.container {
+  z-index: 50;
+}
+
+.message {
+  min-width: 0;
+  max-width: 400px;
+  padding: 0 16px;
+  width: 100%;
+}
+
+.message > img:first-child {
+  width: 16px;
+  height: 16px;
+  margin-right: 16px;
+}

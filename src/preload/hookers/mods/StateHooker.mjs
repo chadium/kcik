@@ -3,6 +3,7 @@ import * as kickApi from '../../kick-api.mjs'
 import * as userApi from '../../user-api.mjs'
 import * as log from '../../log.mjs'
 import { ChatroomAuthentication } from '../../ChatroomAuthentication.mjs'
+import { toaster } from '../../toaster.mjs'
 
 export class StateHooker extends Hooker {
   constructor() {
@@ -57,12 +58,24 @@ export class StateHooker extends Hooker {
       name: 'state',
       api: {
         setUsernameColor: async (username, color) => {
-          await this.chatroomAuthentication.use(username, async ({ token }) => {
-            await userApi.setColor({
-              token,
-              color
-            })
+          let patientNotification = toaster('Assigning you a color, please wait...', {
+            duration: Infinity
           })
+
+          try {
+            await this.chatroomAuthentication.use(username, async ({ token }) => {
+              await userApi.setColor({
+                token,
+                color
+              })
+            })
+            toaster('New username color has been set!')
+          } catch (e) {
+            toaster('Failed to set color. Try again later.')
+            throw e
+          } finally {
+            patientNotification.remove()
+          }
         },
         getUsernameColor: (username) => {
           if (username in this.colorsByUser) {
