@@ -5,6 +5,17 @@ import * as userApi from '../../user-api.mjs'
 import * as colorUtils from '../../color-utils.mjs'
 import { toaster } from '../../toaster.mjs'
 
+function sanitizeColorInput(color) {
+  // May have trailing white space. May.
+  color = color.trim()
+
+  // Don't want no duplicate white space or anything that is not a space
+  // character.
+  color = color.replace(/\s+/g, ' ');
+
+  return color
+}
+
 export class UsernameSetColorFallbackHooker extends Hooker {
   constructor() {
     super()
@@ -19,9 +30,15 @@ export class UsernameSetColorFallbackHooker extends Hooker {
 
         let stateApi = this.pimp.getApi('state')
 
-        let splitsplat = message.split(/\s+/, 2)
+        let firstSpace = message.indexOf(' ')
 
-        let color = colorUtils.toRgbHex(splitsplat[1])
+        if (firstSpace === -1) {
+          // Silly user.
+          toaster(`You must specify a color. (ex: !color red)`)
+          return
+        }
+
+        let color = colorUtils.toRgbHex(sanitizeColorInput(message.substring(firstSpace)))
 
         if (color === null) {
           let command = splitsplat[0].substring('!')
