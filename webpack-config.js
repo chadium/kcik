@@ -14,9 +14,9 @@ require('dotenv-defaults').config()
 
 function makeVersion(production) {
   if (production) {
-    return JSON.stringify('v' + pkg.version.replaceAll(/(\.0)+$/g, ""))
+    return 'ALPHA VERSION ' + pkg.version.replaceAll(/(\.0)+$/g, "")
   } else {
-    return JSON.stringify('DEV BUILD ' + new Date().toISOString())
+    return 'DEV BUILD ' + new Date().toISOString()
   }
 }
 
@@ -71,7 +71,7 @@ exports.generateElectronConfig = ({
     plugins: [
       new DefinePlugin({
         BOOMER_ADMIN: admin,
-        BOOMER_VERSION: makeVersion(production)
+        BOOMER_VERSION: JSON.stringify(makeVersion(production))
       }),
       new Dotenv({
         systemvars: true
@@ -171,7 +171,7 @@ exports.generatePreloadConfig = ({
     plugins: [
       new DefinePlugin({
         BOOMER_ADMIN: admin,
-        BOOMER_VERSION: makeVersion(production),
+        BOOMER_VERSION: JSON.stringify(makeVersion(production)),
         BOOMER_CHROME_EXTENSION: chrome
       }),
       new Dotenv({
@@ -231,7 +231,7 @@ exports.generateChromeContentConfig = ({
     plugins: [
       new DefinePlugin({
         BOOMER_ADMIN: admin,
-        BOOMER_VERSION: makeVersion(production),
+        BOOMER_VERSION: JSON.stringify(makeVersion(production)),
         BOOMER_CHROME_EXTENSION: chrome
       }),
       new Dotenv({
@@ -260,8 +260,9 @@ exports.generateChromeContentConfig = ({
 
   let manifestJson = {
     manifest_version: 3,
-    name: "Kcik",
-    description: "The best kick.com extension that you will find out there.",
+    name: "KCIK",
+    description: "Created LIVE on kick.com.",
+    version_name: makeVersion(production),
     version: pkg.version,
     author: pkg.author,
     icons: {
@@ -283,7 +284,15 @@ exports.generateChromeContentConfig = ({
         matches: ["https://kick.com/*"]
       }
     ],
-    //key: ``.replaceAll(/\s+/g, '')
+    key: `
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgW7qCfPu++Kc0NoR3vt8
+X0vgKFT1VP8m0ch80QUA1TY9hbvRnQXLoffS7HfMJE1OKKkDm4EOPHAQJ5zRWhab
+HBaynbUgwWFy2cCYRjahQknAAInIHYX+zZB5BPpOb7QvFupRHJFF342K36CJ2QbV
+mF5CVdTcoekcgmqkl1sTlVrFC+zTVItm/MUv3iV+f4u9dHPYxtQqxUuxIIiewWGz
+fyeXEc7c7dQde95KdxBIsYGs1TyQvMlYTT7QKcCkShWETV87rZkSbCBZPdthYru2
+Mz4OeDQPM7svcFvtO8sfDrD6uYayy5khVPxK1wuugvOCXrS8/FaooiGgfVOaUz35
+RwIDAQAB
+`.replaceAll(/\s+/g, '')
   }
 
   config.plugins.push(generate({
@@ -312,7 +321,7 @@ exports.generateChromeBackgroundConfig = ({
     plugins: [
       new DefinePlugin({
         BOOMER_ADMIN: admin,
-        BOOMER_VERSION: makeVersion(production),
+        BOOMER_VERSION: JSON.stringify(makeVersion(production)),
         BOOMER_CHROME_EXTENSION: chrome
       }),
       new Dotenv({
@@ -375,7 +384,7 @@ exports.generateChromePopupConfig = ({
       new HtmlWebpackPlugin(),
       new DefinePlugin({
         BOOMER_ADMIN: admin,
-        BOOMER_VERSION: makeVersion(production),
+        BOOMER_VERSION: JSON.stringify(makeVersion(production)),
         BOOMER_CHROME_EXTENSION: chrome
       }),
       new Dotenv({

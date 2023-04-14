@@ -2,7 +2,7 @@ import assert from 'assert'
 import { createTrackingFunction } from './test-utils.mjs'
 import { ChatroomAuthentication } from './ChatroomAuthentication.mjs'
 
-async function createAuthenticatedObject(username, expectedToken) {
+async function createAuthenticatedObject(expectedToken) {
   let auth = new ChatroomAuthentication({
     requestTimeout: 1,
     authSuccessTimeout: 1,
@@ -21,7 +21,7 @@ async function createAuthenticatedObject(username, expectedToken) {
     chatroomSend: () => {}
   })
 
-  await auth.fetch(username)
+  await auth.fetch()
 
   return auth
 }
@@ -35,15 +35,14 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      auth.fetch('gawbly')
+      auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
       assert.strict.deepEqual(masterportSend.tracker, [
         [
           {
-            type: 'authRequest',
-            username: 'gawbly'
+            type: 'authRequest'
           }
         ]
       ])
@@ -60,7 +59,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.fetch('gawbly')
+      let promise = auth.fetch()
 
       assert.strict.rejects(promise)
     } finally {
@@ -77,7 +76,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      auth.fetch('juliuspringlejp')
+      auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -109,7 +108,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.fetch('juliuspringlejp')
+      let promise = auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -132,7 +131,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.fetch('juliuspringlejp')
+      let promise = auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -149,7 +148,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.fetch('juliuspringlejp')
+      let promise = auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -182,7 +181,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.fetch('juliuspringlejp')
+      let promise = auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -211,7 +210,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      let promise = auth.fetch('juliuspringlejp')
+      let promise = auth.fetch()
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
@@ -239,15 +238,14 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      auth.use('gawbly', () => {})
+      auth.use(() => {})
 
       await new Promise((resolve) => setTimeout(resolve, 1))
 
       assert.strict.deepEqual(masterportSend.tracker, [
         [
           {
-            type: 'authRequest',
-            username: 'gawbly'
+            type: 'authRequest'
           }
         ]
       ])
@@ -278,7 +276,7 @@ describe('ChatroomAuthentication', () => {
     })
 
     try {
-      await auth.use('gawbly', useFn)
+      await auth.use(useFn)
 
       assert.strict.deepEqual(useFn.tracker, [
         [
@@ -295,10 +293,10 @@ describe('ChatroomAuthentication', () => {
   it('use: will use existing token if already fetched', async () => {
     const useFn = createTrackingFunction()
 
-    let auth = await createAuthenticatedObject('gawbly', 'the-token')
+    let auth = await createAuthenticatedObject('the-token')
 
     try {
-      await auth.use('gawbly', useFn)
+      await auth.use(useFn)
 
       assert.strict.deepEqual(useFn.tracker, [
         [
@@ -321,10 +319,10 @@ describe('ChatroomAuthentication', () => {
       }
     })
 
-    let auth = await createAuthenticatedObject('gawbly', 'the-token')
+    let auth = await createAuthenticatedObject('the-token')
 
     try {
-      await auth.use('gawbly', useFn)
+      await auth.use(useFn)
 
       assert.strict.deepEqual(useFn.tracker, [
         [
@@ -348,10 +346,10 @@ describe('ChatroomAuthentication', () => {
       throw new Error('Expected error')
     })
 
-    let auth = await createAuthenticatedObject('gawbly', 'the-token')
+    let auth = await createAuthenticatedObject('the-token')
 
     try {
-      let promise = auth.use('gawbly', useFn)
+      let promise = auth.use(useFn)
 
       await assert.strict.rejects(promise)
 

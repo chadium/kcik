@@ -47,10 +47,7 @@ export class UsernameSetColorFallbackHooker extends Hooker {
           return
         }
 
-        let username = e.findUsernameElement().textContent
-
         await stateApi.setUsernameColor(
-          username,
           color
         )
       }

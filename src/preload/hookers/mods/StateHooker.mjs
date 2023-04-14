@@ -57,13 +57,13 @@ export class StateHooker extends Hooker {
     return {
       name: 'state',
       api: {
-        setUsernameColor: async (username, color) => {
+        setUsernameColor: async (color) => {
           let patientNotification = toaster('Assigning you a color, please wait...', {
             duration: Infinity
           })
 
           try {
-            await this.chatroomAuthentication.use(username, async ({ token }) => {
+            await this.chatroomAuthentication.use(async ({ token }) => {
               await userApi.setColor({
                 token,
                 color

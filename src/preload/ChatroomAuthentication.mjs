@@ -6,21 +6,20 @@ const CHATROOM_SEND = Symbol('CHATROOM_SEND')
 const AUTH_SUCCESS_TIMEOUT = Symbol('AUTH_SUCCESS_TIMEOUT')
 
 class StateNotAuthenticated extends MachineState {
-  start(username) {
+  start() {
     return {
       promise: new Promise((resolve, reject) => {
-        this.machine.next(new StateWaitingForAuthRequest(resolve, reject, username))
+        this.machine.next(new StateWaitingForAuthRequest(resolve, reject))
       })
     }
   }
 }
 
 class StateWaitingForAuthRequest extends MachineState {
-  constructor(resolve, reject, username) {
+  constructor(resolve, reject) {
     super()
     this.resolve = resolve
     this.reject = reject
-    this.username = username
     this.timer = null
   }
 
@@ -33,8 +32,7 @@ class StateWaitingForAuthRequest extends MachineState {
     ;(async () => {
       try {
         await this.machine.chatroomAuthentication[MASTERPORT_SEND]({
-          type: 'authRequest',
-          username: this.username
+          type: 'authRequest'
         })
       } catch (e) {
         this.reject(e)
@@ -156,8 +154,8 @@ export class ChatroomAuthentication {
     this.#sm.chatroomAuthentication = this
   }
 
-  async fetch(username) {
-    let result = await this.#sm.call('start', username)
+  async fetch() {
+    let result = await this.#sm.call('start')
 
     if (result) {
       return result.promise
@@ -166,14 +164,14 @@ export class ChatroomAuthentication {
     }
   }
 
-  async use(username, fn) {
+  async use(fn) {
     let result = {
       token: await this.#sm.call('getToken')
     }
 
     if (result.token === undefined) {
       // Gotta get it.
-      result = await this.fetch(username)
+      result = await this.fetch()
     }
 
     try {
@@ -181,7 +179,7 @@ export class ChatroomAuthentication {
     } catch (e) {
       // Try fetching again.
       await this.abort()
-      result = await this.fetch(username)
+      result = await this.fetch()
 
       // Now try again.
       return await fn(result)
