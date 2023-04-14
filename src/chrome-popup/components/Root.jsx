@@ -6,49 +6,28 @@ import { useResource } from '../use-resource.mjs'
 import "./Root.css"
 import * as userApi from '../../preload/user-api.mjs'
 
-async function fetchData() {
-  return {}
-}
-
 export default function Root() {
-  let { loading, data, error } = useResource(fetchData)
-
   return (
-    <GenericLoading loading={loading} error={error}>
-      {data && (
-        <Page
-          theme={data.match ? 'good' : 'warn'}
-          footer={
-            <div className="text-center">
-              Check <TextLink url="https://the28yearoldboomer.com">the28yearoldboomer.com</TextLink>
-            </div>
-          }
-        >
-          {data.match ? (
-            <div className="text-center">
-              <div className="margin-bottom text-big">
-                👍
-              </div>
-              <div className="margin-bottom bold-and-strong">the28yearoldboomer is live!</div>
-
-              <div className="margin-bottom">
-                Go to the stream<br/>
-                if you'd like to join!
-              </div>
-            </div>
-          ) : (
-            <div className="text-center">
-              <div className="margin-bottom text-big">
-                👎
-              </div>
-              <div className="margin-bottom bold-and-strong">
-                the28yearoldboomer is <br/>
-                not playing kirka.io
-              </div>
-            </div>
-          )}
-        </Page>
-      )}
-    </GenericLoading>
+    <Page
+      footer={
+        <div className="text-center">
+          Check <TextLink url="https://chadium.dev">https://chadium.dev</TextLink>
+        </div>
+      }
+    >
+      <div className="text-center">
+        <div className="margin-bottom bold-and-strong">
+          This is the ALPHA version of Chadium's kcik extension.
+        </div>
+        <div className="margin-bottom bold-and-strong">
+          Its first feature allows you to set your username color.
+          Type <code>!color red</code> in any chatroom to set your
+          color to red, for example.
+        </div>
+        <div className="margin-bottom bold-and-strong">
+          The development of this extension is being exclusively live streamed on kick.com!
+        </div>
+      </div>
+    </Page>
   )
 }
