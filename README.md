@@ -35,6 +35,11 @@ npm run build
 The extension files will be placed in `dist/chrome-user`. You can now load this folder in your browser for development.
 
 
+## Development
+
+To make it easy for you to test your changes, you can run `npm run watch` instead of `npm run build`. It will automatically build the extension for you as soon as you edit a file. It doesn't detect changes in your `.env` file, though, so you will have to restart it manually.
+
+
 ## Contributing
 
 The easiest way to contribute is by starring this project on GitHub!
