@@ -11,7 +11,7 @@ export default function Root() {
     <Page
       footer={
         <div className="text-center">
-          Check <TextLink url="https://chadium.dev">https://chadium.dev</TextLink>
+          Check <TextLink newTab={true} url="https://chadium.dev">https://chadium.dev</TextLink>
         </div>
       }
     >
