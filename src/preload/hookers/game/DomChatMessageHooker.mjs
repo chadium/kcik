@@ -71,7 +71,11 @@ class StateChatting extends MachineState {
                   },
 
                   findMessageElement() {
-                    let messageElement = addedNode.querySelector('.chat-entry-content')
+                    let chatMessageIdentityElement = addedNode.querySelector('.chat-message-identity')
+
+                    let colonElement = chatMessageIdentityElement.nextElementSibling
+
+                    let messageElement = colonElement.nextElementSibling
 
                     return messageElement
                   }
