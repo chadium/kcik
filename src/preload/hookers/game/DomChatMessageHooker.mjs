@@ -5,7 +5,7 @@ import { lookForElement } from '../../dom-utils.mjs'
 import EventEmitter from 'events'
 import { DomRemovalDetectorMutationObserverWithId } from '../../DomRemovalDetectorMutationObserverWithId.mjs'
 
-const MESSAGE_CONTAINER_ID = 'messagesContainer'
+const CHATROOM_TOP_ID = 'chatroom-top'
 const CHECK_INTERVAL = 1000 * 30
 
 class StateWaitForBody extends MachineState {
@@ -35,7 +35,7 @@ class StateUnknown extends MachineState {
     if (document.body === null) {
       this.machine.next(new StateWaitForBody())
     } else {
-      let messagesContainer = document.getElementById(MESSAGE_CONTAINER_ID)
+      let messagesContainer = document.getElementById(CHATROOM_TOP_ID)
 
       if (messagesContainer !== null) {
         log.info("DomChatMessage", "Found chat box.")
@@ -60,31 +60,24 @@ class StateChatting extends MachineState {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              if (addedNode.id.startsWith('message-')) {
+              if (addedNode.dataset.chatEntry) {
                 let e = {
                   rootElement: addedNode,
 
                   findUsernameElement() {
-                    let usernameElement = addedNode.querySelector('span[style^=color]')
+                    let usernameElement = addedNode.querySelector('.chat-entry-username')
 
                     return usernameElement
                   },
 
                   findMessageElement() {
-                    let candidates = addedNode.querySelectorAll('span.break-words')
+                    let messageElement = addedNode.querySelector('.chat-entry-content')
 
-                    for (let candidate of candidates) {
-                      if (candidate.firstChild.classList.contains('align-middle')) {
-                        // Found it.
-                        return candidate.firstChild
-                      }
-                    }
-
-                    return null
+                    return messageElement
                   }
                 }
 
-                if (addedNode.id.startsWith('message-temp_')) {
+                if (addedNode.dataset.chatEntry.startsWith('temp_')) {
                   this.machine.hooker.events.emit('sentChatMessage', e)
                 }
 
@@ -98,11 +91,14 @@ class StateChatting extends MachineState {
   }
 
   async [MachineState.ON_ENTER]() {
-    let messagesContainer = document.getElementById(MESSAGE_CONTAINER_ID)
+    let chatroomTop = document.getElementById(CHATROOM_TOP_ID)
+
+    let wrapper = chatroomTop.nextSibling
+    let messagesContainer = wrapper.children[0]
 
     let detector = new DomRemovalDetectorMutationObserverWithId()
 
-    this.#chatContainerDetector = detector.connect(messagesContainer, () => {
+    this.#chatContainerDetector = detector.connect(chatroomTop, () => {
       log.info("DomChatMessage", "Chat container gone. Must look for it again.")
       this.machine.next(new StateWaitingForChat())
     })
@@ -129,7 +125,7 @@ class StateWaitingForChat extends MachineState {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              if (lookForElement(addedNode, (el) => el.id === MESSAGE_CONTAINER_ID)) {
+              if (lookForElement(addedNode, (el) => el.id === CHATROOM_TOP_ID)) {
                 log.info("DomChatMessage", "Found message container.")
                 this.machine.next(new StateChatting())
                 return
@@ -144,7 +140,7 @@ class StateWaitingForChat extends MachineState {
   }
 
   async [MachineState.ON_ENTER]() {
-    let messagesContainer = document.getElementById(MESSAGE_CONTAINER_ID)
+    let messagesContainer = document.getElementById(CHATROOM_TOP_ID)
 
     if (messagesContainer !== null) {
       // That means it's already attached. Let's gooo.
