@@ -153,38 +153,65 @@ export function onPropertyChange(o, propName, onChange) {
   }
 }
 
-export function pathsToValue(obj, value) {
+export function allKeys() {
+  throw new Error('To be implemented.')
+}
+
+export function allKeyValues(obj) {
+  let result = []
+
+  if (obj instanceof Map) {
+    for (let key of obj.keys()) {
+      let value = obj.get(key)
+
+      result.push([key, value])
+    }
+  } else {
+    for (let key of Object.keys(obj)) {
+      let value = obj[key]
+      result.push([key, value])
+    }
+
+    for (let symbol of Object.getOwnPropertySymbols(obj)) {
+      let value = obj[symbol]
+      result.push([symbol, value])
+    }
+  }
+
+  return result
+}
+
+export function pathsToValue(obj, needle) {
   let seen = new Set()
   let found = []
 
-  function findNested(obj, key, value, previousPath) {
+  function findNested(key, value, previousPath) {
     // Base case
     let currentPath = previousPath.concat()
     currentPath.push(key)
 
-    if (obj[key] === value) {
+    if (value === needle) {
       found.push(currentPath)
-    } else if (obj[key] === null) {
+    } else if (value === null) {
       // Ignore.
-    } else if (typeof obj[key] === 'object') {
-      if (seen.has(obj[key])) {
+    } else if (typeof value === 'object') {
+      if (seen.has(value)) {
         // Skip to prevent stack overflow.
         return
       }
 
-      seen.add(obj[key])
+      seen.add(value)
 
-      let newObj = obj[key]
-      for (let newKey of Object.keys(newObj)) {
-        findNested(newObj, newKey, value, currentPath)
+      for (let [newKey, newValue] of allKeyValues(value)) {
+        findNested(newKey, newValue, currentPath)
       }
     } else {
       // Ignore.
     }
   }
 
-  for (let key of Object.keys(obj)) {
-    findNested(obj, key, value, [])
+  for (let [key, value] of allKeyValues(obj)) {
+    findNested(key, value, [])
   }
 
   return found
