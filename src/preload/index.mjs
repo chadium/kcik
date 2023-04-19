@@ -2,6 +2,7 @@ import { Messenger } from './Messenger.mjs'
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
+import { UserHooker } from './hookers/game/UserHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
 import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
@@ -20,6 +21,7 @@ async function main() {
   let hookers = [
     new VueAppHooker(),
     new StateHooker(),
+    new UserHooker(),
     new CredentialsHooker(),
     new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),

@@ -21,12 +21,23 @@ export class UsernameSetColorFallbackHooker extends Hooker {
     super()
 
     this.onNewMessage = async (e) => {
+      let usernameElement = e.findUsernameElement()
+
+      let username = usernameElement.textContent
+
       let messageElement = e.findMessageElement()
 
       let message = messageElement.textContent
 
       if (message.startsWith('!color') || message.startsWith('!colour')) {
         log.info('UsernameSetColorFallback', 'Got the color command.')
+
+        let userApi = this.pimp.getApi('user')
+
+        if (userApi.getCurrentUsername() !== username) {
+          // Nope.
+          return
+        }
 
         let stateApi = this.pimp.getApi('state')
 
@@ -57,12 +68,12 @@ export class UsernameSetColorFallbackHooker extends Hooker {
   async hook() {
     let domChatMessageApi = this.pimp.getApi('domChatMessage')
 
-    domChatMessageApi.on('sentChatMessage', this.onNewMessage)
+    domChatMessageApi.on('chatMessage', this.onNewMessage)
   }
 
   async unhook() {
     let domChatMessageApi = this.pimp.getApi('domChatMessage')
 
-    domChatMessageApi.off('sentChatMessage', this.onNewMessage)
+    domChatMessageApi.off('chatMessage', this.onNewMessage)
   }
 }

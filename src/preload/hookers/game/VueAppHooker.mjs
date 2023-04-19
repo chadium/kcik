@@ -4,12 +4,14 @@ import { waitForElm } from '../../dom-utils.mjs'
 import { waitForProperty } from '../../object-utils.mjs'
 import { onMutation, onceMutation } from '../../vuex-utils.mjs'
 import * as log from '../../log.mjs'
+import * as objectUtils from '../../object-utils.mjs'
 
 export class VueAppHooker extends Hooker {
   constructor() {
     super()
     this._vueApp = null
     this._events = new EventEmitter()
+    this._state = null
   }
 
   hook() {
@@ -17,7 +19,7 @@ export class VueAppHooker extends Hooker {
 
     domApi.on('bodyAvailable', async () => {
       let app = await waitForElm('app')
-      this._vueApp = await waitForProperty(app, '__vue__')
+      this._vueApp = await waitForProperty(app, '__vue_app__')
       log.info('VueApp', 'Found Vue app instance.')
       this._events.emit('available', this._vueApp)
     })
@@ -34,27 +36,16 @@ export class VueAppHooker extends Hooker {
     return {
       name: 'vueApp',
       api: {
-        storeDispatch: (name, ...args) => {
-          log.info('VueApp', `Dispatch ${name}`)
-          return this._vueApp.$store.dispatch(name, ...args)
-        },
-        storeCommit: (name, ...args) => {
-          log.info('VueApp', `Commit ${name}`)
-          return this._vueApp.$store.commit(name, ...args)
-        },
-        onceMutation: (name, fn) => {
-          log.info('VueApp', `Hook once into mutation ${name}`)
-          return onceMutation(this._vueApp.$store, name, fn)
-        },
-        onMutation: (name, fn) => {
-          log.info('VueApp', `Hook into mutation ${name}`)
-          return onMutation(this._vueApp.$store, name, fn)
-        },
         getVueApp: () => this._vueApp,
+
         getModuleState: (name) => {
-          log.info('VueApp', `Accessing ${name} state`)
-          return this._vueApp.$store.state[name]
+          if (this._state === null) {
+            this._state = this.lookForStateProvider().state
+          }
+
+          return this._state.value[name]
         },
+
         on: this._events.on.bind(this._events),
         off: this._events.off.bind(this._events),
       }
@@ -63,5 +54,14 @@ export class VueAppHooker extends Hooker {
 
   unhook(pimp) {
     this._events.removeAllListeners()
+  }
+
+  lookForStateProvider() {
+    for (let [key, value] of objectUtils.allKeyValues(this._vueApp._context.provides)) {
+      if (value.state) {
+        // Found it!
+        return value
+      }
+    }
   }
 }
