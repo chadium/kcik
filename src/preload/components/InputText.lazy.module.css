@@ -1,6 +1,7 @@
 .container > input {
   font-size: var(--boomer-font-size-normal);
   display: block;
+  box-sizing: border-box;
   width: 100%;
   height: 30px;
   padding: 0 10px;

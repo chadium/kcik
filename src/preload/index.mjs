@@ -9,6 +9,8 @@ import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
 import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbackHooker.mjs'
 import { UsernameSetColorFallbackHooker } from './hookers/mods/UsernameSetColorFallbackHooker.mjs'
 import { StateHooker } from './hookers/mods/StateHooker.mjs'
+import { ChromePopupHooker } from './hookers/mods/ChromePopupHooker.mjs'
+import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
@@ -25,7 +27,9 @@ async function main() {
     new CredentialsHooker(),
     new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),
-    new UsernameSetColorFallbackHooker()
+    new UsernameSetColorFallbackHooker(),
+    new ChromePopupHooker(),
+    new FontSizeHooker(),
   ]
 
   for (let hooker of hookers) {

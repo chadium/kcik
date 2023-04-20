@@ -5,8 +5,23 @@ import TextLink from './TextLink.jsx'
 import { useResource } from '../use-resource.mjs'
 import "./Root.css"
 import * as userApi from '../../preload/user-api.mjs'
+import FormField from '../../preload/components/FormField.jsx'
+import InputNumber from '../../preload/components/InputNumber.jsx'
 
-export default function Root() {
+export default function Root({ com }) {
+  let [fontSize, setFontSize] = useState()
+
+  useEffect(() => {
+    com.on('kcik.fontSize', setFontSize)
+    return () => com.off('kcik.fontSize', setFontSize)
+  }, [com])
+
+  useEffect(() => {
+    com.send('kcik.ask', {
+      fields: ['fontSize']
+    })
+  }, [])
+
   return (
     <Page
       footer={
@@ -15,19 +30,20 @@ export default function Root() {
         </div>
       }
     >
-      <div className="text-center">
-        <div className="margin-bottom bold-and-strong">
-          This is the ALPHA version of Chadium's kcik extension.
-        </div>
-        <div className="margin-bottom bold-and-strong">
-          Its first feature allows you to set your username color.
-          Type <code>!color red</code> in any chatroom to set your
-          color to red, for example.
-        </div>
-        <div className="margin-bottom bold-and-strong">
-          The development of this extension is being exclusively live streamed on kick.com!
-        </div>
-      </div>
+      <GenericLoading loading={fontSize === undefined}>
+        <FormField
+          label="Font size"
+          control={
+            <InputNumber
+              value={fontSize}
+              onChange={(value) => {
+                setFontSize(value)
+                com.send('kcik.fontSize.set', value)
+              }}
+            />
+          }
+        />
+      </GenericLoading>
     </Page>
   )
 }
