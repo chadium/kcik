@@ -52,7 +52,7 @@ export class UsernameSetColorFallbackHooker extends Hooker {
         let color = colorUtils.toRgbHex(sanitizeColorInput(message.substring(firstSpace)))
 
         if (color === null) {
-          let command = splitsplat[0].substring('!')
+          let command = message.substring(1, firstSpace)
           // Show message to user.
           toaster(`Invalid ${command}. Did you spell it correctly?`)
           return
