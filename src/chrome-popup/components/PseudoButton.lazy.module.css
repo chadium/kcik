@@ -1,0 +1,20 @@
+.container {
+  color: currentColor;
+  background: transparent;
+  border: 0px;
+  padding: 0;
+  cursor: pointer;
+
+  position: relative;
+}
+
+.foreground {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+}
+
+.container:active > .foreground {
+  opacity: 0.1;
+}

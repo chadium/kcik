@@ -1,19 +1,21 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useIncrement } from './use-increment.mjs'
 
 export function useResource(fetchResource) {
+  const [id, refreshData] = useIncrement()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    (async () => {
-      setLoading(true)
+    setLoading(true)
 
-      if (fetchResource === undefined || fetchResource === null) {
-        // Always in loading.
-        return
-      }
+    if (fetchResource === undefined || fetchResource === null) {
+      // Always in loading.
+      return
+    }
 
+    async function doTheWork()  {
       try {
         let result = await fetchResource()
 
@@ -37,8 +39,10 @@ export function useResource(fetchResource) {
       } finally {
         setLoading(false)
       }
-    })()
-  }, [fetchResource])
+    }
 
-  return { data, setData, loading, error }
+    doTheWork()
+  }, [id, fetchResource])
+
+  return { data, setData, loading, error, refreshData }
 }

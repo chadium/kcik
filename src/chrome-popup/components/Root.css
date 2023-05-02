@@ -42,25 +42,6 @@ body > div {
   margin-bottom: 10px;
 }
 
-.page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  color: var(--text-color);
-  width: 220px;
-  height: 220px;
-}
-
-.page__content {
-  flex: 1;
-}
-
-.page__footer {
-  flex: 0;
-}
-
 html,
 .bg-info {
   background: linear-gradient(#4f94f1, #222aa0);

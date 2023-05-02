@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+}
+
+.selected {
+  flex: 1;
+  text-align: center;
+  align-self: center;
+  font-weight: bold;
+  font-size: var(--boomer-font-size-big);
+}

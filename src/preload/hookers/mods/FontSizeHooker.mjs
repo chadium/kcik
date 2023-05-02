@@ -2,7 +2,7 @@ import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Style from '../../components/Style.jsx'
+import Style from '../../../chrome-popup/components/Style.jsx'
 
 export class FontSizeHooker extends Hooker {
   constructor() {

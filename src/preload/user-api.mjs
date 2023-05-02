@@ -20,6 +20,14 @@ export async function setColor({ token, color }) {
   })
 }
 
+export async function credits() {
+  let { data } = await apiFetch({
+    url: process.env.BACKEND_API_HTTP_PREFIX + '/v1/wonderful-people'
+  })
+
+  return data
+}
+
 export function masterport({ onMessage }) {
   const socket = new ReconnectingWebSocket(`${process.env.BACKEND_API_WS_PREFIX}/v1/masterport`);
 

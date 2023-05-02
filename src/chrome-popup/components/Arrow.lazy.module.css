@@ -1,0 +1,22 @@
+.container {
+  width: 1em;
+  height: 1em;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+}
+
+.direction--left {
+  transform: rotate(135deg) scale(0.699999999999)
+}
+
+.direction--right {
+  transform: rotate(-45deg) scale(0.699999999999)
+}
+
+.direction--up {
+  transform: rotate(-135deg) scale(0.699999999999)
+}
+
+.direction--down {
+  transform: rotate(45deg) scale(0.699999999999)
+}

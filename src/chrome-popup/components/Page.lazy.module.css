@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  color: var(--text-color);
+  width: 220px;
+  height: 220px;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  padding: var(--boomer-safe-space);
+}
+
+.header {
+  flex: 0;
+}
+
+.footer {
+  flex: 0;
+}
