@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { CSSTransition } from 'react-transition-group'
 import ArrowButton from './ArrowButton.jsx'
 import styles from "./ArrowNavigation.lazy.module.css"
 
@@ -7,6 +8,7 @@ export default function ArrowNavigation({ tabIndex, tabs, onTabIndexChange }) {
     styles.use()
   }, [])
 
+  const [direction, setDirection] = useState('right')
   const activeTab = tabs[tabIndex]
 
   function moveLeft() {
@@ -16,6 +18,7 @@ export default function ArrowNavigation({ tabIndex, tabs, onTabIndexChange }) {
       tabIndex = tabs.length - 1
     }
 
+    setDirection('right')
     onTabIndexChange(tabIndex)
   }
 
@@ -26,13 +29,26 @@ export default function ArrowNavigation({ tabIndex, tabs, onTabIndexChange }) {
       tabIndex = 0
     }
 
+    setDirection('left')
     onTabIndexChange(tabIndex)
   }
 
   return (
     <div className={styles.locals.container}>
       <ArrowButton direction="left" onClick={moveLeft}></ArrowButton>
-      <div className={styles.locals.selected}>{activeTab.name}</div>
+      <div className={styles.locals.selected}>
+      {tabs.map((tab) => (
+        <CSSTransition
+          key={tab.name}
+          in={tab === activeTab}
+          timeout={100}
+          classNames={`slide-${direction}`}
+          unmountOnExit
+        >
+          <div className={styles.locals.selectedText}>{activeTab.name}</div>
+        </CSSTransition>
+      ))}
+      </div>
       <ArrowButton direction="right" onClick={moveRight}></ArrowButton>
     </div>
   )
