@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import MessageDialog from './components/MessageDialog.jsx'
+import MessageDialog from '../chrome-popup/components/MessageDialog.jsx'
 
 export class Messenger {
   constructor(root) {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import Train from "./Train.jsx"
 import InputText from "./InputText.jsx"
 import Button from "./Button.jsx"
 import ModalBox from "./ModalBox.jsx"
@@ -60,9 +59,7 @@ export default function Prompt({ show, title, placeholder, buttons, onEnter, onC
 
       <div className="boomer-p-t"></div>
 
-      <Train>
-        {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
-      </Train>
+      {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
     </ModalBox>
   )
 }

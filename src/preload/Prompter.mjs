@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Prompt from './components/Prompt.jsx'
+import Prompt from '../chrome-popup/components/Prompt.jsx'
 
 export class PrompterCancelError extends Error {
   constructor() {

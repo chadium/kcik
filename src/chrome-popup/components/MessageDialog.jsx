@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import Train from "./Train.jsx"
 import Button from "./Button.jsx"
 import ModalBox from "./ModalBox.jsx"
 
@@ -38,9 +37,9 @@ export default function MessageDialog({ show, title, message, buttons, onAccept,
 
       <div className="boomer-p-t"></div>
 
-      <Train>
+      <div>
         {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
-      </Train>
+      </div>
     </ModalBox>
   )
 }
