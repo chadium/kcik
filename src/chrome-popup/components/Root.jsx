@@ -1,38 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import Page from './Page.jsx'
+import React from 'react'
 import "./Root.css"
-import TabChatFont from './tabs/TabChatFont.jsx'
-import TabCredits from './tabs/TabCredits.jsx'
-import ArrowNavigation from './ArrowNavigation.jsx'
+import Connected from './Connected.jsx'
+import Disconnected from './Disconnected.jsx'
 
-const tabs = [
-  {
-    name: 'Chat Font',
-    content: (params) => <TabChatFont {...params}/>
-  },
-  {
-    name: 'Credits',
-    content: (params) => <TabCredits {...params}/>
+export default function Root({ com, error }) {
+  if (error) {
+    return <Disconnected/>
+  } else {
+    return <Connected com={com}/>
   }
-]
-
-export default function Root({ com }) {
-  let [tabIndex, setTabIndex] = useState(0)
-  let activeTab = useMemo(() => {
-    return tabs[tabIndex]
-  }, [tabIndex])
-
-  return (
-    <Page
-      header={
-        <ArrowNavigation
-          tabIndex={tabIndex}
-          tabs={tabs}
-          onTabIndexChange={(tabIndex) => setTabIndex(tabIndex)}
-        />
-      }
-    >
-      {activeTab.content({ com })}
-    </Page>
-  )
 }

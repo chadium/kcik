@@ -24,6 +24,10 @@ export class Com {
       data
     }
 
-    this.port.postMessage(message)
+    try {
+      this.port.postMessage(message)
+    } catch (e) {
+      this.events.emit('error', e)
+    }
   }
 }
