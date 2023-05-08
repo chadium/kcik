@@ -54,7 +54,7 @@ class StateChattingUnknown extends MachineState {
 
     if (chatMessages.length > 0) {
       log.info("DomChatMessage", "Found messages.")
-      this.machine.next(new StateChattingActive(chatMessages[0]))
+      this.machine.next(new StateChattingActive([...chatMessages]))
     } else {
       log.info("DomChatMessage", "No messages found. Will wait for one.")
       this.machine.next(new StateChattingWaitingForChatroomEntry())
@@ -81,13 +81,13 @@ function isRealMessage(addedNode) {
 }
 
 class StateChattingActive extends MachineState {
-  #sampleMessageEntry = null
+  #existingMessages = null
   #chatMessageObserver = null
 
-  constructor(sampleMessageEntry) {
+  constructor(existingMessages) {
     super()
 
-    this.#sampleMessageEntry = sampleMessageEntry
+    this.#existingMessages = existingMessages
 
     this.#chatMessageObserver = new MutationObserver((mutationsList, observer) => {
       for (const mutation of mutationsList) {
@@ -95,31 +95,7 @@ class StateChattingActive extends MachineState {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
               if (isRealMessage(addedNode)) {
-                let e = {
-                  rootElement: addedNode,
-
-                  findUsernameElement() {
-                    let usernameElement = addedNode.querySelector('.chat-entry-username')
-
-                    return usernameElement
-                  },
-
-                  findMessageElement() {
-                    let chatMessageIdentityElement = addedNode.querySelector('.chat-message-identity')
-
-                    let colonElement = chatMessageIdentityElement.nextElementSibling
-
-                    let messageElement = colonElement.nextElementSibling
-
-                    return messageElement
-                  }
-                }
-
-                if (addedNode.dataset.chatEntry.startsWith('temp_')) {
-                  this.machine.hooker.events.emit('sentChatMessage', e)
-                }
-
-                this.machine.hooker.events.emit('chatMessage', e)
+                this.emit(addedNode)
               }
             }
           }
@@ -129,15 +105,43 @@ class StateChattingActive extends MachineState {
   }
 
   async [MachineState.ON_ENTER]() {
-    let messagesContainer = this.#sampleMessageEntry.parentElement.parentElement
+    let messagesContainer = this.#existingMessages[0].parentElement
 
     this.#chatMessageObserver.observe(messagesContainer, {
       childList: true
     })
+
+    for (let chatEntryContainer of this.#existingMessages) {
+      this.emit(chatEntryContainer)
+    }
   }
 
   async [MachineState.ON_LEAVE]() {
     this.#chatMessageObserver.disconnect()
+  }
+
+  emit(chatEntryContainer) {
+    let e = {
+      rootElement: chatEntryContainer,
+
+      findUsernameElement() {
+        let usernameElement = chatEntryContainer.querySelector('.chat-entry-username')
+
+        return usernameElement
+      },
+
+      findMessageElement() {
+        let chatMessageIdentityElement = chatEntryContainer.querySelector('.chat-message-identity')
+
+        let colonElement = chatMessageIdentityElement.nextElementSibling
+
+        let messageElement = colonElement.nextElementSibling
+
+        return messageElement
+      }
+    }
+
+    this.machine.hooker.events.emit('chatMessage', e)
   }
 }
 
@@ -148,19 +152,24 @@ class StateChattingWaitingForChatroomEntry extends MachineState {
     super()
 
     this.#mutationObserver = new MutationObserver((mutationsList, observer) => {
+      let chatEntries = []
+
       for (const mutation of mutationsList) {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              let chatEntry = lookForElement(addedNode, (el) => el.classList.contains('chat-entry'))
-              if (chatEntry) {
-                log.info("DomChatMessage", "Found a message.")
-                this.machine.next(new StateChattingActive(chatEntry))
-                return
+              if (isRealMessage(addedNode)) {
+                chatEntries.push(addedNode)
               }
             }
           }
         }
+      }
+
+      if (chatEntries.length > 0) {
+        log.info("DomChatMessage", `Found ${chatEntries.length} messages.`)
+        this.machine.next(new StateChattingActive(chatEntries))
+        return
       }
     })
   }
