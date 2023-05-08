@@ -42,25 +42,59 @@ class StateUnknown extends MachineState {
         this.machine.next(new StateChatting())
       } else {
         log.info("DomChatMessage", "Couldn't find chat box. Will wait for it.")
-        this.machine.next(new StateWaitingForChat())
+        this.machine.next(new StateWaitingForChatroomTop())
       }
     }
   }
 }
 
-class StateChatting extends MachineState {
-  #chatMessageObserver = null
-  #chatContainerDetector = null
+class StateChattingUnknown extends MachineState {
+  async [MachineState.ON_ENTER]() {
+    let chatMessages = document.getElementsByClassName('chat-entry')
 
-  constructor() {
+    if (chatMessages.length > 0) {
+      log.info("DomChatMessage", "Found messages.")
+      this.machine.next(new StateChattingActive(chatMessages[0]))
+    } else {
+      log.info("DomChatMessage", "No messages found. Will wait for one.")
+      this.machine.next(new StateChattingWaitingForChatroomEntry())
+    }
+  }
+}
+
+function isRealMessage(addedNode) {
+  if (!addedNode.dataset.chatEntry) {
+    // No good.
+    return false
+  }
+
+  if (addedNode.children.length === 0) {
+    // Definitely not what we're looking for.
+    return false
+  }
+
+  if (!addedNode.children[0].classList.contains('chat-entry')) {
+    return false
+  }
+
+  return true
+}
+
+class StateChattingActive extends MachineState {
+  #sampleMessageEntry = null
+  #chatMessageObserver = null
+
+  constructor(sampleMessageEntry) {
     super()
+
+    this.#sampleMessageEntry = sampleMessageEntry
 
     this.#chatMessageObserver = new MutationObserver((mutationsList, observer) => {
       for (const mutation of mutationsList) {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              if (addedNode.dataset.chatEntry) {
+              if (isRealMessage(addedNode)) {
                 let e = {
                   rootElement: addedNode,
 
@@ -95,17 +129,7 @@ class StateChatting extends MachineState {
   }
 
   async [MachineState.ON_ENTER]() {
-    let chatroomTop = document.getElementById(CHATROOM_TOP_ID)
-
-    let wrapper = chatroomTop.nextSibling
-    let messagesContainer = wrapper.children[0]
-
-    let detector = new DomRemovalDetectorMutationObserverWithId()
-
-    this.#chatContainerDetector = detector.connect(chatroomTop, () => {
-      log.info("DomChatMessage", "Chat container gone. Must look for it again.")
-      this.machine.next(new StateWaitingForChat())
-    })
+    let messagesContainer = this.#sampleMessageEntry.parentElement.parentElement
 
     this.#chatMessageObserver.observe(messagesContainer, {
       childList: true
@@ -113,12 +137,74 @@ class StateChatting extends MachineState {
   }
 
   async [MachineState.ON_LEAVE]() {
-    this.#chatContainerDetector.disconnect()
     this.#chatMessageObserver.disconnect()
   }
 }
 
-class StateWaitingForChat extends MachineState {
+class StateChattingWaitingForChatroomEntry extends MachineState {
+  #mutationObserver = null
+
+  constructor() {
+    super()
+
+    this.#mutationObserver = new MutationObserver((mutationsList, observer) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          for (const addedNode of mutation.addedNodes) {
+            if (addedNode.nodeType === Node.ELEMENT_NODE) {
+              let chatEntry = lookForElement(addedNode, (el) => el.classList.contains('chat-entry'))
+              if (chatEntry) {
+                log.info("DomChatMessage", "Found a message.")
+                this.machine.next(new StateChattingActive(chatEntry))
+                return
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+
+  async [MachineState.ON_ENTER]() {
+    let chatroom = document.getElementById('chatroom')
+
+    this.#mutationObserver.observe(chatroom, {
+      childList: true,
+      subtree: true
+    })
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    this.#mutationObserver.disconnect()
+  }
+}
+
+class StateChatting extends MachineState {
+  #chatContainerDetector = null
+  #sm = null
+
+  async [MachineState.ON_ENTER]() {
+    this.#sm = new Machine()
+    this.#sm.hooker = this.machine.hooker
+    await this.#sm.start(new StateChattingUnknown())
+
+    let detector = new DomRemovalDetectorMutationObserverWithId()
+
+    let chatroomTop = document.getElementById(CHATROOM_TOP_ID)
+
+    this.#chatContainerDetector = detector.connect(chatroomTop, () => {
+      log.info("DomChatMessage", "Chat container gone. Must look for it again.")
+      this.machine.next(new StateWaitingForChatroomTop())
+    })
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    this.#chatContainerDetector.disconnect()
+    await this.#sm.stop()
+  }
+}
+
+class StateWaitingForChatroomTop extends MachineState {
   #mutationObserver = null
 
   constructor() {
