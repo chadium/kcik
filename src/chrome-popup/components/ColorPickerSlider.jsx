@@ -1,37 +1,21 @@
-import React from 'react';
-import { Hue, Saturation } from 'react-color/lib/components/common'
-import { CustomPicker } from 'react-color';
-
-const MyCustomPicker = CustomPicker(class extends React.Component {
-  render() {
-    return (
-      <div>
-        <div style={{ position: 'relative', height: '1em' }}>
-          <Hue
-            {...this.props}
-          />
-        </div>
-        <div style={{ position: 'relative', height: '5em' }}>
-          <Saturation
-            {...this.props}
-          />
-        </div>
-      </div>
-    )
-  }
-})
+import React, { useEffect } from 'react';
+import { HexColorPicker } from "react-colorful";
+import { useChangeRetarder } from '../use-change-retarder.mjs';
+import styles from './ColorPickerSlider.lazy.css'
 
 export default function ColorPickerSlider({ value, onChange }) {
-  function handleChangeComplete(e) {
-    if (onChange) {
-      onChange(e.hex)
-    }
-  }
+  useEffect(() => {
+    styles.use()
+  }, [])
+
+  let { currentValue, onCurrentChange } = useChangeRetarder(value, onChange)
 
   return (
-    <MyCustomPicker
-      color={value}
-      onChangeComplete={handleChangeComplete}
-    />
+    <div className="color-picker-slider">
+      <HexColorPicker
+        color={currentValue}
+        onChange={onCurrentChange}
+      />
+    </div>
   )
 }
