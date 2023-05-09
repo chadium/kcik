@@ -1,10 +1,15 @@
 import React, { useState, useMemo } from 'react'
 import Page from './Page.jsx'
+import TabChatUsername from './tabs/TabChatUsername.jsx'
 import TabChatFont from './tabs/TabChatFont.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 
 const tabs = [
+  {
+    name: 'Username',
+    content: (params) => <TabChatUsername {...params}/>
+  },
   {
     name: 'Chat Font',
     content: (params) => <TabChatFont {...params}/>

@@ -58,12 +58,25 @@ export class ChromePopupHooker extends Hooker {
           this.send('kcik.fontSize', fontSizeApi.getSize())
           break
         }
+
+        case 'usernameColor': {
+          let userApi = this.pimp.getApi('user')
+          let color = this.pimp.getApi('state').getUsernameColor(userApi.getCurrentUsername())
+
+          this.send('kcik.usernameColor', color)
+          break
+        }
         }
       }
       break
 
     case 'kcik.fontSize.set':
       fontSizeApi.setSize(data)
+      break
+
+    case 'kcik.usernameColor.set':
+      console.log(data)
+      this.pimp.getApi('state').setUsernameColor(data)
       break
     }
   }
