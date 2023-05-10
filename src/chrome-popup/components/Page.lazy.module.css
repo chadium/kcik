@@ -10,7 +10,7 @@
 
 .content {
   flex: 1;
-  overflow: auto;
+  overflow-x: hidden;
   padding: var(--boomer-safe-space);
 }
 
