@@ -15,7 +15,7 @@ export class ChromeExtensionHooker extends Hooker {
           const newValue = mutation.target.getAttribute('data-message');
           const message = JSON.parse(newValue)
           log.info('Got message from content script', message.type)
-          this.events.emit('message', message)
+          this.handleReceived(message.type, message.data)
         }
       });
     })
@@ -68,9 +68,11 @@ export class ChromeExtensionHooker extends Hooker {
       }
       break
 
-    case 'kcik.fontSize':
+    case 'kcik.fontSize': {
+      let fontSizeApi = this.pimp.getApi('fontSize')
       fontSizeApi.setSize(data)
       break
+    }
 
     case 'kcik.usernameColor.set':
       console.log(data)
