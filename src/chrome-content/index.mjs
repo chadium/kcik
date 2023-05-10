@@ -17,8 +17,26 @@ function inject() {
   }
 }
 
+async function migrate(storageArea) {
+  console.log('KCIK Storage migration start')
+  let currentVersion = (await storageArea.get(['version'])).version
+
+  if (currentVersion === undefined) {
+    console.log('KCIK Storage applying version 1')
+
+    await storageArea.set({
+      version: 1
+    })
+
+    currentVersion = 1
+  }
+
+  console.log('KCIK Storage migration end.')
+}
+
 async function main() {
   let injection = inject()
+  await migrate(chrome.storage.sync)
   let repository = new Repository(chrome.storage.sync)
 
   let popupCom = new PopupCom()
