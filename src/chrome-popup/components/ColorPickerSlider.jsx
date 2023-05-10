@@ -8,6 +8,10 @@ export default function ColorPickerSlider({ value, onChange }) {
     styles.use()
   }, [])
 
+  if (value === null) {
+    value = '#000000'
+  }
+
   let { currentValue, onCurrentChange } = useChangeRetarder(value, onChange)
 
   return (
