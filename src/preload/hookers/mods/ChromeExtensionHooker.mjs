@@ -1,9 +1,12 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
+import EventEmitter from 'events'
 
-export class ChromePopupHooker extends Hooker {
+export class ChromeExtensionHooker extends Hooker {
   constructor() {
     super()
+
+    this.events = new EventEmitter()
 
     this.port = null
     this.scriptMutationObserver = new MutationObserver((mutations) => {
@@ -12,7 +15,7 @@ export class ChromePopupHooker extends Hooker {
           const newValue = mutation.target.getAttribute('data-message');
           const message = JSON.parse(newValue)
           log.info('Got message from content script', message.type)
-          this.handleReceived(message.type, message.data)
+          this.events.emit('message', message)
         }
       });
     })
@@ -26,11 +29,13 @@ export class ChromePopupHooker extends Hooker {
     this.send('kcik.ready', {})
 
     return {
-      name: 'chromePopup',
+      name: 'chromeExtension',
       api: {
-        send(type, data) {
+        send: (type, data) => {
           this.send(type, data)
-        }
+        },
+        on: (type, cb) => this.events.on(type, cb),
+        off: (type, cb) => this.events.off(type, cb),
       }
     }
   }
@@ -48,17 +53,10 @@ export class ChromePopupHooker extends Hooker {
   }
 
   handleReceived(type, data) {
-    let fontSizeApi = this.pimp.getApi('fontSize')
-
     switch (type) {
     case 'kcik.ask':
       for (const field of data.fields) {
         switch (field) {
-        case 'fontSize': {
-          this.send('kcik.fontSize', fontSizeApi.getSize())
-          break
-        }
-
         case 'usernameColor': {
           let userApi = this.pimp.getApi('user')
           let color = this.pimp.getApi('state').getUsernameColor(userApi.getCurrentUsername())
@@ -70,7 +68,7 @@ export class ChromePopupHooker extends Hooker {
       }
       break
 
-    case 'kcik.fontSize.set':
+    case 'kcik.fontSize':
       fontSizeApi.setSize(data)
       break
 

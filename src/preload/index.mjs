@@ -8,7 +8,7 @@ import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
 import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbackHooker.mjs'
 import { StateHooker } from './hookers/mods/StateHooker.mjs'
-import { ChromePopupHooker } from './hookers/mods/ChromePopupHooker.mjs'
+import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
 import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
 import * as log from './log.mjs'
@@ -26,7 +26,7 @@ async function main() {
     new CredentialsHooker(),
     new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),
-    new ChromePopupHooker(),
+    new ChromeExtensionHooker(),
     new FontSizeHooker(),
   ]
 

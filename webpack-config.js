@@ -278,6 +278,9 @@ exports.generateChromeContentConfig = ({
         run_at: 'document_idle'
       }
     ],
+    permissions: [
+      "storage"
+    ],
     web_accessible_resources: [
       {
         resources: ["preload/index.js", "icon128.png"],

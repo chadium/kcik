@@ -1,35 +1,53 @@
-const src = chrome.runtime.getURL('preload/index.js')
-const s = document.createElement('script')
-s.setAttribute('src', src)
-s.id = 'kcik'
-s.dataset.message = ''
-document.head.appendChild(s)
+import { Repository } from "../chrome-popup/repository.mjs"
+import { PopupCom } from "./PopupCom.mjs"
+import { WebsiteCom } from "./WebsiteCom.mjs"
 
-let port
+function inject() {
+  const src = chrome.runtime.getURL('preload/index.js')
+  const s = document.createElement('script')
+  s.setAttribute('src', src)
+  s.id = 'kcik'
+  s.dataset.message = ''
+  document.head.appendChild(s)
 
-chrome.runtime.onConnect.addListener((p) => {
-  port = p
-
-  port.onMessage.addListener((message) => {
-    console.log('Forwarding data to website', message)
-    s.dataset.message = JSON.stringify(message)
-    window.postMessage(JSON.stringify(message))
-  })
-
-  port.onDisconnect.addListener(() => {
-    port = undefined
-  })
-});
-
-addEventListener('message', (e) => {
-  console.log('Content Script received message from window', e.data)
-
-  if (e.origin === 'https://kick.com') {
-    if (e.data.type !== undefined) {
-      if (port) {
-        console.log('Forwarding data to popup', e.data)
-        port.postMessage(e.data)
-      }
+  return {
+    sendMessage(message) {
+      s.dataset.message = JSON.stringify(message)
     }
   }
-})
+}
+
+async function main() {
+  let injection = inject()
+  let repository = new Repository(chrome.storage.sync)
+
+  let popupCom = new PopupCom()
+  let websiteCom = new WebsiteCom(injection)
+
+  websiteCom.on('message', async ({ type, data }) => {
+    switch (type) {
+    case 'kcik.ask':
+      for (const field of data.fields) {
+        switch (field) {
+        case 'fontSize': {
+          websiteCom.send('kcik.fontSize', await repository.getFontSize())
+          break
+        }
+        }
+      }
+      break
+    }
+  })
+
+  // Forwarding messages.
+  popupCom.on('message', (message) => {
+    console.log('Forwarding data to website', message)
+    websiteCom.send(message.type, message.data)
+  })
+  websiteCom.on('message', (message) => {
+    console.log('Forwarding data to popup', message)
+    popupCom.send(message.type, message.data)
+  })
+}
+
+main().catch(console.error)

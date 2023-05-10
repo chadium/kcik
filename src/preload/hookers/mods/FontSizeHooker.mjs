@@ -10,37 +10,46 @@ export class FontSizeHooker extends Hooker {
     this._root = null
     this._reactRoot = null
     this._size = 14
+
+    this._fontSizeHandler = (message) => {
+      if (message.type === 'kcik.fontSize') {
+        this.#setSize(message.data)
+      }
+    }
   }
 
   async hook() {
     const domApi = this.pimp.getApi('dom')
+    const chromeExtensionApi = this.pimp.getApi('chromeExtension')
+
+    chromeExtensionApi.on('message', this._fontSizeHandler)
+
+    chromeExtensionApi.send('kcik.ask', {
+      fields: ['fontSize']
+    })
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)
 
-    this._reactRoot.render(React.createElement(Style, this._makeProps(), null))
+    this._reactRoot.render(React.createElement(Style, this.#makeProps(), null))
 
     return {
       name: 'fontSize',
       api: {
         getSize: () => {
           return this._size
-        },
-
-        setSize: (size) => {
-          this._size = size
-          this._reactRoot.render(React.createElement(Style, this._makeProps(), null))
         }
       }
     }
   }
 
   unhook() {
+    chromeExtensionApi.off('message', this._fontSizeHandler)
     this._reactRoot.unmount()
     this._root.remove()
   }
 
-  _makeProps() {
+  #makeProps() {
     return {
       css: `
 .chat-entry {
@@ -49,5 +58,10 @@ export class FontSizeHooker extends Hooker {
 }
 `
     }
+  }
+
+  #setSize(size) {
+    this._size = size
+    this._reactRoot.render(React.createElement(Style, this.#makeProps(), null))
   }
 }

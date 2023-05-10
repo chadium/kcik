@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 
-export class Com {
+export class ContentCom {
   constructor(port) {
     this.port = port
     this.events = new EventEmitter()

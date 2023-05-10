@@ -20,7 +20,7 @@ const tabs = [
   }
 ]
 
-export default function Connected({ com }) {
+export default function Connected({ com, repo }) {
   let [tabIndex, setTabIndex] = useState(0)
   let activeTab = useMemo(() => {
     return tabs[tabIndex]
@@ -36,7 +36,7 @@ export default function Connected({ com }) {
         />
       }
     >
-      {activeTab.content({ com })}
+      {activeTab.content({ com, repo })}
     </Page>
   )
 }

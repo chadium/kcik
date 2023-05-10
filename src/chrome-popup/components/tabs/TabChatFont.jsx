@@ -1,36 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import GenericLoading from '../GenericLoading.jsx'
 import FormField from '../FormField.jsx'
 import InputNumber from '../InputNumber.jsx'
+import { useResource } from '../../use-resource.mjs'
 
-export default function TabChatFont({ com }) {
-  let [fontSize, setFontSize] = useState()
+export default function TabChatFont({ com, repo }) {
+  let fetchResource = useCallback(() => repo.getFontSize(), [repo])
+  let { data, setData, loading, error } = useResource(fetchResource)
+
+  // useEffect(() => {
+  //   com.on('kcik.fontSize', setFontSize)
+  //   return () => com.off('kcik.fontSize', setFontSize)
+  // }, [com])
 
   useEffect(() => {
-    com.on('kcik.fontSize', setFontSize)
-    return () => com.off('kcik.fontSize', setFontSize)
-  }, [com])
-
-  useEffect(() => {
-    com.send('kcik.ask', {
-      fields: ['fontSize']
-    })
+    // com.send('kcik.ask', {
+    //   fields: ['fontSize']
+    // })
   }, [])
 
   return (
-    <GenericLoading loading={fontSize === undefined}>
-      <FormField
+    <GenericLoading loading={loading} error={error}>
+      {data !== null && <FormField
         label="Font size"
         control={
           <InputNumber
-            value={fontSize}
-            onChange={(value) => {
-              setFontSize(value)
-              com.send('kcik.fontSize.set', value)
+            value={data}
+            onChange={async (value) => {
+              await repo.setFontSize(value)
+              com.send('kcik.fontSize', value)
+              setData(value)
             }}
           />
         }
-      />
+      />}
     </GenericLoading>
   )
 }
