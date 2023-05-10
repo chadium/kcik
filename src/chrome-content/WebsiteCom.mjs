@@ -6,8 +6,6 @@ export class WebsiteCom {
     this.events = new EventEmitter()
 
     window.addEventListener('message', (e) => {
-      console.log('Content Script received message from window', e.data)
-  
       if (e.origin === 'https://kick.com') {
         if (e.data.type !== undefined) {
           this.events.emit('message', e.data)

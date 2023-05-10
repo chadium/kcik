@@ -59,13 +59,15 @@ async function main() {
 
   // Forwarding messages.
   popupCom.on('message', (message) => {
-    console.log('Forwarding data to website', message)
+    console.log('KCIK Forwarding data to website', message)
     websiteCom.send(message.type, message.data)
   })
   websiteCom.on('message', (message) => {
-    console.log('Forwarding data to popup', message)
+    console.log('KCIK Forwarding data to popup', message)
     popupCom.send(message.type, message.data)
   })
 }
 
-main().catch(console.error)
+main().catch((e) => {
+  console.error('KCIK', e)
+})
