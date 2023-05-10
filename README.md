@@ -3,7 +3,7 @@
 This is a browser extension for the streaming platform [kick.com](https://kick.com).
 
 Features:
-- set username color. For example, type `!color hot pink` in any chatroom.
+- set username color.
 - set chat font size.
 
 The development of this extension is being exclusively live streamed on kick.com! All of you who support me will be credited in the extension! Thank you!
