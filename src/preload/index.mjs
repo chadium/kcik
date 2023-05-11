@@ -1,6 +1,7 @@
 import { Messenger } from './Messenger.mjs'
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
+import { EchoHooker } from './hookers/game/EchoHooker.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { UserHooker } from './hookers/game/UserHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
@@ -10,6 +11,7 @@ import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbac
 import { StateHooker } from './hookers/mods/StateHooker.mjs'
 import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
 import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
+import { HostStopperHooker } from './hookers/mods/HostStopperHooker.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
@@ -21,6 +23,8 @@ async function main() {
 
   let hookers = [
     new VueAppHooker(),
+    new EchoHooker(),
+    new HostStopperHooker(),
     new StateHooker(),
     new UserHooker(),
     new CredentialsHooker(),
