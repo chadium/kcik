@@ -82,6 +82,17 @@ export class EchoHooker extends Hooker {
 
           return channel.callbacks.get(type) ?? null
         },
+        addChannelEventHandler: (channel, type, eventHandler) => {
+          if (typeof channel === 'string') {
+            channel = Echo.connector.pusher.channels.find(channel)
+
+            if (channel === undefined) {
+              throw new Error('Could not find channel')
+            }
+          }
+
+          channel.callbacks.add(type, eventHandler.fn, eventHandler.context)
+        },
         removeChannelEventHandler: (channel, type, eventHandler) => {
           if (typeof channel === 'string') {
             channel = Echo.connector.pusher.channels.find(channel)

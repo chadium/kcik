@@ -10,6 +10,7 @@
 .container > input {
   width: 0;
   height: 0;
+  margin: 0;
   overflow: hidden;
   visibility: hidden;
 }
@@ -25,6 +26,7 @@
   text-align: center;
   line-height: var(--boomer-control-height);
   font-size: var(--boomer-control-height);
+  box-sizing: border-box;
 }
 
 .checked {

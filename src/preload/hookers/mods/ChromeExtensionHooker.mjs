@@ -74,6 +74,12 @@ export class ChromeExtensionHooker extends Hooker {
       break
     }
 
+    case 'kcik.enableHost': {
+      let hostStopperApi = this.pimp.getApi('hostStopper')
+      hostStopperApi.enableHost(data)
+      break
+    }
+
     case 'kcik.usernameColor.set':
       console.log(data)
       this.pimp.getApi('state').setUsernameColor(data)

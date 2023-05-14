@@ -51,6 +51,10 @@ async function main() {
           websiteCom.send('kcik.fontSize', await repository.getFontSize())
           break
         }
+        case 'enableHost': {
+          websiteCom.send('kcik.enableHost', await repository.getEnableHost())
+          break
+        }
         }
       }
       break

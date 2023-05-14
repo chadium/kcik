@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import Page from './Page.jsx'
 import TabChatUsername from './tabs/TabChatUsername.jsx'
 import TabChatFont from './tabs/TabChatFont.jsx'
+import TabHost from './tabs/TabHost.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 
@@ -13,6 +14,10 @@ const tabs = [
   {
     name: 'Chat Font',
     content: (params) => <TabChatFont {...params}/>
+  },
+  {
+    name: 'Host',
+    content: (params) => <TabHost {...params}/>
   },
   {
     name: 'Credits',

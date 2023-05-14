@@ -24,7 +24,6 @@ async function main() {
   let hookers = [
     new VueAppHooker(),
     new EchoHooker(),
-    new HostStopperHooker(),
     new StateHooker(),
     new UserHooker(),
     new CredentialsHooker(),
@@ -32,6 +31,7 @@ async function main() {
     new UsernameColorFallbackHooker(),
     new ChromeExtensionHooker(),
     new FontSizeHooker(),
+    new HostStopperHooker(),
   ]
 
   for (let hooker of hookers) {
