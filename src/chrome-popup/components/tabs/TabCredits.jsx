@@ -20,11 +20,25 @@ export default function TabCredits({ com }) {
       <GenericLoading loading={loading} error={error}>
         {data && (
           <div>
-            {data.kickSubscribers.map(username => (
-              <div key={username}>
-                {username}
-              </div>
-            ))}
+            <div>Kick Subscribers:</div>
+            <div>
+              {data.kickSubscribers.map(username => (
+                <div key={username}>
+                  <strong><based><legend>{username}</legend></based></strong>
+                </div>
+              ))}
+            </div>
+
+            <div className="boomer-p-t"/>
+
+            <div>Ko-Fi Supporters:</div>
+            <div>
+              {data.kofiSupporters.map(name => (
+                <div key={name}>
+                  <strong><based><legend>{name}</legend></based></strong>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </GenericLoading>
