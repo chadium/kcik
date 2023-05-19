@@ -5,6 +5,7 @@ import { EchoHooker } from './hookers/game/EchoHooker.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { UserHooker } from './hookers/game/UserHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
+import { VueRouteHooker } from './hookers/game/VueRouteHooker.mjs'
 import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
 import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbackHooker.mjs'
@@ -12,6 +13,7 @@ import { StateHooker } from './hookers/mods/StateHooker.mjs'
 import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
 import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
 import { HostStopperHooker } from './hookers/mods/HostStopperHooker.mjs'
+import { VodHooker } from './hookers/mods/VodHooker.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
@@ -29,9 +31,11 @@ async function main() {
     new CredentialsHooker(),
     new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),
+    new VueRouteHooker(),
     new ChromeExtensionHooker(),
     new FontSizeHooker(),
     new HostStopperHooker(),
+    new VodHooker(),
   ]
 
   for (let hooker of hookers) {
