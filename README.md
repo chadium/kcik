@@ -3,8 +3,10 @@
 This is a browser extension for the streaming platform [kick.com](https://kick.com).
 
 Features:
-- set username color.
+- prevent hosts.
+- arrow key navigation in vod pages.
 - set chat font size.
+- set username color beyond fixed palette.
 
 The development of this extension is being exclusively live streamed on kick.com! All of you who support me will be credited in the extension! Thank you!
 
