@@ -13,16 +13,13 @@ p {
   margin: 0;
 }
 
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
 body > div {
   height: 100%;
-}
-
-.text-big {
-  font-size: 60px;
-}
-
-.bold-and-strong {
-  font-weight: bold;
 }
 
 .text-center {
@@ -32,14 +29,6 @@ body > div {
 .text-link {
   color: var(--text-color);
   text-decoration: none;
-}
-
-.padding {
-  padding: 10px;
-}
-
-.margin-bottom {
-  margin-bottom: 10px;
 }
 
 html,

@@ -55,6 +55,10 @@ async function main() {
           websiteCom.send('kcik.enableHost', await repository.getEnableHost())
           break
         }
+        case 'enableVodKeyboardNavigation': {
+          websiteCom.send('kcik.enableVodKeyboardNavigation', await repository.getEnableVodKeyboardNavigation())
+          break
+        }
         }
       }
       break

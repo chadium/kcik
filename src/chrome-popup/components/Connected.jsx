@@ -3,6 +3,7 @@ import Page from './Page.jsx'
 import TabChatUsername from './tabs/TabChatUsername.jsx'
 import TabChatFont from './tabs/TabChatFont.jsx'
 import TabHost from './tabs/TabHost.jsx'
+import TabKeyboardNavigation from './tabs/TabKeyboardNavigation.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 
@@ -18,6 +19,10 @@ const tabs = [
   {
     name: 'Host',
     content: (params) => <TabHost {...params}/>
+  },
+  {
+    name: 'Keyboard Navigation',
+    content: (params) => <TabKeyboardNavigation {...params}/>
   },
   {
     name: 'Credits',

@@ -1,5 +1,6 @@
 const DEFAULT_FONT_SIZE = 14;
 const DEFAULT_ENABLE_HOST = true;
+const DEFAULT_VOD_KEYBOARD_NAVIGATION = true;
 
 export class Repository {
   #storageArea = null
@@ -44,6 +45,26 @@ export class Repository {
     } else {
       await this.#storageArea.set({
         enableHost: value
+      })
+    }
+  }
+
+  async getEnableVodKeyboardNavigation() {
+    let result = await this.#storageArea.get(['enableVodKeyboardNavigation'])
+
+    if (result.enableVodKeyboardNavigation === undefined) {
+      return DEFAULT_VOD_KEYBOARD_NAVIGATION
+    }
+
+    return result.enableVodKeyboardNavigation
+  }
+
+  async setEnableVodKeyboardNavigation(value) {
+    if (value === DEFAULT_VOD_KEYBOARD_NAVIGATION) {
+      await this.#storageArea.remove(['enableVodKeyboardNavigation'])
+    } else {
+      await this.#storageArea.set({
+        enableVodKeyboardNavigation: value
       })
     }
   }

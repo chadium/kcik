@@ -4,6 +4,29 @@ import { lookForElement } from '../../dom-utils.mjs'
 
 import { Machine, MachineState } from '../../state-machine.mjs'
 
+class DisabledState extends MachineState {}
+
+class EnabledState extends MachineState {
+  constructor() {
+    super()
+    this.sm = null
+  }
+
+  async [MachineState.ON_ENTER]() {
+    log.info('Vod', 'Enable vod keyboard navigation.')
+
+    this.sm = new Machine()
+    this.sm.pimp = this.machine.pimp
+    await this.sm.start(new UnknownState())
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    log.info('Vod', 'Disable vod keyboard navigation.')
+
+    await this.sm.stop()
+  }
+}
+
 class UnknownState extends MachineState {
   async [MachineState.ON_ENTER]() {
     let vueRouteApi = this.machine.pimp.getApi('vueRoute')
@@ -193,7 +216,26 @@ export class VodHooker extends Hooker {
   async hook() {
     this.#sm = new Machine()
     this.#sm.pimp = this.pimp
-    await this.#sm.start(new UnknownState())
+    await this.#sm.start(new DisabledState())
+
+    const chromeExtensionApi = this.pimp.getApi('chromeExtension')
+
+    chromeExtensionApi.send('kcik.ask', {
+      fields: ['enableVodKeyboardNavigation']
+    })
+
+    return {
+      name: 'vod',
+      api: {
+        enableVodKeyboardNavigation: (state) => {
+          if (state) {
+            this.#sm.next(new EnabledState())
+          } else {
+            this.#sm.next(new DisabledState())
+          }
+        }
+      }
+    }
   }
 
   async unhook() {

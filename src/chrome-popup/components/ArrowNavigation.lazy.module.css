@@ -6,7 +6,7 @@
   flex: 1;
   align-self: stretch;
   font-weight: bold;
-  font-size: var(--boomer-font-size-big);
+  font-size: var(--boomer-font-size-small);
   position: relative;
 }
 

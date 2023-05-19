@@ -80,6 +80,12 @@ export class ChromeExtensionHooker extends Hooker {
       break
     }
 
+    case 'kcik.enableVodKeyboardNavigation': {
+      let vodApi = this.pimp.getApi('vod')
+      vodApi.enableVodKeyboardNavigation(data)
+      break
+    }
+
     case 'kcik.usernameColor.set':
       console.log(data)
       this.pimp.getApi('state').setUsernameColor(data)
