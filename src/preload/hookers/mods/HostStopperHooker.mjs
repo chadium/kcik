@@ -1,8 +1,32 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
+import { toaster } from '../../toaster.mjs'
 
 const HOST_EVENT = 'App\\Events\\ChatMoveToSupportedChannelEvent'
+
+class DisabledState extends MachineState {}
+
+class EnabledState extends MachineState {
+  constructor() {
+    super()
+    this.sm = null
+  }
+
+  async [MachineState.ON_ENTER]() {
+    log.info('HostStopper', 'Prevent hosts.')
+
+    this.sm = new Machine()
+    this.sm.pimp = this.machine.pimp
+    await this.sm.start(new UnknownState())
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    log.info('HostStopper', 'Allow hosts.')
+
+    await this.sm.stop()
+  }
+}
 
 class UnknownState extends MachineState {
   async [MachineState.ON_ENTER]() {
@@ -34,7 +58,7 @@ class ChannelState extends MachineState {
     this.sm = new Machine()
     this.sm.pimp = this.machine.pimp
     this.sm.channel = this.channel
-    this.sm.start(this.machine.enable ? new ChannelHostEnableState() : new ChannelHostDisableState())
+    this.sm.start(new ChannelHostDisableState())
 
     let echoApi = this.machine.pimp.getApi('echo')
 
@@ -46,19 +70,19 @@ class ChannelState extends MachineState {
 
     echoApi.off('streamerUnsubscribe', this.onUnsubscribe)
   }
-
-  async enable(enable) {
-    this.sm.next(enable ? new ChannelHostEnableState() : new ChannelHostDisableState())
-  }
-}
-
-class ChannelHostEnableState extends MachineState {
 }
 
 class ChannelHostDisableState extends MachineState {
   constructor() {
     super()
     this.eventHandlers = null
+
+    this.onHost = {
+      fn: () => {
+        toaster('Prevented a host!')
+      },
+      context: undefined
+    }
   }
 
   async [MachineState.ON_ENTER]() {
@@ -67,11 +91,15 @@ class ChannelHostDisableState extends MachineState {
     this.eventHandlers = echoApi.getChannelEventHandlers(this.machine.channel, HOST_EVENT)
 
     this.eventHandlers.forEach(echoApi.removeChannelEventHandler.bind(null, this.machine.channel, HOST_EVENT))
+
+    echoApi.addChannelEventHandler(this.machine.channel, HOST_EVENT, this.onHost)
   }
 
   async [MachineState.ON_LEAVE]() {
     log.info('HostStopper', 'Hosts enabled')
     let echoApi = this.machine.pimp.getApi('echo')
+
+    echoApi.removeChannelEventHandler(this.machine.channel, HOST_EVENT, this.onHost)
 
     for (let eventHandler of this.eventHandlers) {
       echoApi.addChannelEventHandler(this.machine.channel, HOST_EVENT, eventHandler)
@@ -112,11 +140,9 @@ export class HostStopperHooker extends Hooker {
   }
 
   async hook() {
-    this.sm = new Machine()
-    this.sm.pimp = this.pimp
-    this.sm.enable = false
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    await this.sm.start(new UnknownState())
+    this.#sm = new Machine()
+    this.#sm.pimp = this.pimp
+    await this.#sm.start(new DisabledState())
 
     const chromeExtensionApi = this.pimp.getApi('chromeExtension')
 
@@ -127,9 +153,12 @@ export class HostStopperHooker extends Hooker {
     return {
       name: 'hostStopper',
       api: {
-        enableHost: (enable) => {
-          this.sm.enable = enable
-          this.sm.call('enable', this.sm.enable)
+        enableHost: (state) => {
+          if (state) {
+            this.#sm.next(new DisabledState())
+          } else {
+            this.#sm.next(new EnabledState())
+          }
         }
       }
     }

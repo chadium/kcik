@@ -80,7 +80,7 @@ export class EchoHooker extends Hooker {
             }
           }
 
-          return channel.callbacks.get(type) ?? null
+          return channel.callbacks.get(type) ?? []
         },
         addChannelEventHandler: (channel, type, eventHandler) => {
           if (typeof channel === 'string') {
