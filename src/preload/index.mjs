@@ -5,6 +5,7 @@ import { EchoHooker } from './hookers/game/EchoHooker.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { UserHooker } from './hookers/game/UserHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
+import { VueComponentHooker } from './hookers/game/VueComponentHooker.mjs'
 import { VueRouteHooker } from './hookers/game/VueRouteHooker.mjs'
 import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
@@ -14,7 +15,8 @@ import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
 import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
 import { HostStopperHooker } from './hookers/mods/HostStopperHooker.mjs'
 import { VodHooker } from './hookers/mods/VodHooker.mjs'
-import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty } from './object-utils.mjs'
+import { ClipsHooker } from './hookers/mods/ClipsHooker.mjs'
+import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty, getByPath} from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
 
@@ -25,6 +27,7 @@ async function main() {
 
   let hookers = [
     new VueAppHooker(),
+    new VueComponentHooker(),
     new EchoHooker(),
     new StateHooker(),
     new UserHooker(),
@@ -36,6 +39,7 @@ async function main() {
     new FontSizeHooker(),
     new HostStopperHooker(),
     new VodHooker(),
+    new ClipsHooker(),
   ]
 
   for (let hooker of hookers) {
@@ -52,6 +56,7 @@ async function main() {
   window.breakOnSet = breakOnSet
   window.breakOnGet = breakOnGet
   window.freezeProperty = freezeProperty
+  window.getByPath = getByPath
   window.pimp = pimp
 
   pimp.getApi('dom').on('headAvailable', () => {

@@ -83,6 +83,8 @@ export class ChromeExtensionHooker extends Hooker {
     case 'kcik.enableVodKeyboardNavigation': {
       let vodApi = this.pimp.getApi('vod')
       vodApi.enableVodKeyboardNavigation(data)
+      let clipsApi = this.pimp.getApi('clips')
+      clipsApi.enableVodKeyboardNavigation(data)
       break
     }
 

@@ -1,8 +1,8 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import { lookForElement } from '../../dom-utils.mjs'
-
 import { Machine, MachineState } from '../../state-machine.mjs'
+import { VideoKeyboardNavigationState } from './VideoKeyboardNavigationState.mjs'
 
 class DisabledState extends MachineState {}
 
@@ -110,7 +110,8 @@ class VideoPageLookForElementState extends MachineState {
 
     if (videoHolder !== null) {
       log.info('Vod', 'Video holder found')
-      this.machine.next(new VideoPageGotElementState())
+      let video = videoHolder.getElementsByTagName('video')[0]
+      this.machine.next(new VideoKeyboardNavigationState(video))
     } else {
       log.info('Vod', 'Video holder is missing')
       this.machine.next(new VideoPageWaitForElementState())
@@ -127,9 +128,12 @@ class VideoPageWaitForElementState extends MachineState {
         if (mutation.type === 'childList') {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
-              if (lookForElement(addedNode, (el) => el.id === 'video-holder')) {
+              let videoHolder = lookForElement(addedNode, (el) => el.id === 'video-holder')
+
+              if (videoHolder) {
                 log.info('Vod', 'Video holder found by mutation observer')
-                this.machine.next(new VideoPageGotElementState())
+                let video = videoHolder.getElementsByTagName('video')[0]
+                this.machine.next(new VideoKeyboardNavigationState(video))
               }
             }
           }
@@ -152,79 +156,9 @@ class VideoPageWaitForElementState extends MachineState {
   }
 }
 
-class VideoPageGotElementState extends MachineState {
-  video = null
-
-  keyActions = {
-    ArrowLeft: () => {
-      let power = e.shiftKey ? 10000 : 5000
-      this.skipTime(-power)
-    },
-    ArrowRight: () => {
-      let power = e.shiftKey ? 10000 : 5000
-      this.skipTime(power)
-    },
-    " ": () => {
-      if (this.video.paused) {
-        this.video.play()
-      } else {
-        this.video.pause()
-      }
-    },
-    ",": () => {
-      // Can't do this because it's not working. I cannot
-      // detect the frame rate.
-      return
-      this.skipFrames(-1)
-    },
-    ".": () => {
-      return
-      // Can't do this because it's not working. I cannot
-      // detect the frame rate.
-      this.skipFrames(1)
-    }
-  }
-
-  onKeydown = (e) => {
-    if (e.key in this.keyActions) {
-      this.keyActions[e.key]()
-      e.preventDefault()
-    }
-  }
-
-  async [MachineState.ON_ENTER]() {
-    let videoHolder = document.getElementById('video-holder')
-
-    this.video = videoHolder.getElementsByTagName('video')[0]
-
-    document.addEventListener("keydown", this.onKeydown)
-  }
-
-  async [MachineState.ON_LEAVE]() {
-    document.removeEventListener("keydown", this.onKeydown)
-  }
-
-  skipTime(millis) {
-    this.video.currentTime += millis / 1000
-  }
-
-  skipFrames(frameCount) {
-    let mediaInfo = this.video.getVideoPlaybackQuality()
-    let currentFrame = this.seconds2Frames(this.video.currentTime, mediaInfo.framesPerSecond)
-    this.video.currentTime = this.frames2Seconds(currentFrame + frameCount, mediaInfo.framesPerSecond)
-  }
-
-  seconds2Frames(time, framesPerSecond) {
-    return Math.floor(time * framesPerSecond)
-  }
-
-  frames2Seconds(frames, framesPerSecond) {
-    return frames / framesPerSecond
-  }
-}
-
 export class VodHooker extends Hooker {
   #sm = null
+  #state = false
 
   async hook() {
     this.#sm = new Machine()
@@ -241,6 +175,13 @@ export class VodHooker extends Hooker {
       name: 'vod',
       api: {
         enableVodKeyboardNavigation: (state) => {
+          if (this.#state === state) {
+            // Do nothing
+            return
+          }
+
+          this.#state  = state
+
           if (state) {
             this.#sm.next(new EnabledState())
           } else {
