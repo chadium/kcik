@@ -55,7 +55,7 @@ export class VueComponentHooker extends Hooker {
         },
 
         addOnRemove: (node, fn) => {
-          this.findScope(node).cleanups.push(() => fn(node))
+          this.findScope(node).cleanups.push(fn)
         },
 
         removeOnRemove: (node, fn) => {
