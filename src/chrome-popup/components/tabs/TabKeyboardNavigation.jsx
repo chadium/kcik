@@ -27,6 +27,7 @@ export default function TabKeyboardNavigation({ com, repo }) {
           <div className="boomer-p-t"></div>
 
           <ul>
+            <li><b>Space bar</b>: pause/play video</li>
             <li><b>Left arrow</b>: go back 5 seconds</li>
             <li><b>Right arrow</b>: go forward 5 seconds</li>
           </ul>
