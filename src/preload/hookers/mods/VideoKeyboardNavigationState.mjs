@@ -43,14 +43,20 @@ export class VideoKeyboardNavigationState extends MachineState {
   constructor(video) {
     super()
     this.video = video
+    this.button = this.video.parentElement.parentElement.getElementsByClassName('vjs-play-control')[0]
+    this.mute = this.video.parentElement.parentElement.getElementsByClassName('vjs-mute-control')[0]
   }
 
   async [MachineState.ON_ENTER]() {
     document.addEventListener("keydown", this.onKeydown)
+    this.button.addEventListener("keydown", this.onKeydown)
+    this.mute.addEventListener("keydown", this.onKeydown)
   }
 
   async [MachineState.ON_LEAVE]() {
     document.removeEventListener("keydown", this.onKeydown)
+    this.button.removeEventListener("keydown", this.onKeydown)
+    this.mute.removeEventListener("keydown", this.onKeydown)
   }
 
   skipTime(millis) {
