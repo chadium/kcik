@@ -155,27 +155,40 @@ class VideoPageWaitForElementState extends MachineState {
 class VideoPageGotElementState extends MachineState {
   video = null
 
-  onKeydown = (e) => {
-    let power = e.shiftKey ? 10000 : 5000
-
-    if (e.key === "ArrowLeft") {
+  keyActions = {
+    ArrowLeft: () => {
+      let power = e.shiftKey ? 10000 : 5000
       this.skipTime(-power)
-      e.preventDefault()
-    } else if (e.key === "ArrowRight") {
+    },
+    ArrowRight: () => {
+      let power = e.shiftKey ? 10000 : 5000
       this.skipTime(power)
-      e.preventDefault()
-    }
-
-    if (false) {
+    },
+    " ": () => {
+      if (this.video.paused) {
+        this.video.play()
+      } else {
+        this.video.pause()
+      }
+    },
+    ",": () => {
       // Can't do this because it's not working. I cannot
       // detect the frame rate.
-      if (e.key === ",") {
-        this.skipFrames(-1)
-        e.preventDefault()
-      } else if (e.key === ".") {
-        this.skipFrames(1)
-        e.preventDefault()
-      }
+      return
+      this.skipFrames(-1)
+    },
+    ".": () => {
+      return
+      // Can't do this because it's not working. I cannot
+      // detect the frame rate.
+      this.skipFrames(1)
+    }
+  }
+
+  onKeydown = (e) => {
+    if (e.key in this.keyActions) {
+      this.keyActions[e.key]()
+      e.preventDefault()
     }
   }
 
