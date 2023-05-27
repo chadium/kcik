@@ -2,18 +2,28 @@ import { Repository } from "../chrome-popup/repository.mjs"
 import { PopupCom } from "./PopupCom.mjs"
 import { WebsiteCom } from "./WebsiteCom.mjs"
 
-function inject() {
-  const src = chrome.runtime.getURL('preload/index.js')
-  const s = document.createElement('script')
-  s.setAttribute('src', src)
-  s.id = 'kcik'
-  s.dataset.message = ''
-  document.head.appendChild(s)
+class Injection {
+  #s = null
 
-  return {
-    sendMessage(message) {
-      s.dataset.message = JSON.stringify(message)
+  init() {
+    if (this.#s !== null) {
+      throw new Error('Already initialized')
     }
+
+    const src = chrome.runtime.getURL('preload/index.js')
+    this.#s = document.createElement('script')
+    this.#s.setAttribute('src', src)
+    this.#s.id = 'kcik'
+    this.#s.dataset.message = ''
+    document.head.appendChild(this.#s)
+  }
+
+  sendMessage(message) {
+    if (this.#s === null) {
+      throw new Error('Need to initialize')
+    }
+
+    this.#s.dataset.message = JSON.stringify(message)
   }
 }
 
@@ -35,12 +45,14 @@ async function migrate(storageArea) {
 }
 
 async function main() {
-  let injection = inject()
-  await migrate(chrome.storage.sync)
-  let repository = new Repository(chrome.storage.sync)
-
+  let injection = new Injection()
   let popupCom = new PopupCom()
   let websiteCom = new WebsiteCom(injection)
+
+  injection.init()
+
+  await migrate(chrome.storage.sync)
+  let repository = new Repository(chrome.storage.sync)
 
   websiteCom.on('message', async ({ type, data }) => {
     switch (type) {
