@@ -37,6 +37,7 @@
     "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "events": "^3.3.0",
+    "joi": "^17.9.2",
     "js-cookie": "^3.0.1",
     "js-deobfuscator": "^1.0.19",
     "object-path": "^0.11.8",

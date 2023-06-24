@@ -74,6 +74,12 @@ export class ChromeExtensionHooker extends Hooker {
       break
     }
 
+    case 'kcik.websiteTheme': {
+      let websiteThemeApi = this.pimp.getApi('websiteTheme')
+      websiteThemeApi.setWebsiteTheme(data)
+      break
+    }
+
     case 'kcik.enableHost': {
       let hostStopperApi = this.pimp.getApi('hostStopper')
       hostStopperApi.enableHost(data)

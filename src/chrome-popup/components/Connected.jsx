@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import Page from './Page.jsx'
+import TabWebsiteTheme from './tabs/TabWebsiteTheme.jsx'
 import TabChatUsername from './tabs/TabChatUsername.jsx'
 import TabChatFont from './tabs/TabChatFont.jsx'
 import TabHost from './tabs/TabHost.jsx'
@@ -8,6 +9,10 @@ import TabCredits from './tabs/TabCredits.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 
 const tabs = [
+  {
+    name: 'Website Theme',
+    content: (params) => <TabWebsiteTheme {...params}/>
+  },
   {
     name: 'Username',
     content: (params) => <TabChatUsername {...params}/>

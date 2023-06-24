@@ -71,6 +71,10 @@ async function main() {
           websiteCom.send('kcik.enableVodKeyboardNavigation', await repository.getEnableVodKeyboardNavigation())
           break
         }
+        case 'websiteTheme': {
+          websiteCom.send('kcik.websiteTheme', await repository.getWebsiteTheme())
+          break
+        }
         }
       }
       break

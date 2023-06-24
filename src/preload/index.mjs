@@ -14,6 +14,7 @@ import { StateHooker } from './hookers/mods/StateHooker.mjs'
 import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
 import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
 import { HostStopperHooker } from './hookers/mods/HostStopperHooker.mjs'
+import { WebsiteThemeHooker } from './hookers/mods/WebsiteThemeHooker.mjs'
 import { VodHooker } from './hookers/mods/VodHooker.mjs'
 import { ClipsHooker } from './hookers/mods/ClipsHooker.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty, getByPath} from './object-utils.mjs'
@@ -36,6 +37,7 @@ async function main() {
     new UsernameColorFallbackHooker(),
     new VueRouteHooker(),
     new ChromeExtensionHooker(),
+    new WebsiteThemeHooker(),
     new FontSizeHooker(),
     new HostStopperHooker(),
     new VodHooker(),
