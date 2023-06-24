@@ -58,26 +58,32 @@ export class WebsiteThemeHooker extends Hooker {
       // Equivalent to: #191b1f
       let shade1 = colorUtils.adjustBrightness(mainColor, 0.06 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
-      // Equivalent to: #24272c
-      let shade2 = colorUtils.adjustBrightness(mainColor, 0.1 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+      // Equivalent to: #202225
+      let shade2 = colorUtils.adjustBrightness(mainColor, 0.08 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
-      // Equivalent to: #3f4448
-      let shade3 = colorUtils.adjustBrightness(mainColor, 0.2 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+      // Equivalent to: #24272c
+      let shade3 = colorUtils.adjustBrightness(mainColor, 0.1 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+
+      // Equivalent to: #3f4448, #374151
+      let shade4 = colorUtils.adjustBrightness(mainColor, 0.2 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
       // Equivalent to: #474f54
-      let shade4 = colorUtils.adjustBrightness(mainColor, 0.25 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+      let shade5 = colorUtils.adjustBrightness(mainColor, 0.25 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
       let textColor = this.#getTextColor(mainColor)
 
       // Equivalent to: #e5e7eb
-      debugger
-      let textColorSubtle = colorUtils.adjustBrightness(textColor, 0.1 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+      let textColorSubtle = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
-      console.log(textColorSubtle, '#e5e7eb')
-
+      // Equivalent to: #53fc18
       let complementary = colorUtils.cssColorComplementary(mainColor)
+
+      // Equivalent to: #3ad305
       let complementaryShade = colorUtils.adjustBrightness(complementary, 0.1 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
+
       let complementaryText = this.#getTextColor(complementary)
+
+      let [complementaryHue] = colorUtils.rgbToHsl(complementary)
 
       return {
         css: `
@@ -85,6 +91,9 @@ export class WebsiteThemeHooker extends Hooker {
 .menu-items {
   color: ${textColor} !important;
   background: ${shade1} !important;
+}
+.menu-items>:not([hidden])~:not([hidden]) {
+  border-color: ${shade4};
 }
 
 /* Chat */
@@ -100,8 +109,8 @@ export class WebsiteThemeHooker extends Hooker {
 /* Text mode editor (used in chat) */
 .text-mode {
   color: ${textColor} !important;
-  border-color: ${shade2} !important;
-  background-color: ${shade2} !important;
+  border-color: ${shade3} !important;
+  background-color: ${shade3} !important;
 }
 .text-mode:focus-within {
   background-color: ${shade1} !important;
@@ -115,8 +124,8 @@ export class WebsiteThemeHooker extends Hooker {
   border-color: ${mainColor} !important;
 }
 .dark #search-input:hover {
-  border-color: ${shade4} !important;
-  background: ${shade4} !important;
+  border-color: ${shade5} !important;
+  background: ${shade5} !important;
 }
 
 /* Search results */
@@ -148,10 +157,10 @@ export class WebsiteThemeHooker extends Hooker {
 .variant-highlight {
   color: ${textColor} !important;
   fill: ${textColor} !important;
-  background: ${shade3} !important;
+  background: ${shade4} !important;
 }
 .variant-highlight:hover {
-  background: ${shade2} !important;
+  background: ${shade3} !important;
 }
 
 /* Cards */
@@ -160,15 +169,19 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade1} !important;
 }
 
-/* Stream category */
-.category-tags-holder .stream-category {
+/* Homepage grid cards */
+.grid-item.card-content[data-v-44fe15bf]:hover {
+  background: ${shade3} !important;
+}
+.card-session-name:hover,
+.card-user-name:hover,
+.card-category-name:hover {
   color: ${complementary} !important;
 }
 
-/* Profile status */
-.avatar-live-tag {
-  color: ${complementaryText} !important;
-  background: ${complementary} !important;
+/* Stream category */
+.category-tags-holder .stream-category {
+  color: ${complementary} !important;
 }
 
 /* Stream Tags */
@@ -188,10 +201,10 @@ export class WebsiteThemeHooker extends Hooker {
 
 /* Text input box */
 .base-input-layout .input-holder {
-  background-color: ${shade4} !important;
+  background-color: ${shade5} !important;
 }
 .base-input-layout .input-holder:focus-within {
-  border-color: ${shade4};
+  border-color: ${shade5};
   background-color: ${mainColor} !important;
 }
 .base-input-layout input {
@@ -202,24 +215,88 @@ export class WebsiteThemeHooker extends Hooker {
 /* Select boxes */
 .vue-select .btn-listbox {
   color: ${textColor} !important;
-  background-color: ${shade4} !important;
+  background-color: ${shade5} !important;
+}
+.vue-select .btn-listbox:focus {
+  border-color: ${shade5} !important;
+}
+.vue-select .listbox-options {
+  background: ${shade1} !important;
+}
+
+/* Modview right panel */
+.right-panel .divider {
+  border-color: ${shade3} !important;
+}
+
+/* Modview top bar */
+.border-sec .divider {
+  background-color: ${shade3} !important;
+}
+
+/* Quick emotes */
+.quick-emote-item {
+  background-color: ${shade3} !important;
+}
+.quick-emote-item:not(.quick-emote-item-disabled):hover {
+  background-color: ${shade5} !important;
+}
+
+/* Live indicator in the home page */
+.live-tag-component {
+  background-color: ${mainColor} !important;
+  color: ${complementary} !important;
+}
+
+/* Category banner */
+.subcategory-card .category-banner:hover {
+  filter: sepia(1) hue-rotate(${complementaryHue - 0.15}turn) contrast(1.4) brightness(1) saturate(3)
+}
+
+/* Grid */
+.see-more .see-more-btn {
+  background-color: ${mainColor} !important;
+  color: ${textColor} !important;
+}
+
+.see-more:after {
+  background-color: ${shade3} !important;
 }
 
 /* Anything else */
-.bg-secondary-light {
+.bg-secondary {
   color: ${textColor};
   background: ${shade1};
 }
 
-.bg-secondary-lighter {
+.bg-secondary-light {
   color: ${textColor};
   background: ${shade2};
 }
+
+.bg-secondary-lighter {
+  color: ${textColor};
+  background: ${shade3};
+}
+.\\!bg-secondary-lighter {
+  color: ${textColor};
+  background: ${shade3} !important;
+}
 .border-secondary-lighter {
-  border-color: ${shade2};
+  border-color: ${shade3};
 }
 .border-b-secondary-lighter {
-  border-bottom-color: ${shade2};
+  border-bottom-color: ${shade3};
+}
+.hover\\:bg-secondary-lighter:hover {
+  background: ${shade3};
+}
+
+.bg-secondary-lightest {
+  background-color: ${shade5};
+}
+.hover\\:bg-secondary-lightest:hover {
+  background-color: ${shade5};
 }
 
 .bg-secondary-dark {
@@ -236,11 +313,11 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade1};
 }
 .bg-\\[\\#3F4448\\] {
-  background: ${shade3};
+  background: ${shade4};
 }
 .bg-\\[\\#232628\\] {
   color: ${textColor};
-  background: ${shade2};
+  background: ${shade3};
 }
 .\\!border-primary {
   border-color: ${complementary} !important;
@@ -252,6 +329,49 @@ export class WebsiteThemeHooker extends Hooker {
 /* Weird, I know but looks good. */
 .bg-black {
   background: ${mainColor};
+}
+
+.text-gray-400 {
+  color: ${textColorSubtle};
+}
+
+.text-white {
+  color: ${textColor};
+}
+.hover\\:border-white\\/100:hover {
+  border-color: ${textColor};
+}
+
+.text-primary {
+  color: ${complementary};
+}
+
+.hover\\:text-primary:hover {
+  color: ${complementary};
+}
+.sm\\:hover\\:text-primary:hover {
+  color: ${complementary};
+}
+.lg\\:hover\\:text-primary:hover {
+  color: ${complementary};
+}
+
+.border-primary {
+  border-color: ${complementary};
+}
+.border-primary\\/50 {
+  border-color: ${complementary};
+}
+.\\!border-primary\\/100 {
+  border-color: ${complementary} !important;
+}
+
+.sm\\:hover\\:text-primary-dark:hover {
+  color: ${complementaryShade};
+}
+
+.hover\\:bg-primary-dark:hover {
+  background-color: ${complementaryShade};
 }
 `
       }

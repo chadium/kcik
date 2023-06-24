@@ -1,4 +1,5 @@
 import knownNames from './colors.mjs'
+import { pSBC } from './colorfulmess.mjs'
 
 /**
  * Tries to return a hex color for the given color id.
@@ -58,35 +59,37 @@ export function getLightness(rgbColor) {
   return lightness;
 }
 
-// Helper function to clamp a value between a minimum and maximum
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-// Helper function to convert a component value to hexadecimal
-function componentToHex(c) {
-  const hex = c.toString(16);
-  return hex.length === 1 ? "0" + hex : hex;
-}
-
 export function adjustBrightness(rgbColor, brightness) {
-  // Remove the "#" symbol if present
-  const color = rgbColor.replace("#", "");
+  return pSBC(brightness, rgbColor);
+}
 
-  // Extract the red, green, and blue components from the RGB color string
-  const red = parseInt(color.substr(0, 2), 16);
-  const green = parseInt(color.substr(2, 2), 16);
-  const blue = parseInt(color.substr(4, 2), 16);
+export function rgbToHsl(r, g, b) {
+  if (typeof r === 'string') {
+    const rgb = r.replace("#", "");
 
-  // Adjust the brightness relative to the original color
-  const adjustedRed = clamp(Math.round(red + (brightness * (255 - red))), 0, 255);
-  const adjustedGreen = clamp(Math.round(green + (brightness * (255 - green))), 0, 255);
-  const adjustedBlue = clamp(Math.round(blue + (brightness * (255 - blue))), 0, 255);
+    r = parseInt(rgb.substr(0, 2), 16);
+    g = parseInt(rgb.substr(2, 2), 16);
+    b = parseInt(rgb.substr(4, 2), 16);
+  }
 
-  // Convert the adjusted RGB values back to hexadecimal
-  const adjustedColor = `#${componentToHex(adjustedRed)}${componentToHex(adjustedGreen)}${componentToHex(adjustedBlue)}`;
+  r /= 255, g /= 255, b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
 
-  return adjustedColor;
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+
+  return [h, s, l];
 }
 
 export function cssColorComplementary(color) {
