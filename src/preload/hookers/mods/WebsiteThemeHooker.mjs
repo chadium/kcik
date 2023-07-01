@@ -55,45 +55,74 @@ export class WebsiteThemeHooker extends Hooker {
       // Equivalent to: #0b0e0f
       let mainColor = this._websiteTheme.mainColor
 
-      // Equivalent to: #191b1f
+      // Seen #0f1214.
+
+      // Equivalent to: #191b1f, #171c1e
       let shade1 = colorUtils.adjustBrightness(mainColor, 0.06 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
       // Equivalent to: #202225
       let shade2 = colorUtils.adjustBrightness(mainColor, 0.08 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
-      // Equivalent to: #24272c
+      // Equivalent to: #24272c, #232628
       let shade3 = colorUtils.adjustBrightness(mainColor, 0.1 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
+      // Equivalent to: #313538, #271B1D
+      let shade4 = colorUtils.adjustBrightness(mainColor, 0.15 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+
       // Equivalent to: #3f4448, #374151
-      let shade4 = colorUtils.adjustBrightness(mainColor, 0.2 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+      let shade5 = colorUtils.adjustBrightness(mainColor, 0.2 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
       // Equivalent to: #474f54
-      let shade5 = colorUtils.adjustBrightness(mainColor, 0.25 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+      let shade6 = colorUtils.adjustBrightness(mainColor, 0.25 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+
+      // Equivalent to: #6b7280
+      let shade7 = colorUtils.adjustBrightness(mainColor, 0.35 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+
+      // Equivalent to: #929ea6
+      let shade8 = colorUtils.adjustBrightness(mainColor, 0.5 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
       let textColor = this.#getTextColor(mainColor)
 
       // Equivalent to: #e5e7eb
-      let textColorSubtle = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+      let textColorSubtle1 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+
+      // Equivalent to: #b1bcc3
+      let textColorSubtle2 = colorUtils.adjustBrightness(textColor, 0.5 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
       // Equivalent to: #53fc18
       let complementary = colorUtils.cssColorComplementary(mainColor)
 
       // Equivalent to: #3ad305
-      let complementaryShade = colorUtils.adjustBrightness(complementary, 0.1 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
+      let complementaryShade1 = colorUtils.adjustBrightness(complementary, 0.1 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
+
+      // Equivalent to: #21650a
+      let complementaryShade2 = colorUtils.adjustBrightness(complementary, 0.2 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
 
       let complementaryText = this.#getTextColor(complementary)
 
       let [complementaryHue] = colorUtils.rgbToHsl(complementary)
 
+      // Note: I use html[lang] to increase specifity.
       return {
         css: `
+:root {
+  --toastify-color-dark: ${mainColor};
+  --toastify-text-color-dark: ${textColor};
+}
+
+/* Toast card */
+.toast-card {
+  color: ${complementaryText} !important;
+  background: ${complementaryShade2} !important;
+}
+
 /* Account menu */
 .menu-items {
   color: ${textColor} !important;
   background: ${shade1} !important;
 }
 .menu-items>:not([hidden])~:not([hidden]) {
-  border-color: ${shade4};
+  border-color: ${shade5};
 }
 
 /* Chat */
@@ -104,6 +133,36 @@ export class WebsiteThemeHooker extends Hooker {
 .chatroom-footer {
   color: ${textColor};
   background: ${shade1} !important;
+}
+.chat-message-identity:hover {
+  background: ${shade6} !important;
+}
+.chat-actions-popup {
+  background: ${shade1} !important;
+}
+.chatroom-identity .preview {
+  background: ${mainColor} !important;
+}
+.chatroom-identity .divider {
+  background: ${shade4} !important;
+}
+.chatroom-identity .badges-container .badge.bordered,
+.chatroom-identity .badges-container .badge.bordered {
+  outline-color: ${complementary} !important;
+}
+.chatroom-event-ban__container,
+.chatroom-event-unban__container {
+  background: ${shade3} !important;
+}
+.chatroom-event-ban__container .chatroom-event-ban__icon,
+.chatroom-event-unban__container .chatroom-event-unban__icon {
+  color: ${complementary} !important;
+}
+#chatroom-top svg path[fill=white] {
+  fill: ${textColor};
+}
+.chatroom-identity .color-item.selected {
+  --tw-ring-color: ${complementary} !important;
 }
 
 /* Text mode editor (used in chat) */
@@ -117,15 +176,19 @@ export class WebsiteThemeHooker extends Hooker {
 }
 
 /* Search input */
-.dark #search-input {
+html[lang] #search-input {
   color: ${textColor} !important;
   caret-color: ${textColor} !important;
   background: ${shade1} !important;
   border-color: ${mainColor} !important;
 }
-.dark #search-input:hover {
-  border-color: ${shade5} !important;
-  background: ${shade5} !important;
+html[lang] #search-input:hover {
+  border-color: ${shade6} !important;
+  background: ${shade6} !important;
+}
+html[lang] #search-input:focus {
+  border-color: ${mainColor} !important;
+  background: ${shade1} !important;
 }
 
 /* Search results */
@@ -152,15 +215,47 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${complementary} !important;
 }
 .variant-action:hover {
-  background: ${complementaryShade} !important;
+  background: ${complementaryShade1} !important;
 }
+.variant-action:disabled {
+  background: ${complementaryShade2} !important;
+}
+html[lang] .variant-action.state-loading {
+  background: ${complementaryShade2} !important;
+}
+
 .variant-highlight {
   color: ${textColor} !important;
   fill: ${textColor} !important;
-  background: ${shade4} !important;
+  background: ${shade5} !important;
+}
+.variant-highlight .icon {
+  color: currentColor !important;
 }
 .variant-highlight:hover {
   background: ${shade3} !important;
+}
+.variant-highlight:disabled {
+  background: ${mainColor} !important;
+}
+
+.variant-text {
+  color: currentColor !important;
+}
+.variant-text .icon {
+  color: currentColor !important;
+}
+
+.variant-text:hover {
+  background: ${shade5} !important;
+}
+
+.btn.btn-secondary-lightest {
+  color: ${textColor};
+  background: ${shade6};
+}
+.btn.btn-secondary-lightest:hover {
+  background: ${shade8};
 }
 
 /* Cards */
@@ -172,6 +267,10 @@ export class WebsiteThemeHooker extends Hooker {
 /* Homepage grid cards */
 .grid-item.card-content[data-v-44fe15bf]:hover {
   background: ${shade3} !important;
+}
+
+.card-session-name {
+  color: ${textColor} !important;
 }
 .card-session-name:hover,
 .card-user-name:hover,
@@ -190,6 +289,11 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade1} !important;
 }
 
+/* Stream information */
+.stream-info svg path[fill=white] {
+  fill: ${textColor};
+}
+
 /* Radio */
 .radio-container input:checked {
   border-color: ${complementary} !important;
@@ -198,27 +302,181 @@ export class WebsiteThemeHooker extends Hooker {
 .radio-container input:checked:before {
   background-color: ${complementary} !important;
 }
+.radio-container label {
+  color: currentColor !important;
+}
+
+/* Checkbox */
+.checkbox-container {
+}
+.checkbox-container input {
+  border-color: ${textColor} !important;
+}
+.checkbox-container input:hover:not(:checked):not(:disabled) {
+  border-color: ${complementary} !important;
+}
+.checkbox-container input:checked {
+  border-color: ${complementaryShade1} !important;
+}
+.checkbox-container input:before {
+  border-color: ${textColor} !important;
+}
+.checkbox-container label {
+  color: currentColor !important;
+}
+
+/* Toggle button */
+/* Not checked */
+.toggle-button-indicator.bg-white {
+  background-color: ${textColor} !important;
+}
+/* Checked */
+.toggle-button-indicator.bg-surface-tint {
+  background-color: ${complementaryText} !important;
+}
+
+/* Moderation panel */
+.user-profile.power-user .profile {
+  background-color: ${shade3} !important;
+}
+.user-profile .content .moderation {
+  background-color: ${shade3} !important;
+}
+.chatroom-user-profile-history .tab-headers .title {
+  color: currentColor !important;
+}
+.chatroom-user-profile-history .tab-headers .selected {
+  background-color: ${complementary} !important;
+}
+.chatroom-user-profile-history .tab-headers > div:hover {
+  background-color: ${shade6} !important;
+}
+/* Emote selector */
+.chat-emote-picker-popout {
+  background-color: ${shade3} !important;
+}
+.emote-picker-panel {
+  background-color: ${shade1} !important;
+}
+
+/* Panel tabs */
+.panel-header {
+  background: ${shade3} !important;
+}
+.panel-tabs {
+  background: ${shade3} !important;
+}
+.panel-tabs .tab-item:hover {
+  border-color: ${shade7} !important;
+}
+.panel-tabs .tab-item.tab-item-active {
+  border-color: ${complementary} !important;
+}
+
+/* Activity feed */
+.activity-feed-item:not(:last-child) {
+  border-color: ${shade4} !important;
+}
+
+/* Toggle container */
+.toggle-container {
+  background-color: ${shade1} !important;
+}
+.toggle-container .label-container {
+  color: ${complementary} !important;
+}
 
 /* Text input box */
 .base-input-layout .input-holder {
-  background-color: ${shade5} !important;
+  background-color: ${shade6} !important;
 }
 .base-input-layout .input-holder:focus-within {
-  border-color: ${shade5};
+  border-color: ${shade6};
   background-color: ${mainColor} !important;
 }
 .base-input-layout input {
   color: ${textColor} !important;
   caret-color: ${shade1} !important;
 }
+.base-input-layout .input-holder .input-icon {
+  color: ${textColor} !important;
+}
+.base-input-layout > label {
+  color: ${textColor} !important;
+}
+html[lang] .input-holder:has(input:disabled) {
+  background-color: ${shade6} !important;
+}
+.input-holder:has(:not(input:disabled)):focus-within:has(> input:placeholder-shown) {
+  --tw-ring-color: ${shade6} !important;
+}
 
-/* Select boxes */
+/* Text area input box */
+.base-textarea-layout > label {
+  color: currentColor !important;
+}
+.textarea-holder > textarea {
+  color: ${textColor} !important;
+  caret-color: ${shade1} !important;
+  border-color: ${shade6} !important;
+  background-color: ${shade6} !important;
+}
+.base-textarea-layout textarea:focus {
+  border-color: ${shade6} !important;
+  background-color: ${mainColor} !important;
+}
+/* Found no good parent class. Trying to avoid clashes */
+.absolute .overflow-hidden .hit:hover {
+  background-color: ${shade4} !important;
+}
+
+/* Number input box */
+.input {
+  color: ${textColor};
+  background-color: ${shade6};
+}
+.input:focus {
+  border-color: ${shade6};
+  background-color: ${mainColor};
+}
+
+/* Native select boxes */
+.base-select > .select-label {
+  color: currentColor !important;
+}
+.base-select > .menu-holder .select-input {
+  background-color: ${shade4} !important;
+}
+.base-select > .menu-holder .select-input > .select-selected-item {
+  color: ${textColor} !important;
+}
+.base-select>.menu-holder .select-input > .select-arrow-icon {
+  color: ${textColor} !important;
+}
+.base-select-menu {
+  background-color: ${shade1} !important;
+}
+.base-select-menu .menu-item {
+  color: ${textColor} !important;
+}
+.base-select-menu .menu-item:not(.item-selected):hover {
+  background-color: ${shade3} !important;
+}
+.base-select-menu .menu-item.item-selected {
+  color: ${complementaryText} !important;
+  background-color: ${complementaryShade1} !important;
+}
+.base-select-menu .menu-item.item-selected:hover {
+  background-color: ${complementary} !important;
+}
+
+/* Vue select boxes */
 .vue-select .btn-listbox {
   color: ${textColor} !important;
-  background-color: ${shade5} !important;
+  background-color: ${shade6} !important;
 }
 .vue-select .btn-listbox:focus {
-  border-color: ${shade5} !important;
+  border-color: ${shade6} !important;
 }
 .vue-select .listbox-options {
   background: ${shade1} !important;
@@ -227,6 +485,54 @@ export class WebsiteThemeHooker extends Hooker {
 /* Modview right panel */
 .right-panel .divider {
   border-color: ${shade3} !important;
+}
+.creator-actions-item:hover {
+  background-color: ${shade5} !important;
+}
+.channel-actions-item.channel-actions-link:hover {
+  background-color: ${shade5} !important;
+}
+
+/* Modview left panel */
+aside.min-w-\\[256px\\].max-w-\\[256px\\],
+aside.min-w-\\[60px\\].max-w-\\[60px\\] {
+  color: ${textColor} !important;
+  background: ${shade1} !important;
+}
+.dashboard-left-menu-header > .menu-title {
+  color: ${textColorSubtle2} !important;
+}
+.dashboard-left-menu-item > .menu-item-link {
+  color: inherit !important;
+}
+.dashboard-left-menu-item > .menu-item-link:hover {
+  background: ${shade5} !important;
+}
+.dashboard-left-menu-item > .menu-item-link.item-selected {
+  color: ${complementaryText} !important;
+  background: ${complementary} !important;
+}
+.dashboard-left-menu-item > .menu-item-link.item-selected:hover {
+  background: ${complementaryShade1} !important;
+}
+.dashboard-left-menu-item >.menu-item-link > .content-expand-icon-holder .content-expand-icon {
+  color: ${textColor} !important;
+}
+.dashboard-left-menu-item > .menu-item-link:not(.item-selected) > .item-new-tag {
+  color: ${complementaryText} !important;
+  background-color: ${complementaryShade1} !important;
+}
+/* Modview left panel expandable item list background */
+.dashboard-left-menu-item:before {
+  background: ${shade3} !important;
+}
+
+/* Modview stats */
+.session-info > :not([hidden])~:not([hidden]) {
+  border-color: ${shade3} !important;
+}
+.session-info .stats-container .data {
+  color: ${textColor} !important;
 }
 
 /* Modview top bar */
@@ -239,7 +545,7 @@ export class WebsiteThemeHooker extends Hooker {
   background-color: ${shade3} !important;
 }
 .quick-emote-item:not(.quick-emote-item-disabled):hover {
-  background-color: ${shade5} !important;
+  background-color: ${shade6} !important;
 }
 
 /* Live indicator in the home page */
@@ -253,6 +559,11 @@ export class WebsiteThemeHooker extends Hooker {
   filter: sepia(1) hue-rotate(${complementaryHue - 0.15}turn) contrast(1.4) brightness(1) saturate(3)
 }
 
+/* Show more button */
+.show-more-btn-bg {
+  background: linear-gradient(to right, transparent, ${mainColor} 12px) !important;
+}
+
 /* Grid */
 .see-more .see-more-btn {
   background-color: ${mainColor} !important;
@@ -263,9 +574,40 @@ export class WebsiteThemeHooker extends Hooker {
   background-color: ${shade3} !important;
 }
 
+/* Loading icon */
+.spinner {
+  border-top-color: ${complementary};
+}
+
+/* Table */
+.base-table {
+  background: ${shade1} !important;
+}
+
+.base-table th {
+  border-color: ${shade6}99 !important;
+}
+
+/* Link */
+.link {
+  color: ${complementary};
+}
+.link:hover {
+  color: ${complementaryShade1};
+}
+
+/* Modal dialog */
+.base-modal > .modal-content {
+  background: ${shade2} !important;
+}
+
 /* Anything else */
 .bg-secondary {
   color: ${textColor};
+  background: ${shade1};
+}
+
+.hover\\:bg-secondary:hover {
   background: ${shade1};
 }
 
@@ -277,6 +619,9 @@ export class WebsiteThemeHooker extends Hooker {
 .bg-secondary-lighter {
   color: ${textColor};
   background: ${shade3};
+}
+.bg-secondary-lighter\\/80 {
+  background: ${shade3}cc;
 }
 .\\!bg-secondary-lighter {
   color: ${textColor};
@@ -292,14 +637,26 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade3};
 }
 
+.border-y-secondary-lighter {
+  border-top-color: ${shade3};
+  border-bottom-color: ${shade3};
+}
+
 .bg-secondary-lightest {
-  background-color: ${shade5};
+  background-color: ${shade6};
 }
 .hover\\:bg-secondary-lightest:hover {
-  background-color: ${shade5};
+  background-color: ${shade6};
+}
+.hover\\:bg-secondary-lightest\\/80:hover {
+  background-color: ${shade6}cc;
 }
 
 .bg-secondary-dark {
+  color: ${textColor};
+  background: ${mainColor};
+}
+.hover\\:bg-secondary-dark:hover {
   color: ${textColor};
   background: ${mainColor};
 }
@@ -313,11 +670,18 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade1};
 }
 .bg-\\[\\#3F4448\\] {
-  background: ${shade4};
+  background: ${shade5};
 }
-.bg-\\[\\#232628\\] {
+.bg-\\[\\#232628\\],
+.hover\\:bg-\\[\\#232628\\]:hover {
   color: ${textColor};
   background: ${shade3};
+}
+.border-\\[\\#232628\\] {
+  border-color: ${shade3};
+}
+.bg-\\[\\#271B1D\\] {
+  background-color: ${shade4};
 }
 .\\!border-primary {
   border-color: ${complementary} !important;
@@ -330,16 +694,39 @@ export class WebsiteThemeHooker extends Hooker {
 .bg-black {
   background: ${mainColor};
 }
+.bg-black\\/80 {
+  background: ${mainColor}cc;
+}
 
 .text-gray-400 {
-  color: ${textColorSubtle};
+  color: ${textColorSubtle1};
 }
 
 .text-white {
   color: ${textColor};
 }
+.\\!text-white {
+  color: ${textColor} !important;
+}
+.text-white\\/50 {
+  color: ${textColor}80;
+}
+.text-white\\/80 {
+  color: ${textColor}cc;
+}
+.hover\\:text-white {
+  color: ${textColor};
+}
+.group:hover .group-hover\\:text-white {
+  color: ${textColor};
+}
+
 .hover\\:border-white\\/100:hover {
   border-color: ${textColor};
+}
+
+.text-black {
+  color: ${mainColor};
 }
 
 .text-primary {
@@ -356,6 +743,10 @@ export class WebsiteThemeHooker extends Hooker {
   color: ${complementary};
 }
 
+.text-primary-dark {
+  color: ${complementaryShade1};
+}
+
 .border-primary {
   border-color: ${complementary};
 }
@@ -367,11 +758,37 @@ export class WebsiteThemeHooker extends Hooker {
 }
 
 .sm\\:hover\\:text-primary-dark:hover {
-  color: ${complementaryShade};
+  color: ${complementaryShade1};
 }
 
 .hover\\:bg-primary-dark:hover {
-  background-color: ${complementaryShade};
+  background-color: ${complementaryShade1};
+}
+.bg-primary-dark\\/40 {
+  background-color: ${complementary}66;
+}
+
+.bg-white {
+  background-color: ${textColor};
+}
+.bg-white\\/50 {
+  background-color: ${textColor}80;
+}
+
+.border-t-white {
+  border-top-color: ${textColor};
+}
+
+.fill-white {
+  fill: ${textColor} !important;
+}
+
+.text-\\[\\#53FC18\\] {
+  color: ${complementary};
+}
+
+.bg-surface-tint {
+  background-color: ${shade4};
 }
 `
       }
