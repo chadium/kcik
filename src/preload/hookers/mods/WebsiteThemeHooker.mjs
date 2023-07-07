@@ -205,6 +205,9 @@ html[lang] #search-input:focus {
   color: ${textColor};
   background: ${shade1} !important;
 }
+.sidebar-item:hover {
+  background: ${shade3} !important;
+}
 .sidebar-item .item-name {
   color: ${textColor};
 }
