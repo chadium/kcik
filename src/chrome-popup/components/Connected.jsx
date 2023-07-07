@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import Page from './Page.jsx'
+import TabHome from './tabs/TabHome.jsx'
 import TabWebsiteTheme from './tabs/TabWebsiteTheme.jsx'
 import TabChatUsername from './tabs/TabChatUsername.jsx'
 import TabChatFont from './tabs/TabChatFont.jsx'
@@ -9,6 +10,10 @@ import TabCredits from './tabs/TabCredits.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 
 const tabs = [
+  {
+    name: 'KCIK ' + BOOMER_VERSION,
+    content: (params) => <TabHome {...params}/>
+  },
   {
     name: 'Website Theme',
     content: (params) => <TabWebsiteTheme {...params}/>
