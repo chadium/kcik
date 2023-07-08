@@ -50,3 +50,39 @@ html {
 .bg-warn {
   background: linear-gradient(#f1b64f, #a07222);
 }
+
+.slide-left-enter {
+  transform: translateX(100%);
+}
+
+.slide-left-enter-active {
+  transform: translateX(0);
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
+}
+
+.slide-left-exit {
+  transform: translateX(0);
+}
+
+.slide-left-exit-active {
+  transform: translateX(-100%);
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
+}
+
+.slide-right-enter {
+  transform: translateX(-100%);
+}
+
+.slide-right-enter-active {
+  transform: translateX(0);
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
+}
+
+.slide-right-exit {
+  transform: translateX(0);
+}
+
+.slide-right-exit-active {
+  transform: translateX(100%);
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
+}
