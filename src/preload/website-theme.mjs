@@ -14,25 +14,25 @@ export function websiteThemeValues(websiteTheme) {
   let shade1 = colorUtils.adjustBrightness(mainColor, 0.06 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #202225
-  let shade2 = colorUtils.adjustBrightness(mainColor, 0.08 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade2 = colorUtils.adjustBrightness(mainColor, 0.1 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #24272c, #232628
-  let shade3 = colorUtils.adjustBrightness(mainColor, 0.1 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade3 = colorUtils.adjustBrightness(mainColor, 0.12 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #313538, #271B1D
-  let shade4 = colorUtils.adjustBrightness(mainColor, 0.15 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade4 = colorUtils.adjustBrightness(mainColor, 0.18 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #3f4448, #374151
-  let shade5 = colorUtils.adjustBrightness(mainColor, 0.2 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade5 = colorUtils.adjustBrightness(mainColor, 0.28 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #474f54
-  let shade6 = colorUtils.adjustBrightness(mainColor, 0.25 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade6 = colorUtils.adjustBrightness(mainColor, 0.3 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #6b7280
-  let shade7 = colorUtils.adjustBrightness(mainColor, 0.35 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade7 = colorUtils.adjustBrightness(mainColor, 0.38 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #929ea6
-  let shade8 = colorUtils.adjustBrightness(mainColor, 0.5 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
+  let shade8 = colorUtils.adjustBrightness(mainColor, 0.48 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   let textColor = getTextColor(mainColor)
 
@@ -53,7 +53,7 @@ export function websiteThemeValues(websiteTheme) {
   let complementaryShade1 = colorUtils.adjustBrightness(complementary, 0.1 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #21650a
-  let complementaryShade2 = colorUtils.adjustBrightness(complementary, 0.2 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
+  let complementaryShade2 = colorUtils.adjustBrightness(complementary, 0.32 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
 
   let complementaryText = getTextColor(complementary)
 

@@ -1,5 +1,6 @@
 import knownNames from './colors.mjs'
 import { pSBC } from './colorfulmess.mjs'
+import { increaseBrightness } from './colorfulmess2.mjs'
 
 /**
  * Tries to return a hex color for the given color id.
@@ -60,7 +61,7 @@ export function getLightness(rgbColor) {
 }
 
 export function adjustBrightness(rgbColor, brightness) {
-  return pSBC(brightness, rgbColor);
+  return increaseBrightness(rgbColor, brightness);
 }
 
 export function rgbToHsl(r, g, b) {
