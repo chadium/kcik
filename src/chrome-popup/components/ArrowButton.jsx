@@ -10,7 +10,7 @@ export default function ArrowButton({ direction, onClick }) {
 
   return (
     <PseudoButton onClick={onClick}>
-      <div className={styles.locals.container}>
+      <div className={[styles.locals.container, 'boomer-theme--ok'].join(' ')}>
         <Arrow direction={direction}/>
       </div>
     </PseudoButton>
