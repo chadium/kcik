@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import Page from './Page.jsx'
 import TabHome from './tabs/TabHome.jsx'
 import TabWebsiteTheme from './tabs/TabWebsiteTheme.jsx'
@@ -8,6 +8,8 @@ import TabHost from './tabs/TabHost.jsx'
 import TabKeyboardNavigation from './tabs/TabKeyboardNavigation.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
+import { websiteThemeValues } from '../../preload/website-theme.mjs'
+import { useResource } from '../use-resource.mjs'
 
 const tabs = [
   {
@@ -45,6 +47,17 @@ export default function Connected({ com, repo }) {
   let activeTab = useMemo(() => {
     return tabs[tabIndex]
   }, [tabIndex])
+  let fetchResource = useCallback(() => repo.getWebsiteTheme(), [repo])
+  let { data, setData, loading, error } = useResource(fetchResource)
+
+  let {
+    mainColor,
+    textColor,
+    complementary,
+    complementaryText
+  } = useMemo(() => {
+    return websiteThemeValues(data)
+  }, [data])
 
   return (
     <Page
@@ -56,6 +69,15 @@ export default function Connected({ com, repo }) {
         />
       }
     >
+      <style>
+:root &#123;
+  --chad-text-color: {textColor};
+  --chad-bg-color: {mainColor};
+  --chad-action-ok-text-color: {complementaryText};
+  --chad-action-ok-bg-color: {complementary};
+&#125;
+      </style>
+
       {activeTab.content({ com, repo })}
     </Page>
   )

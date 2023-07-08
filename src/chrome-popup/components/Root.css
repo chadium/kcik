@@ -1,12 +1,11 @@
 :root {
-  --text-color: white;
   min-width: 220px;
 }
 
 body {
   height: 100%;
   margin: 0;
-  color: var(--text-color);
+  color: var(--chad-text-color);
 }
 
 p {
@@ -27,11 +26,15 @@ body > div {
 }
 
 .text-link {
-  color: var(--text-color);
+  color: var(--chad-text-color);
   text-decoration: none;
 }
 
-html,
+html {
+  background-color: var(--chad-bg-color);
+  background-image: linear-gradient(#ffffff00, #00000099);
+}
+
 .bg-info {
   background: linear-gradient(#4f94f1, #222aa0);
 }

@@ -1,8 +1,8 @@
 .container + .container {
-  margin-top: var(--boomer-safe-space);
+  margin-top: var(--chad-safe-space);
 }
 
 .label {
-  font-size: var(--boomer-font-size-normal);
-  margin-bottom: var(--boomer-safe-space);
+  font-size: var(--chad-font-size-normal);
+  margin-bottom: var(--chad-safe-space);
 }

@@ -1,6 +1,6 @@
 .container {
-  color: var(--boomer-text-color);
-  border-radius: var(--boomer-border-radius);
+  color: var(--chad-text-color);
+  border-radius: var(--chad-border-radius);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 
   position: relative;
@@ -10,7 +10,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  border-radius: var(--boomer-border-radius);
-  background: var(--boomer-bg-color);
+  border-radius: var(--chad-border-radius);
+  background: var(--chad-bg-color);
   opacity: 0.8;
 }

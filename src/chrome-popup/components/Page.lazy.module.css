@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100%;
   box-sizing: border-box;
-  color: var(--text-color);
+  color: var(--chad-text-color);
   width: 220px;
   height: 220px;
 }
@@ -11,7 +11,7 @@
 .content {
   flex: 1;
   overflow-x: hidden;
-  padding: var(--boomer-safe-space);
+  padding: var(--chad-safe-space);
 }
 
 .header {

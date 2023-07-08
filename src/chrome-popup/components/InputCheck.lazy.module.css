@@ -1,7 +1,7 @@
 .container {
-  font-size: var(--boomer-font-size-normal);
+  font-size: var(--chad-font-size-normal);
   display: inline-flex;
-  height: var(--boomer-control-height);
+  height: var(--chad-control-height);
   align-items: center;
   cursor: pointer;
   overflow: hidden;
@@ -16,27 +16,27 @@
 }
 
 .label {
-  padding-left: calc(var(--boomer-safe-space) / 2);
+  padding-left: calc(var(--chad-safe-space) / 2);
 }
 
 .check {
-  width: var(--boomer-control-height);
-  height: var(--boomer-control-height);
-  border-radius: var(--boomer-border-radius);
+  width: var(--chad-control-height);
+  height: var(--chad-control-height);
+  border-radius: var(--chad-border-radius);
   text-align: center;
-  line-height: var(--boomer-control-height);
-  font-size: var(--boomer-control-height);
+  line-height: var(--chad-control-height);
+  font-size: var(--chad-control-height);
   box-sizing: border-box;
 }
 
 .checked {
-  background-color: var(--boomer-action-bg-color);
+  background-color: var(--chad-action-bg-color);
 }
 .checked:before {
   content: "✓";
-  color: var(--boomer-action-text-color);
+  color: var(--chad-action-text-color);
 }
 
 .unchecked {
-  border: 2px solid var(--boomer-action-bg-color);
+  border: 2px solid var(--chad-action-bg-color);
 }

@@ -1,5 +1,5 @@
 .container > input {
-  font-size: var(--boomer-font-size-normal);
+  font-size: var(--chad-font-size-normal);
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -8,8 +8,8 @@
   border: 0;
   border-radius: 3px;
   outline: none;
-  border: var(--boomer-control-border);
-  border-radius: var(--boomer-border-radius);
-  color: var(--boomer-text-color);
-  background: var(--boomer-bg-color);
+  border: var(--chad-control-border);
+  border-radius: var(--chad-border-radius);
+  color: var(--chad-text-color);
+  background: var(--chad-bg-color);
 }

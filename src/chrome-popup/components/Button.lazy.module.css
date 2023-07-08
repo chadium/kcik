@@ -1,12 +1,12 @@
 .container {
-  font-size: var(--boomer-font-size-normal);
+  font-size: var(--chad-font-size-normal);
   font-weight: 600;
-  color: var(--boomer-action-text-color);
-  background-color: var(--boomer-action-bg-color);
+  color: var(--chad-action-text-color);
+  background-color: var(--chad-action-bg-color);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: var(--boomer-border-radius);
-  line-height: var(--boomer-control-height);
-  padding: 0 var(--boomer-safe-space);
+  border-radius: var(--chad-border-radius);
+  line-height: var(--chad-control-height);
+  padding: 0 var(--chad-safe-space);
   cursor: pointer;
 
   position: relative;

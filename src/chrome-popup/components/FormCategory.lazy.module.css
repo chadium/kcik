@@ -3,11 +3,11 @@
 }
 
 .label {
-  font-size: var(--boomer-font-size-normal);
+  font-size: var(--chad-font-size-normal);
   text-transform: uppercase;
-  color: var(--boomer-special-text-color);
+  color: var(--chad-special-text-color);
 }
 
 .content {
-  margin-top: var(--boomer-safe-space);
+  margin-top: var(--chad-safe-space);
 }

@@ -1,53 +1,53 @@
 :root {
-  --boomer-font-size-small: 14px;
-  --boomer-font-size-normal: 16px;
-  --boomer-font-size-big: 20px;
+  --chad-font-size-small: 14px;
+  --chad-font-size-normal: 16px;
+  --chad-font-size-big: 20px;
 
-  --boomer-text-color: #000;
-  --boomer-bg-color: #fff;
-  --boomer-bg-select-color: #efefef;
-  --boomer-special-text-color: yellow;
+  --chad-text-color: #000;
+  --chad-bg-color: #fff;
+  --chad-bg-select-color: #efefef;
+  --chad-special-text-color: yellow;
 
-  --boomer-border-radius: 3px;
+  --chad-border-radius: 3px;
 
-  --boomer-control-border: 1px solid var(--boomer-text-color);
-  --boomer-control-height: 30px;
+  --chad-control-border: 1px solid var(--chad-text-color);
+  --chad-control-height: 30px;
 
-  --boomer-safe-space: 10px;
+  --chad-safe-space: 10px;
 
-  --boomer-action-ok-text-color: white;
-  --boomer-action-ok-bg-color: #d49500;
+  --chad-action-ok-text-color: white;
+  --chad-action-ok-bg-color: #d49500;
 
-  --boomer-action-other-text-color: white;
-  --boomer-action-other-bg-color: #777777;
+  --chad-action-other-text-color: white;
+  --chad-action-other-bg-color: #777777;
 
-  --boomer-quick-transition-duration: 100ms;
+  --chad-quick-transition-duration: 100ms;
 }
 
 .boomer-bright {
-  --boomer-text-color: #222;
-  --boomer-bg-color: #fafafa;
-  --boomer-bg-select-color: #dadada;
+  --chad-text-color: #222;
+  --chad-bg-color: #fafafa;
+  --chad-bg-select-color: #dadada;
 }
 
 .boomer-dark {
-  --boomer-text-color: #fff;
-  --boomer-bg-color: #222;
-  --boomer-bg-select-color: #555;
+  --chad-text-color: #fff;
+  --chad-bg-color: #222;
+  --chad-bg-select-color: #555;
 }
 
 .boomer-theme--ok {
-  --boomer-action-text-color: var(--boomer-action-ok-text-color);
-  --boomer-action-bg-color: var(--boomer-action-ok-bg-color);
+  --chad-action-text-color: var(--chad-action-ok-text-color);
+  --chad-action-bg-color: var(--chad-action-ok-bg-color);
 }
 
 .boomer-theme--other {
-  --boomer-action-text-color: var(--boomer-action-other-text-color);
-  --boomer-action-bg-color: var(--boomer-action-other-bg-color);
+  --chad-action-text-color: var(--chad-action-other-text-color);
+  --chad-action-bg-color: var(--chad-action-other-bg-color);
 }
 
 .boomer-p-t {
-  padding-top: var(--boomer-safe-space);
+  padding-top: var(--chad-safe-space);
 }
 
 .boomer-text-shadow {
@@ -61,7 +61,7 @@
 
 .slide-left-enter-active {
   transform: translateX(0);
-  transition: transform var(--boomer-quick-transition-duration) ease-in-out;
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
 }
 
 .slide-left-exit {
@@ -70,7 +70,7 @@
 
 .slide-left-exit-active {
   transform: translateX(-100%);
-  transition: transform var(--boomer-quick-transition-duration) ease-in-out;
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
 }
 
 
@@ -80,7 +80,7 @@
 
 .slide-right-enter-active {
   transform: translateX(0);
-  transition: transform var(--boomer-quick-transition-duration) ease-in-out;
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
 }
 
 .slide-right-exit {
@@ -89,5 +89,5 @@
 
 .slide-right-exit-active {
   transform: translateX(100%);
-  transition: transform var(--boomer-quick-transition-duration) ease-in-out;
+  transition: transform var(--chad-quick-transition-duration) ease-in-out;
 }

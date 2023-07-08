@@ -1,5 +1,5 @@
 .container {
-  margin: calc(var(--boomer-safe-space) * -1);
+  margin: calc(var(--chad-safe-space) * -1);
   margin-right: 0;
   margin-bottom: 0;
 }
@@ -9,7 +9,7 @@
 }
 
 .container > * {
-  margin: var(--boomer-safe-space);
+  margin: var(--chad-safe-space);
   margin-right: 0;
   margin-bottom: 0;
 }
