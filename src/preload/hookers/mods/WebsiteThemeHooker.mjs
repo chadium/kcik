@@ -69,6 +69,11 @@ export class WebsiteThemeHooker extends Hooker {
   --toastify-text-color-dark: ${textColor};
 }
 
+/* Kick logo */
+.main-navbar svg path {
+  fill: ${textColor};
+}
+
 /* Toast card */
 .toast-card {
   color: ${complementaryText} !important;
