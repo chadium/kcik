@@ -252,7 +252,7 @@ html[lang] .variant-action.state-loading {
 
 /* Stream Tags */
 .category-tag-component {
-  color: ${textColor} !important;
+  color: ${shade7} !important;
   background: ${shade1} !important;
 }
 
