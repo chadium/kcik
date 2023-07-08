@@ -32,7 +32,7 @@ body > div {
 
 html {
   background-color: var(--chad-bg-color);
-  background-image: linear-gradient(#ffffff00, #00000099);
+  background-image: linear-gradient(#ffffff00, #00000033);
 }
 
 .bg-info {
