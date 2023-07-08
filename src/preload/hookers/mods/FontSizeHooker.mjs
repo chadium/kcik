@@ -14,11 +14,6 @@ export class FontSizeHooker extends Hooker {
 
   async hook() {
     const domApi = this.pimp.getApi('dom')
-    const chromeExtensionApi = this.pimp.getApi('chromeExtension')
-
-    chromeExtensionApi.send('kcik.ask', {
-      fields: ['fontSize']
-    })
 
     this._root = domApi.addElement()
     this._reactRoot = ReactDOM.createRoot(this._root)

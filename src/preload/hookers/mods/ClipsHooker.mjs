@@ -123,12 +123,6 @@ export class ClipsHooker extends Hooker {
     this.#sm.pimp = this.pimp
     await this.#sm.start(new DisabledState())
 
-    const chromeExtensionApi = this.pimp.getApi('chromeExtension')
-
-    chromeExtensionApi.send('kcik.ask', {
-      fields: ['enableVodKeyboardNavigation']
-    })
-
     return {
       name: 'clips',
       api: {

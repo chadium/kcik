@@ -26,7 +26,15 @@ export class ChromeExtensionHooker extends Hooker {
 
     this.scriptMutationObserver.observe(kcik, { attributes: true });
 
+    const initialData = JSON.parse(kcik.getAttribute('data-message'))
+
     this.send('kcik.ready', {})
+
+    this.pimp.getApi('websiteTheme').setWebsiteTheme(initialData.websiteTheme)
+    this.pimp.getApi('clips').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
+    this.pimp.getApi('vod').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
+    this.pimp.getApi('fontSize').setSize(initialData.fontSize)
+    this.pimp.getApi('hostStopper').enableHost(initialData.enableHost)
 
     return {
       name: 'chromeExtension',

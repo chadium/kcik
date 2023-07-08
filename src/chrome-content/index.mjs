@@ -5,7 +5,7 @@ import { WebsiteCom } from "./WebsiteCom.mjs"
 class Injection {
   #s = null
 
-  init() {
+  init(initialData) {
     if (this.#s !== null) {
       throw new Error('Already initialized')
     }
@@ -14,7 +14,7 @@ class Injection {
     this.#s = document.createElement('script')
     this.#s.setAttribute('src', src)
     this.#s.id = 'kcik'
-    this.#s.dataset.message = ''
+    this.#s.dataset.message = JSON.stringify(initialData)
     document.head.appendChild(this.#s)
   }
 
@@ -49,36 +49,14 @@ async function main() {
   let popupCom = new PopupCom()
   let websiteCom = new WebsiteCom(injection)
 
-  injection.init()
-
   await migrate(chrome.storage.sync)
   let repository = new Repository(chrome.storage.sync)
 
-  websiteCom.on('message', async ({ type, data }) => {
-    switch (type) {
-    case 'kcik.ask':
-      for (const field of data.fields) {
-        switch (field) {
-        case 'fontSize': {
-          websiteCom.send('kcik.fontSize', await repository.getFontSize())
-          break
-        }
-        case 'enableHost': {
-          websiteCom.send('kcik.enableHost', await repository.getEnableHost())
-          break
-        }
-        case 'enableVodKeyboardNavigation': {
-          websiteCom.send('kcik.enableVodKeyboardNavigation', await repository.getEnableVodKeyboardNavigation())
-          break
-        }
-        case 'websiteTheme': {
-          websiteCom.send('kcik.websiteTheme', await repository.getWebsiteTheme())
-          break
-        }
-        }
-      }
-      break
-    }
+  injection.init({
+    websiteTheme: await repository.getWebsiteTheme(),
+    fontSize: await repository.getFontSize(),
+    enableHost: await repository.getEnableHost(),
+    enableVodKeyboardNavigation: await repository.getEnableVodKeyboardNavigation(),
   })
 
   // Forwarding messages.

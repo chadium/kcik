@@ -144,12 +144,6 @@ export class HostStopperHooker extends Hooker {
     this.#sm.pimp = this.pimp
     await this.#sm.start(new DisabledState())
 
-    const chromeExtensionApi = this.pimp.getApi('chromeExtension')
-
-    chromeExtensionApi.send('kcik.ask', {
-      fields: ['enableHost']
-    })
-
     return {
       name: 'hostStopper',
       api: {

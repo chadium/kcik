@@ -24,9 +24,8 @@ import styles from "./global.lazy.css"
 async function main() {
   let pimp = new Pimp()
 
-  await pimp.register(new DomHooker())
-
   let hookers = [
+    new DomHooker(),
     new VueAppHooker(),
     new VueComponentHooker(),
     new EchoHooker(),
@@ -36,12 +35,12 @@ async function main() {
     new DomChatMessageHooker(),
     new UsernameColorFallbackHooker(),
     new VueRouteHooker(),
-    new ChromeExtensionHooker(),
     new WebsiteThemeHooker(),
     new FontSizeHooker(),
     new HostStopperHooker(),
     new VodHooker(),
     new ClipsHooker(),
+    new ChromeExtensionHooker(),
   ]
 
   for (let hooker of hookers) {
