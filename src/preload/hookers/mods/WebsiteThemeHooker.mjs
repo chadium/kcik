@@ -517,8 +517,7 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 
 /* Live indicator in the home page */
 .live-tag-component {
-  background-color: ${mainColor} !important;
-  color: ${complementary} !important;
+  /* I have decided against styling this. It looks better. */
 }
 
 /* Category banner */
