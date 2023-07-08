@@ -15,7 +15,7 @@ export default function TabCredits({ com }) {
         THIS EXTENSION POSSIBLE
       </div>
 
-      <div className="boomer-p-t"/>
+      <div className="chad-p-t"/>
 
       <GenericLoading loading={loading} error={error}>
         {data && (
@@ -29,7 +29,7 @@ export default function TabCredits({ com }) {
               ))}
             </div>
 
-            <div className="boomer-p-t"/>
+            <div className="chad-p-t"/>
 
             <div>Ko-Fi Supporters:</div>
             <div>
@@ -43,7 +43,7 @@ export default function TabCredits({ com }) {
         )}
       </GenericLoading>
 
-      <div className="boomer-p-t"/>
+      <div className="chad-p-t"/>
 
       <div className="text-center">
         Check <TextLink newTab={true} url="https://chadium.dev">https://chadium.dev</TextLink>

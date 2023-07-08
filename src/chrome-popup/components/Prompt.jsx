@@ -57,7 +57,7 @@ export default function Prompt({ show, title, placeholder, buttons, onEnter, onC
     <ModalBox show={show} onClose={onReject} title={title}>
       <InputText placeholder={placeholder} value={input} onChange={setInput}/>
 
-      <div className="boomer-p-t"></div>
+      <div className="chad-p-t"></div>
 
       {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}
     </ModalBox>

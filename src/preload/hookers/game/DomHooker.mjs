@@ -41,7 +41,7 @@ export class DomHooker extends Hooker {
     this._state = new Machine()
     this._state.hooker = this
     this._injectionPoint = document.createElement('div')
-    this._injectionPoint.classList.add('boomer-root', 'boomer-dark')
+    this._injectionPoint.classList.add('chad-root', 'chad-dark')
     this._onRemove = []
   }
 

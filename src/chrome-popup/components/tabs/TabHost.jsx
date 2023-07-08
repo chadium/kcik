@@ -15,7 +15,7 @@ export default function TabHost({ com, repo }) {
           <p>Streamers can send their viewers to another channel
             to show their support. You can opt out of hosts:</p>
 
-          <div className="boomer-p-t"></div>
+          <div className="chad-p-t"></div>
 
           <div>
             <InputCheck

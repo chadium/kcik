@@ -24,33 +24,33 @@
   --chad-quick-transition-duration: 100ms;
 }
 
-.boomer-bright {
+.chad-bright {
   --chad-text-color: #222;
   --chad-bg-color: #fafafa;
   --chad-bg-select-color: #dadada;
 }
 
-.boomer-dark {
+.chad-dark {
   --chad-text-color: #fff;
   --chad-bg-color: #222;
   --chad-bg-select-color: #555;
 }
 
-.boomer-theme--ok {
+.chad-theme--ok {
   --chad-action-text-color: var(--chad-action-ok-text-color);
   --chad-action-bg-color: var(--chad-action-ok-bg-color);
 }
 
-.boomer-theme--other {
+.chad-theme--other {
   --chad-action-text-color: var(--chad-action-other-text-color);
   --chad-action-bg-color: var(--chad-action-other-bg-color);
 }
 
-.boomer-p-t {
+.chad-p-t {
   padding-top: var(--chad-safe-space);
 }
 
-.boomer-text-shadow {
+.chad-text-shadow {
   text-shadow: -1px -1px 0 #0f0f0f, 1px -1px 0 #0f0f0f, -1px 1px 0 #0f0f0f, 1px 1px 0 #0f0f0f, 0 0.13rem 1px rgb(0 0 0 / 49%);
 }
 

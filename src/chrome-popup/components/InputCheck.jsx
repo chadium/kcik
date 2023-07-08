@@ -15,7 +15,7 @@ export default function InputCheck({ label, value, onChange }) {
   return (
     <label className={styles.locals.container}>
       <input type="checkbox" checked={value} onChange={nativeOnChange}/>
-      <span className={['boomer-theme--ok', styles.locals.check, value ? styles.locals.checked : styles.locals.unchecked].join(' ')}></span>
+      <span className={['chad-theme--ok', styles.locals.check, value ? styles.locals.checked : styles.locals.unchecked].join(' ')}></span>
       {label && <span className={styles.locals.label}>{label}</span>}
     </label>
   );

@@ -24,7 +24,7 @@ export default function TabKeyboardNavigation({ com, repo }) {
             />
           </div>
 
-          <div className="boomer-p-t"></div>
+          <div className="chad-p-t"></div>
 
           <ul>
             <li><b>Space bar</b>: pause/play video</li>
@@ -32,7 +32,7 @@ export default function TabKeyboardNavigation({ com, repo }) {
             <li><b>Right arrow</b>: go forward 5 seconds</li>
           </ul>
 
-          <div className="boomer-p-t"></div>
+          <div className="chad-p-t"></div>
 
           <p>Use the shift key to go back and forth 10 seconds.</p>
         </div>

@@ -35,7 +35,7 @@ export default function MessageDialog({ show, title, message, buttons, onAccept,
     <ModalBox show={show} onClose={onReject} title={title}>
       <p>{message}</p>
 
-      <div className="boomer-p-t"></div>
+      <div className="chad-p-t"></div>
 
       <div>
         {realButtons.map((entry, i) => <Button {...entry} key={i}/>)}

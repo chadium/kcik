@@ -38,7 +38,7 @@ export default function TabWebsiteTheme({ com, repo }) {
         }}
       />
 
-      <div className="boomer-p-t"></div>
+      <div className="chad-p-t"></div>
 
       <p>
         You can customize the color of the website.
@@ -46,8 +46,8 @@ export default function TabWebsiteTheme({ com, repo }) {
         You can review your changes in real time.
       </p>
 
-      <div className="boomer-p-t"></div>
-      <div className="boomer-p-t"></div>
+      <div className="chad-p-t"></div>
+      <div className="chad-p-t"></div>
 
       {data !== null && (
         <>
@@ -70,8 +70,8 @@ export default function TabWebsiteTheme({ com, repo }) {
             )}
           />
     
-          <div className="boomer-p-t"></div>
-          <div className="boomer-p-t"></div>
+          <div className="chad-p-t"></div>
+          <div className="chad-p-t"></div>
     
           <FormField
             label={(
