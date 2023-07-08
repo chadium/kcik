@@ -1,10 +1,8 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import Style from '../../../chrome-popup/components/Style.jsx'
 import * as colorUtils from '../../color-utils.mjs'
 import { websiteThemeValues } from '../../website-theme.mjs'
+import { CssInjector } from '../../CssInjector.mjs'
 
 export class WebsiteThemeHooker extends Hooker {
   constructor() {
@@ -12,15 +10,15 @@ export class WebsiteThemeHooker extends Hooker {
     this._root = null
     this._reactRoot = null
     this._websiteTheme = null
+    this._css = null
   }
 
   async hook() {
     const domApi = this.pimp.getApi('dom')
 
     this._root = domApi.addElement()
-    this._reactRoot = ReactDOM.createRoot(this._root)
 
-    this._reactRoot.render(React.createElement(Style, this.#makeProps(), null))
+    this._css = new CssInjector({ root: this._root })
 
     return {
       name: 'websiteTheme',
@@ -31,18 +29,17 @@ export class WebsiteThemeHooker extends Hooker {
 
         setWebsiteTheme: (websiteTheme) => {
           this._websiteTheme = websiteTheme
-          this._reactRoot.render(React.createElement(Style, this.#makeProps(), null))
+          this._css.setCss(this.#makeCss())
         }
       }
     }
   }
 
   unhook() {
-    this._reactRoot.unmount()
     this._root.remove()
   }
 
-  #makeProps() {
+  #makeCss() {
     if (this._websiteTheme) {
       let {
         mainColor,
@@ -66,8 +63,7 @@ export class WebsiteThemeHooker extends Hooker {
       let [complementaryHue] = colorUtils.rgbToHsl(complementary)
 
       // Note: I use html[lang] to increase specifity.
-      return {
-        css: `
+      return `
 :root {
   --toastify-color-dark: ${mainColor};
   --toastify-text-color-dark: ${textColor};
@@ -757,9 +753,8 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   background-color: ${shade4};
 }
 `
-      }
     } else {
-      return {}
+      return ''
     }
   }
 }
