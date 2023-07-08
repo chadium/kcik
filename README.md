@@ -3,8 +3,9 @@
 This is a browser extension for the streaming platform [kick.com](https://kick.com).
 
 Features:
+- change website color.
 - prevent hosts.
-- arrow key navigation in vod pages.
+- extended keyboard navigation for vods and clips.
 - set chat font size.
 - set username color beyond fixed palette.
 
