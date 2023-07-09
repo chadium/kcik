@@ -128,6 +128,13 @@ export class WebsiteThemeHooker extends Hooker {
 .chatroom-identity .color-item.selected {
   --tw-ring-color: ${complementary} !important;
 }
+.chat-entry-clip {
+  background: ${shade1} !important;
+}
+.chat-entry-clip .chat-entry-clip-info .clipped-by {
+  /* todo */
+  color: #fff6 !important;
+}
 
 /* Text mode editor (used in chat) */
 .text-mode {
