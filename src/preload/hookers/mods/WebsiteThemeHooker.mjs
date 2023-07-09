@@ -54,6 +54,9 @@ export class WebsiteThemeHooker extends Hooker {
         textColor,
         textColorShade1,
         textColorShade2,
+        textColorShade3,
+        textColorShade4,
+        textColorShade5,
         complementary,
         complementaryShade1,
         complementaryShade2,
@@ -135,6 +138,9 @@ export class WebsiteThemeHooker extends Hooker {
   /* todo */
   color: #fff6 !important;
 }
+.chatroom-banner {
+  background: #53fc18 !important;
+}
 
 /* Text mode editor (used in chat) */
 .text-mode {
@@ -183,12 +189,12 @@ html[lang] #search-input:focus {
   color: ${textColor};
 }
 .sidebar-item .item-categories {
-  color: ${textColorShade2};
+  color: ${textColorShade3};
 }
 
 /* Sidebar button */
 .show-action-btn {
-  color: ${textColorShade2} !important;
+  color: ${textColorShade3} !important;
 }
 .show-action-btn:hover {
   color: ${textColor} !important;
@@ -485,7 +491,7 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   background: ${shade1} !important;
 }
 .dashboard-left-menu-header > .menu-title {
-  color: ${textColorShade2} !important;
+  color: ${textColorShade3} !important;
 }
 .dashboard-left-menu-item > .menu-item-link {
   color: inherit !important;
@@ -686,6 +692,10 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   color: ${textColorShade1};
 }
 
+.text-gray-300 {
+  color: ${textColorShade2};
+}
+
 .text-white {
   color: ${textColor};
 }
@@ -697,6 +707,9 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 }
 .text-white\\/80 {
   color: ${textColor}cc;
+}
+.text-white\\/40 {
+  color: ${textColor}66;
 }
 .hover\\:text-white {
   color: ${textColor};
@@ -769,6 +782,15 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 
 .text-\\[\\#53FC18\\] {
   color: ${complementary};
+}
+.text-\\[\\#999999\\] {
+  color: ${textColorShade5};
+}
+.text-\\[\\#b1bcc3\\] {
+  color: ${textColorShade3};
+}
+.text-\\[\\#a8b1b8\\] {
+  color: ${textColorShade4};
 }
 
 .bg-surface-tint {
