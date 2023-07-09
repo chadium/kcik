@@ -37,10 +37,10 @@ export function websiteThemeValues(websiteTheme) {
   let textColor = getTextColor(mainColor)
 
   // Equivalent to: #e5e7eb
-  let textColorSubtle1 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade1 = colorUtils.adjustBrightness(textColor, 0.1 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #b1bcc3
-  let textColorSubtle2 = colorUtils.adjustBrightness(textColor, 0.5 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade2 = colorUtils.adjustBrightness(textColor, 0.25 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #53fc18
   // When I first released the extension with the website theme feature,
@@ -68,8 +68,8 @@ export function websiteThemeValues(websiteTheme) {
     shade7,
     shade8,
     textColor,
-    textColorSubtle1,
-    textColorSubtle2,
+    textColorShade1,
+    textColorShade2,
     complementary,
     complementaryShade1,
     complementaryShade2,

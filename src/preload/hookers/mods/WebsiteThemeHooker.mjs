@@ -52,8 +52,8 @@ export class WebsiteThemeHooker extends Hooker {
         shade7,
         shade8,
         textColor,
-        textColorSubtle1,
-        textColorSubtle2,
+        textColorShade1,
+        textColorShade2,
         complementary,
         complementaryShade1,
         complementaryShade2,
@@ -181,6 +181,17 @@ html[lang] #search-input:focus {
 }
 .sidebar-item .item-name {
   color: ${textColor};
+}
+.sidebar-item .item-categories {
+  color: ${textColorShade2};
+}
+
+/* Sidebar button */
+.show-action-btn {
+  color: ${textColorShade2} !important;
+}
+.show-action-btn:hover {
+  color: ${textColor} !important;
 }
 
 /* Buttons */
@@ -474,7 +485,7 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   background: ${shade1} !important;
 }
 .dashboard-left-menu-header > .menu-title {
-  color: ${textColorSubtle2} !important;
+  color: ${textColorShade2} !important;
 }
 .dashboard-left-menu-item > .menu-item-link {
   color: inherit !important;
@@ -672,7 +683,7 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 }
 
 .text-gray-400 {
-  color: ${textColorSubtle1};
+  color: ${textColorShade1};
 }
 
 .text-white {
