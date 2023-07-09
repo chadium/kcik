@@ -149,6 +149,9 @@ export class WebsiteThemeHooker extends Hooker {
 .chatroom-event-sub__label {
   color: ${textColorShade2} !important;
 }
+.pinned-message__container {
+  background: ${shade3} !important;
+}
 
 /* Text mode editor (used in chat) */
 .text-mode {
@@ -291,6 +294,11 @@ html[lang] .variant-action.state-loading {
 /* Stream information */
 .stream-info svg path[fill=white] {
   fill: ${textColor};
+}
+
+/* Stream information panel */
+.carousel-card-panel {
+  background: ${mainColor}99 !important;
 }
 
 /* Radio */
