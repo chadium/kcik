@@ -844,6 +844,9 @@ html[lang] .category-tile-holder.category-tile-active {
 .text-\\[\\#75FD46\\] {
   color: ${complementaryShade3};
 }
+.text-\\[\\#D2DAE0\\] {
+  color: ${textColorShade2};
+}
 
 .bg-surface-tint {
   background-color: ${shade4};
