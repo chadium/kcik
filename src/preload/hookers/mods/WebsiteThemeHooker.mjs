@@ -127,6 +127,9 @@ export class WebsiteThemeHooker extends Hooker {
 .chatroom-event-unban__container .chatroom-event-unban__icon {
   color: ${complementary} !important;
 }
+.chatroom-event-sub__icon {
+  color: ${complementary} !important;
+}
 #chatroom-top svg path[fill=white] {
   fill: ${textColor};
 }
@@ -151,6 +154,12 @@ export class WebsiteThemeHooker extends Hooker {
 }
 .pinned-message__container {
   background: ${shade3} !important;
+}
+.chatroom-history-breaker {
+  color: ${complementary} !important;
+}
+.chatroom-history-breaker div {
+  background: ${complementary} !important;
 }
 
 /* Text mode editor (used in chat) */
@@ -564,6 +573,12 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 }
 
 /* Category banner */
+html[lang] .category-tile-holder.category-tile-active {
+  --tw-hue-rotate: hue-rotate(${complementaryHue - 0.15}turn);
+}
+.category-tile-holder:hover {
+  --tw-hue-rotate: hue-rotate(${complementaryHue - 0.15}turn);
+}
 .subcategory-card .category-banner:hover {
   filter: sepia(1) hue-rotate(${complementaryHue - 0.15}turn) contrast(1.4) brightness(1) saturate(3)
 }
