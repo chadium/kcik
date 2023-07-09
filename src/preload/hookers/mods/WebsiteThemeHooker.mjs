@@ -57,6 +57,7 @@ export class WebsiteThemeHooker extends Hooker {
         textColorShade3,
         textColorShade4,
         textColorShade5,
+        textColorShade6,
         complementary,
         complementaryShade1,
         complementaryShade2,
@@ -355,6 +356,9 @@ html[lang] .variant-action.state-loading {
 }
 .emote-picker-panel {
   background-color: ${shade1} !important;
+}
+.emote-picker-section .section-title {
+  color: ${shade8} !important;
 }
 
 /* Panel tabs */
@@ -695,10 +699,15 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   background: ${mainColor}cc;
 }
 
+.text-gray-500 {
+  color: ${textColorShade6};
+}
+.text-gray-500\\/40 {
+  color: ${textColorShade6}66;
+}
 .text-gray-400 {
   color: ${textColorShade1};
 }
-
 .text-gray-300 {
   color: ${textColorShade2};
 }

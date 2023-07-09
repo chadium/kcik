@@ -51,6 +51,9 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #999999
   let textColorShade5 = colorUtils.adjustBrightness(textColor, 0.4 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
+  // Equivalent to: #6b7280
+  let textColorShade6 = colorUtils.adjustBrightness(textColor, 0.56 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+
   // Equivalent to: #53fc18
   // When I first released the extension with the website theme feature,
   // I had the complementary color set automatically by an algorithm.
@@ -85,6 +88,7 @@ export function websiteThemeValues(websiteTheme) {
     textColorShade3,
     textColorShade4,
     textColorShade5,
+    textColorShade6,
     complementary,
     complementaryShade1,
     complementaryShade2,
