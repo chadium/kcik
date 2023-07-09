@@ -60,6 +60,7 @@ export class WebsiteThemeHooker extends Hooker {
         complementary,
         complementaryShade1,
         complementaryShade2,
+        complementaryShade3,
         complementaryText,
       } = websiteThemeValues(this._websiteTheme)
 
@@ -140,6 +141,12 @@ export class WebsiteThemeHooker extends Hooker {
 }
 .chatroom-banner {
   background: #53fc18 !important;
+}
+.chatroom-event-sub__container {
+  background: ${shade3} !important
+}
+.chatroom-event-sub__label {
+  color: ${textColorShade2} !important;
 }
 
 /* Text mode editor (used in chat) */
@@ -801,6 +808,9 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 }
 .text-\\[\\#a8b1b8\\] {
   color: ${textColorShade4};
+}
+.text-\\[\\#75FD46\\] {
+  color: ${complementaryShade3};
 }
 
 .bg-surface-tint {

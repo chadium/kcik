@@ -39,7 +39,7 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #e5e7eb
   let textColorShade1 = colorUtils.adjustBrightness(textColor, 0.1 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
-  // Equivalent to: #d1d5db
+  // Equivalent to: #d1d5db and #d3d8db
   let textColorShade2 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #b1bcc3
@@ -64,6 +64,9 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #21650a
   let complementaryShade2 = colorUtils.adjustBrightness(complementary, 0.32 * (colorUtils.getLightness(complementary) >= 0.5 ? -1 : 1))
 
+  // Equivalent to: #75FD46
+  let complementaryShade3 = colorUtils.adjustBrightness(complementary, 0.1 * (colorUtils.getLightness(complementary) >= 0.5 ? 1 : -1))
+
   let complementaryText = getTextColor(complementary)
 
   return {
@@ -85,6 +88,7 @@ export function websiteThemeValues(websiteTheme) {
     complementary,
     complementaryShade1,
     complementaryShade2,
+    complementaryShade3,
     complementaryText,
   }
 }
