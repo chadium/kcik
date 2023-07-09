@@ -109,6 +109,9 @@ export class WebsiteThemeHooker extends Hooker {
 .chat-actions-popup {
   background: ${shade1} !important;
 }
+.actions-muted-count {
+  color: ${textColorShade4} !important;
+}
 .chatroom-identity .preview {
   background: ${mainColor} !important;
 }
@@ -160,6 +163,11 @@ export class WebsiteThemeHooker extends Hooker {
 }
 .chatroom-history-breaker div {
   background: ${complementary} !important;
+}
+.chatroom-identity .settings .global-badges .badges-container .no-data,
+.chatroom-identity .settings .channel-badges .badges-container .no-data,
+.chatroom-identity .settings .colors .badges-container .no-data {
+  color: ${textColor} !important;
 }
 
 /* Text mode editor (used in chat) */
