@@ -730,6 +730,16 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   color: ${complementary};
 }
 
+.hover\\:bg-primary:hover {
+  background: ${complementary};
+}
+.text-secondary {
+  color: ${complementaryText};
+}
+.hover\\:text-secondary:hover {
+  color: ${complementaryText};
+}
+
 .hover\\:text-primary:hover {
   color: ${complementary};
 }
