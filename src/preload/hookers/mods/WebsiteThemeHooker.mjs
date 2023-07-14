@@ -147,7 +147,15 @@ export class WebsiteThemeHooker extends Hooker {
   color: #fff6 !important;
 }
 .chatroom-banner {
-  background: #53fc18 !important;
+  background: ${complementary} !important;
+  color: ${complementaryText} !important;
+}
+.chatroom-banner .banner-icon {
+  color: ${complementaryText} !important;
+}
+.sliding-div-holder:before {
+  /* First seen in the chatroom banner. */
+  background: linear-gradient(to right, ${complementary}, transparent 1%, transparent 99%, ${complementary} 100%) !important;
 }
 .chatroom-event-sub__container {
   background: ${shade3} !important
@@ -781,6 +789,10 @@ html[lang] .category-tile-holder.category-tile-active {
   background: ${complementary};
 }
 .text-secondary {
+  color: ${complementaryText};
+}
+.text-secondary-dark {
+  /* Supposed to be #0f1214. */
   color: ${complementaryText};
 }
 .hover\\:text-secondary:hover {
