@@ -178,6 +178,17 @@ export class WebsiteThemeHooker extends Hooker {
   color: ${textColor} !important;
 }
 
+/* Gifted subs in chat */
+.chatroom-event-subgift__container {
+  background-color: ${shade3} !important;
+}
+.chatroom-event-subgift__container .chatroom-event-subgift__icon {
+  color: ${textColor} !important;
+}
+.chatroom-event-subgift__container .chatroom-event-subgift__label {
+  color: ${textColorShade2} !important;
+}
+
 /* Text mode editor (used in chat) */
 .text-mode {
   color: ${textColor} !important;
