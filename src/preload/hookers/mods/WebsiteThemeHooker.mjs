@@ -714,6 +714,9 @@ html[lang] .category-tile-holder.category-tile-active {
   color: ${textColor};
   background: ${shade2};
 }
+.hover\\:bg-secondary-light:hover {
+  background: ${shade2};
+}
 
 .bg-secondary-lighter {
   color: ${textColor};
