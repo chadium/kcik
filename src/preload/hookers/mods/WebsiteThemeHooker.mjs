@@ -123,6 +123,9 @@ export class WebsiteThemeHooker extends Hooker {
 .chatroom-identity .badges-container .badge.bordered {
   outline-color: ${complementary} !important;
 }
+.chatroom-identity .labels .subtitle {
+  color: ${textColorShade4} !important;
+}
 .chatroom-event-ban__container,
 .chatroom-event-unban__container {
   background: ${shade3} !important;
