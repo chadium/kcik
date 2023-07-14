@@ -54,7 +54,7 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #999999
   let textColorShade6 = colorUtils.adjustBrightness(textColor, 0.4 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
-  // Equivalent to: #6b7280
+  // Equivalent to: #6b7280 or #7d7d7d
   let textColorShade7 = colorUtils.adjustBrightness(textColor, 0.56 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #53fc18

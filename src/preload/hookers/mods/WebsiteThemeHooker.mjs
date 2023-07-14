@@ -218,6 +218,9 @@ html[lang] #search-input:focus {
   border-color: ${mainColor} !important;
   background: ${shade1} !important;
 }
+html[lang] #search-input::placeholder {
+  color: ${textColor}80;
+}
 
 /* Search results */
 .results .hit:hover {
@@ -469,6 +472,9 @@ html[lang] .input-holder:has(input:disabled) {
 }
 .input-holder:has(:not(input:disabled)):focus-within:has(> input:placeholder-shown) {
   --tw-ring-color: ${shade6} !important;
+}
+.input-holder > input::placeholder {
+  color: ${textColorShade7};
 }
 
 /* Text area input box */
@@ -930,6 +936,13 @@ html[lang] .category-tile-holder.category-tile-active {
 
 .bg-surface-tint {
   background-color: ${shade4};
+}
+
+input::placeholder {
+  color: ${shade8};
+}
+textarea::placeholder {
+  color: ${shade8};
 }
 `
     } else {
