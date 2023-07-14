@@ -637,6 +637,9 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 
 /* Modal dialog */
+.base-dialog {
+  background-color: ${shade2} !important;
+}
 .base-modal > .modal-content {
   background: ${shade2} !important;
 }
@@ -834,6 +837,10 @@ html[lang] .category-tile-holder.category-tile-active {
   background-color: ${complementary}66;
 }
 
+:is(.dark .dark\\:bg-secondary-light) {
+  background-color: ${shade2};
+  color: ${textColor};
+}
 .bg-white {
   background-color: ${textColor};
 }
