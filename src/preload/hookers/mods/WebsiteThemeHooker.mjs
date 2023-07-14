@@ -661,6 +661,25 @@ html[lang] .category-tile-holder.category-tile-active {
   background: ${shade2} !important;
 }
 
+/* Video player */
+.vjs-control:hover {
+  color: ${complementary};
+}
+.vjs-menu-item:hover {
+  background-color: ${complementaryShade1} !important;
+  color: ${complementaryText};
+}
+.vjs-menu-item.vjs-selected {
+  background-color: ${complementary} !important;
+  color: ${complementaryText};
+}
+.video-js .vjs-volume-level {
+  background-color: ${complementary} !important;
+}
+.video-js .vjs-volume-level:before {
+  color: ${complementary} !important;
+}
+
 /* Anything else */
 .bg-secondary {
   color: ${textColor};
