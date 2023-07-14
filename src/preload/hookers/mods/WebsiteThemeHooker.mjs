@@ -505,6 +505,12 @@ html[lang] .input-holder:has(input:disabled) {
   background-color: ${complementary} !important;
 }
 
+/* Special select boxes for live stream filters */
+#livestreams .vue-select .input {
+  color: ${textColor} !important;
+  background-color: ${shade6} !important;
+}
+
 /* Vue select boxes */
 .vue-select .btn-listbox {
   color: ${textColor} !important;
