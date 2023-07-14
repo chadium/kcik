@@ -80,6 +80,11 @@ export class WebsiteThemeHooker extends Hooker {
   fill: ${textColor};
 }
 
+/* Kick logo in the footer */
+footer svg path {
+  fill: ${textColor};
+}
+
 /* Toast card */
 .toast-card {
   color: ${complementaryText} !important;
