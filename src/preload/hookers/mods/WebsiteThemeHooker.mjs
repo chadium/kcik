@@ -58,6 +58,7 @@ export class WebsiteThemeHooker extends Hooker {
         textColorShade4,
         textColorShade5,
         textColorShade6,
+        textColorShade7,
         complementary,
         complementaryShade1,
         complementaryShade2,
@@ -110,7 +111,7 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade1} !important;
 }
 .actions-muted-count {
-  color: ${textColorShade4} !important;
+  color: ${textColorShade5} !important;
 }
 .chatroom-identity .preview {
   background: ${mainColor} !important;
@@ -161,7 +162,7 @@ export class WebsiteThemeHooker extends Hooker {
   background: ${shade3} !important
 }
 .chatroom-event-sub__label {
-  color: ${textColorShade2} !important;
+  color: ${textColorShade3} !important;
 }
 .pinned-message__container {
   background: ${shade3} !important;
@@ -186,7 +187,7 @@ export class WebsiteThemeHooker extends Hooker {
   color: ${textColor} !important;
 }
 .chatroom-event-subgift__container .chatroom-event-subgift__label {
-  color: ${textColorShade2} !important;
+  color: ${textColorShade3} !important;
 }
 
 /* Text mode editor (used in chat) */
@@ -236,12 +237,12 @@ html[lang] #search-input:focus {
   color: ${textColor};
 }
 .sidebar-item .item-categories {
-  color: ${textColorShade3};
+  color: ${textColorShade4};
 }
 
 /* Sidebar button */
 .show-action-btn {
-  color: ${textColorShade3} !important;
+  color: ${textColorShade4} !important;
 }
 .show-action-btn:hover {
   color: ${textColor} !important;
@@ -294,6 +295,16 @@ html[lang] .variant-action.state-loading {
 }
 .btn.btn-secondary-lightest:hover {
   background: ${shade8};
+}
+
+.btn.btn-primary {
+  background: ${complementary};
+  color: ${complementaryText};
+}
+.btn.btn-primary:hover,
+.btn.btn-primary:focus {
+  background: ${complementaryShade1};
+  color: ${complementaryText};
 }
 
 /* Cards */
@@ -552,7 +563,7 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
   background: ${shade1} !important;
 }
 .dashboard-left-menu-header > .menu-title {
-  color: ${textColorShade3} !important;
+  color: ${textColorShade4} !important;
 }
 .dashboard-left-menu-item > .menu-item-link {
   color: inherit !important;
@@ -778,16 +789,19 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 
 .text-gray-500 {
-  color: ${textColorShade6};
+  color: ${textColorShade7};
 }
 .text-gray-500\\/40 {
-  color: ${textColorShade6}66;
+  color: ${textColorShade7}66;
 }
 .text-gray-400 {
-  color: ${textColorShade1};
+  color: ${textColorShade2};
 }
 .text-gray-300 {
-  color: ${textColorShade2};
+  color: ${textColorShade3};
+}
+.text-gray-100 {
+  color: ${textColorShade1};
 }
 
 .text-white {
@@ -896,19 +910,19 @@ html[lang] .category-tile-holder.category-tile-active {
   color: ${complementary};
 }
 .text-\\[\\#999999\\] {
-  color: ${textColorShade5};
+  color: ${textColorShade6};
 }
 .text-\\[\\#b1bcc3\\] {
-  color: ${textColorShade3};
+  color: ${textColorShade4};
 }
 .text-\\[\\#a8b1b8\\] {
-  color: ${textColorShade4};
+  color: ${textColorShade5};
 }
 .text-\\[\\#75FD46\\] {
   color: ${complementaryShade3};
 }
 .text-\\[\\#D2DAE0\\] {
-  color: ${textColorShade2};
+  color: ${textColorShade3};
 }
 
 .bg-surface-tint {

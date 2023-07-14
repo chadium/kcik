@@ -36,23 +36,26 @@ export function websiteThemeValues(websiteTheme) {
 
   let textColor = getTextColor(mainColor)
 
+  // Equivalent to: #f3f4f6
+  let textColorShade1 = colorUtils.adjustBrightness(textColor, 0.05 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+
   // Equivalent to: #e5e7eb
-  let textColorShade1 = colorUtils.adjustBrightness(textColor, 0.1 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade2 = colorUtils.adjustBrightness(textColor, 0.1 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #d1d5db and #d3d8db and #d2dae0
-  let textColorShade2 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade3 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #b1bcc3
-  let textColorShade3 = colorUtils.adjustBrightness(textColor, 0.25 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade4 = colorUtils.adjustBrightness(textColor, 0.25 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #a8b1b8
-  let textColorShade4 = colorUtils.adjustBrightness(textColor, 0.31 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade5 = colorUtils.adjustBrightness(textColor, 0.31 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #999999
-  let textColorShade5 = colorUtils.adjustBrightness(textColor, 0.4 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade6 = colorUtils.adjustBrightness(textColor, 0.4 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #6b7280
-  let textColorShade6 = colorUtils.adjustBrightness(textColor, 0.56 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
+  let textColorShade7 = colorUtils.adjustBrightness(textColor, 0.56 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #53fc18
   // When I first released the extension with the website theme feature,
@@ -89,6 +92,7 @@ export function websiteThemeValues(websiteTheme) {
     textColorShade4,
     textColorShade5,
     textColorShade6,
+    textColorShade7,
     complementary,
     complementaryShade1,
     complementaryShade2,
