@@ -1,6 +1,8 @@
 import { Messenger } from './Messenger.mjs'
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
+import { PiniaHooker } from './hookers/game/PiniaHooker.mjs'
+import { HideStreamersHooker } from './hookers/mods/HideStreamersHooker.mjs'
 import { EchoHooker } from './hookers/game/EchoHooker.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { UserHooker } from './hookers/game/UserHooker.mjs'
@@ -28,6 +30,7 @@ async function main() {
     new DomHooker(),
     new VueAppHooker(),
     new VueComponentHooker(),
+    new PiniaHooker(),
     new EchoHooker(),
     new StateHooker(),
     new UserHooker(),
@@ -40,6 +43,7 @@ async function main() {
     new HostStopperHooker(),
     new VodHooker(),
     new ClipsHooker(),
+    new HideStreamersHooker(),
     new ChromeExtensionHooker(),
   ]
 

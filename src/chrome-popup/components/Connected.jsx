@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import Page from './Page.jsx'
 import TabHome from './tabs/TabHome.jsx'
+import TabHideStreamers from './tabs/TabHideStreamers.jsx'
 import TabWebsiteTheme from './tabs/TabWebsiteTheme.jsx'
 import TabChatUsername from './tabs/TabChatUsername.jsx'
 import TabChatFont from './tabs/TabChatFont.jsx'
@@ -19,6 +20,10 @@ const tabs = [
   {
     name: 'Website Theme',
     content: (params) => <TabWebsiteTheme {...params}/>
+  },
+  {
+    name: 'Hide Streamers',
+    content: (params) => <TabHideStreamers {...params}/>
   },
   {
     name: 'Username',

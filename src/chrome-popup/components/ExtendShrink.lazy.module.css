@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  gap: var(--chad-safe-space);
+}
+
+.container > *:first-child {
+  flex: 1;
+}

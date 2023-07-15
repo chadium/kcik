@@ -12,6 +12,10 @@ let websiteThemeSchema = Joi.object({
   complementaryColor: Joi.string(),
 })
 
+let hideStreamersSchema = Joi.object({
+  featured: Joi.array().items(Joi.string()).required()
+})
+
 export class Repository {
   #storageArea = null
 
@@ -99,5 +103,36 @@ export class Repository {
         enableVodKeyboardNavigation: value
       })
     }
+  }
+
+  async getHideStreamers() {
+    let result = await this.#storageArea.get(['hideStreamers'])
+
+    if (result.hideStreamers === undefined) {
+      result.hideStreamers = {}
+    }
+
+    if (result.hideStreamers.featured === undefined) {
+      result.hideStreamers.featured = []
+    }
+
+    return result.hideStreamers
+  }
+
+  async setHideStreamers(value) {
+    value = await hideStreamersSchema.validateAsync(value)
+
+    if (value.featured.length === 0) {
+      delete value.featured
+    }
+
+    if (Object.keys(value).length === 0) {
+      // Naughty list is empty.
+      await this.#storageArea.remove(['hideStreamers'])
+    }
+
+    await this.#storageArea.set({
+      hideStreamers: value
+    })
   }
 }

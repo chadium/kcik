@@ -57,6 +57,7 @@ async function main() {
     fontSize: await repository.getFontSize(),
     enableHost: await repository.getEnableHost(),
     enableVodKeyboardNavigation: await repository.getEnableVodKeyboardNavigation(),
+    hideStreamers: await repository.getHideStreamers(),
   })
 
   // Forwarding messages.

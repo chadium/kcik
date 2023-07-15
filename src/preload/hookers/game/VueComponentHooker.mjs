@@ -85,6 +85,78 @@ export class VueComponentHooker extends Hooker {
           return this.findNodes(root, (vm) => vm.type === id)
         },
 
+        snapshot: () => {
+          let root = objectUtils.getByPath(vueAppApi.getVueApp(), [
+            "_container",
+            "_vnode",
+            "component",
+            "appContext",
+            "app",
+            "config",
+            "globalProperties",
+            "$router",
+            "currentRoute",
+            "_rawValue",
+            "matched",
+            "0",
+            "instances",
+            "default",
+            "_",
+            "vnode"
+          ])
+
+          root = {
+            vm: root,
+            children: []
+          }
+
+          let next = [root]
+
+          function areTheseChildrenSane(children) {
+            if (children === null) {
+              return false
+            }
+
+            if (!(children instanceof Array)) {
+              return false
+            }
+
+            return true
+          }
+
+          while (next.length > 0) {
+            for (let node of next.concat()) {
+              arrayUtils.removeFirstByValue(next, node)
+
+              if (node.vm.component) {
+                if (areTheseChildrenSane(node.vm.component.subTree.children)) {
+                  for (let child of node.vm.component.subTree.children) {
+                    let childNode = {
+                      vm: child,
+                      children: []
+                    }
+                    node.children.push(childNode)
+                    next.push(childNode)
+                  }
+                }
+              } else {
+                if (areTheseChildrenSane(node.vm.children)) {
+                  for (let child of node.vm.children) {
+                    let childNode = {
+                      vm: child,
+                      children: []
+                    }
+                    node.children.push(childNode)
+                    next.push(childNode)
+                  }
+                }
+              }
+            }
+          }
+
+          return root
+        },
+
         getNodeComponentProxy: (node) => {
           return node.component.proxy
         },

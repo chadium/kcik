@@ -35,6 +35,7 @@ export class ChromeExtensionHooker extends Hooker {
     this.pimp.getApi('vod').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
     this.pimp.getApi('fontSize').setSize(initialData.fontSize)
     this.pimp.getApi('hostStopper').enableHost(initialData.enableHost)
+    this.pimp.getApi('hideStreamers').setNaughtyList(initialData.hideStreamers)
 
     return {
       name: 'chromeExtension',
@@ -103,8 +104,11 @@ export class ChromeExtensionHooker extends Hooker {
     }
 
     case 'kcik.usernameColor.set':
-      console.log(data)
       this.pimp.getApi('state').setUsernameColor(data)
+      break
+
+    case 'kcik.hideStreamers':
+      this.pimp.getApi('hideStreamers').setNaughtyList(data)
       break
     }
   }
