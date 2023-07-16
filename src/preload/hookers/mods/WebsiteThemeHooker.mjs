@@ -115,6 +115,9 @@ footer svg path {
 .chat-actions-popup {
   background: ${shade1} !important;
 }
+.chat-actions-item:hover {
+  background: ${shade6}99 !important;
+}
 .actions-muted-count {
   color: ${textColorShade5} !important;
 }
@@ -612,6 +615,9 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 }
 .session-info .stats-container .data {
   color: ${textColor} !important;
+}
+.session-info .stats-container .label {
+  color: ${shade8} !important;
 }
 
 /* Modview top bar */
