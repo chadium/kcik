@@ -9,20 +9,12 @@ export default function TabHome({ com, repo }) {
         of this extension to your liking.
       </p>
 
-      <br />
-
-      <p>
-        KCIK is a chrome extension for kick.com developed LIVE and
-        exclusively on kick.com!
-      </p>
-
-      <br />
+      <br/>
 
       <p>
         <b>New experimental feature</b>:<br/>
-        Website color! You can now change the color of the
-        website. This is very much work in progress but it
-        is released in this version for you to play around!
+        Hide streamers! You can now remove streamers from the
+        Featured Streams sections of the home page.
       </p>
     </div>
   )
