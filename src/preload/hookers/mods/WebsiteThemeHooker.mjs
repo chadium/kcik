@@ -862,6 +862,9 @@ html[lang] .category-tile-holder.category-tile-active {
 .text-primary {
   color: ${complementary};
 }
+.text-primary\\/40 {
+  color: ${complementary}66;
+}
 
 .hover\\:bg-primary:hover {
   background: ${complementary};
