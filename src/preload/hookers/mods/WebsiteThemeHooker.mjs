@@ -295,9 +295,11 @@ html[lang] .variant-action.state-loading {
 .variant-text .icon {
   color: currentColor !important;
 }
-
 .variant-text:hover {
   background: ${shade5} !important;
+}
+.variant-text:disabled {
+  background: ${mainColor} !important;
 }
 
 .btn.btn-secondary-lightest {
@@ -730,6 +732,9 @@ html[lang] .category-tile-holder.category-tile-active {
 .bg-secondary-lighter\\/80 {
   background: ${shade3}cc;
 }
+.odd\\:bg-secondary-lighter:nth-child(odd) {
+  background: ${shade3};
+}
 .\\!bg-secondary-lighter {
   color: ${textColor};
   background: ${shade3} !important;
@@ -765,6 +770,9 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 .hover\\:bg-secondary-dark:hover {
   color: ${textColor};
+  background: ${mainColor};
+}
+.even\\:bg-secondary-dark:nth-child(even) {
   background: ${mainColor};
 }
 .bg-gray-900 {
