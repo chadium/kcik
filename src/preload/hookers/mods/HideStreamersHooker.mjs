@@ -9,8 +9,6 @@ export class HideStreamersHooker extends Hooker {
     this._naughtyList = {
       featured: new Set()
     }
-
-    this._prev
   }
 
   async hook() {
@@ -63,11 +61,12 @@ export class HideStreamersHooker extends Hooker {
       get() {
         return data
       },
-      set(newData) {
+      set: (newData) => {
         data.length = 0
         for (let entry of newData) {
           data.push(entry)
         }
+        this.#doesTheDeed()
       }
     })
   }
