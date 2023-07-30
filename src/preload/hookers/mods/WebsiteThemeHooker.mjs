@@ -134,6 +134,9 @@ footer svg path {
 .chatroom-identity .labels .subtitle {
   color: ${textColorShade4} !important;
 }
+.chatroom-identity .settings .global-badges .labels .title .suffix {
+  color: ${shade8} !important;
+}
 .chatroom-event-ban__container,
 .chatroom-event-unban__container {
   background: ${shade3} !important;
@@ -323,6 +326,14 @@ html[lang] .variant-action.state-loading {
   color: ${complementaryText};
 }
 
+/* Color picker */
+.base-color-picker-item {
+  border-color: ${complementaryText} !important;
+}
+.base-color-picker-item.selected {
+  --tw-ring-color: ${complementary} !important;
+}
+
 /* Cards */
 .base-card {
   background: ${shade1} !important;
@@ -334,7 +345,7 @@ html[lang] .variant-action.state-loading {
 }
 
 /* Homepage grid cards */
-.grid-item.card-content[data-v-44fe15bf]:hover {
+.grid-item.card-content:hover {
   background: ${shade3} !important;
 }
 
@@ -663,6 +674,11 @@ aside.min-w-\\[60px\\].max-w-\\[60px\\] {
 .dashboard-left-menu-item > .menu-item-link:not(.item-selected) > .item-new-tag {
   color: ${complementaryText} !important;
   background-color: ${complementaryShade1} !important;
+}
+.dashboard-left-menu-item > .menu-item-link.item-selected > .item-new-tag {
+  /* The background was meant to be shade1 but it looks so bad. */
+  background: ${complementaryText} !important;
+  color: ${complementary} !important;
 }
 /* Modview left panel expandable item list background */
 .dashboard-left-menu-item:before {
