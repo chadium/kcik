@@ -550,7 +550,7 @@ html[lang] .input-holder:has(input:disabled) {
 }
 .textarea-holder > textarea {
   color: ${textColor} !important;
-  caret-color: ${shade1} !important;
+  caret-color: ${complementary} !important;
   border-color: ${shade6} !important;
   background-color: ${shade6} !important;
 }
