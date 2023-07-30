@@ -426,6 +426,14 @@ html[lang] .variant-action.state-loading {
   background-color: ${complementaryText} !important;
 }
 
+/* Another toggle button */
+.base-toggle:not(.toggle-disabled).toggled-on {
+  background-color: ${complementary} !important;
+}
+.base-toggle:not(.toggle-disabled).toggled-on .base-toggle-indicator {
+  background-color: ${complementaryText} !important;
+}
+
 /* Moderation panel */
 .user-profile.power-user .profile {
   background-color: ${shade3} !important;
