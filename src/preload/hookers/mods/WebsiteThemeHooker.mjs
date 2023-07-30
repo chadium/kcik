@@ -324,6 +324,10 @@ html[lang] .variant-action.state-loading {
 }
 
 /* Cards */
+.base-card {
+  background: ${shade1} !important;
+  color: ${textColor} !important;
+}
 .card {
   color: ${textColor} !important;
   background: ${shade1} !important;
