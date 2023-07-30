@@ -5,13 +5,15 @@ This is a browser extension for the streaming platform [kick.com](https://kick.c
 Features:
 - change website color.
 - prevent hosts.
+- show deleted messages.
+- hide streamers in the home page.
 - extended keyboard navigation for vods and clips.
 - set chat font size.
 - set username color beyond fixed palette.
 
 The development of this extension is being exclusively live streamed on kick.com! All of you who support me will be credited in the extension! Thank you!
 
-[![Setting username color](https://lh3.googleusercontent.com/9zqfmqYps_Nn_Qmpif2kNNK9KitxHEuJ6h-zkh5HKI5ks2-1KMII0jTC0CUvXtKDqpjFEUd9eY4YZTD0BcldybqIBDw=w640-h400-e365-rj-sc0x00ffffff)]
+[![Setting username color](https://lh3.googleusercontent.com/Pu3UMiARvVYgKN5Kx94BO712L2Q9gMIGXTpBZudRYsP4wHYcTL1tqhoD1fuzJFFeBjqsSq3FzFH-3p1MXQzUJkb7vg=w640-h400-e365-rj-sc0x00ffffff)]
 
 
 ## Installation
