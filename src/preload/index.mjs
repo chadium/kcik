@@ -11,6 +11,7 @@ import { VueComponentHooker } from './hookers/game/VueComponentHooker.mjs'
 import { VueRouteHooker } from './hookers/game/VueRouteHooker.mjs'
 import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
+import { ChatMessageDeletedHooker } from './hookers/mods/ChatMessageDeletedHooker.mjs'
 import { UsernameColorFallbackHooker } from './hookers/mods/UsernameColorFallbackHooker.mjs'
 import { StateHooker } from './hookers/mods/StateHooker.mjs'
 import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
@@ -44,6 +45,7 @@ async function main() {
     new VodHooker(),
     new ClipsHooker(),
     new HideStreamersHooker(),
+    new ChatMessageDeletedHooker(),
     new ChromeExtensionHooker(),
   ]
 

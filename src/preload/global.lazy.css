@@ -4,6 +4,7 @@
   --chad-font-size-big: 20px;
 
   --chad-text-color: #000;
+  --chad-text-suble-color: #555;
   --chad-bg-color: #fff;
   --chad-bg-select-color: #efefef;
   --chad-special-text-color: yellow;
@@ -26,14 +27,20 @@
 
 .chad-bright {
   --chad-text-color: #222;
+  --chad-text-suble-color: #555;
   --chad-bg-color: #fafafa;
   --chad-bg-select-color: #dadada;
 }
 
 .chad-dark {
   --chad-text-color: #fff;
+  --chad-text-suble-color: #ddd;
   --chad-bg-color: #222;
   --chad-bg-select-color: #555;
+}
+
+.chad-subtle {
+  color: var(--chad-text-suble-color);
 }
 
 .chad-theme--ok {

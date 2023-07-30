@@ -1,9 +1,15 @@
 import Joi from 'joi'
 
+export const chatMessageDeletedMode = {
+  DEFAULT: 0,
+  SHOW_MESSAGE: 1
+}
+
 const DEFAULT_FONT_SIZE = 14;
 const DEFAULT_ENABLE_HOST = true;
 const DEFAULT_VOD_KEYBOARD_NAVIGATION = true;
 const DEFAULT_WEBSITE_THEME = null
+const DEFAULT_CHAT_MESSAGE_DELETED_MODE = chatMessageDeletedMode.DEFAULT
 
 let websiteThemeSchema = Joi.object({
   mainColor: Joi.string()
@@ -21,6 +27,26 @@ export class Repository {
 
   constructor(storageArea) {
     this.#storageArea = storageArea
+  }
+
+  async getChatMessageDeletedMode() {
+    let result = await this.#storageArea.get(['chatMessageDeletedMode'])
+
+    if (result.chatMessageDeletedMode === undefined) {
+      return DEFAULT_CHAT_MESSAGE_DELETED_MODE
+    }
+
+    return result.chatMessageDeletedMode
+  }
+
+  async setChatMessageDeletedMode(value) {
+    if (value === DEFAULT_CHAT_MESSAGE_DELETED_MODE) {
+      await this.#storageArea.remove(['chatMessageDeletedMode'])
+    } else {
+      await this.#storageArea.set({
+        chatMessageDeletedMode: value
+      })
+    }
   }
 
   async getWebsiteTheme() {

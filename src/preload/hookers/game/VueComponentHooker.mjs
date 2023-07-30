@@ -19,6 +19,29 @@ export class VueComponentHooker extends Hooker {
 
     let that = this
 
+    Object.defineProperty(Object.getPrototypeOf({}), '__v_skip', {
+      configurable: false,
+      enumerable: false,
+      set(v) {
+        this._accessCache = v
+
+        const component = this._.type
+
+        if (!that.idsByName[component.__name]) {
+          if (component.__name) {
+            that.idsByName[component.__name] = component
+          }
+
+          that.events.emit('newComponent', {
+            id: component
+          })
+        }
+      },
+      get() {
+        return this._accessCache
+      }
+    })
+
     vueAppApi.on('available', (vueApp) => {
       this.optionsCache = vueApp._context.optionsCache
 
@@ -42,6 +65,21 @@ export class VueComponentHooker extends Hooker {
     return {
       name: 'vueComponent',
       api: {
+        waitForComponentByName: (name, cb) => {
+          if (this.idsByName[name]) {
+            cb(this.idsByName[name])
+          } else {
+            const handler = ({ id }) => {
+              if (this.idsByName[name]) {
+                this.events.off('newComponent', handler)
+                cb(this.idsByName[name])
+              }
+            }
+
+            this.events.on('newComponent', handler)
+          }
+        },
+        
         getComponentIdByName: (name) => {
           return this.idsByName[name] ?? null
         },
@@ -159,6 +197,28 @@ export class VueComponentHooker extends Hooker {
 
         getNodeComponentProxy: (node) => {
           return node.component.proxy
+        },
+
+        replaceSetup: (id, replacement) => {
+          if (id.originalSetup !== undefined) {
+            throw new Error("Setup has already been replaced. Pelase restore first.")
+          }
+
+          id.originalSetup = id.setup
+
+          id.setup = (props) => {
+            return replacement(props, { originalSetup: id.originalSetup })
+          }
+        },
+
+        restoreSetup: (id) => {
+          if (id.originalSetup === undefined) {
+            // Nothing to restore.
+            return
+          }
+
+          id.setup = id.originalSetup
+          delete id.originalSetup
         },
 
         addMounted: (id, fn) => {

@@ -12,9 +12,10 @@ export default function TabHome({ com, repo }) {
       <br/>
 
       <p>
-        <b>New experimental feature</b>:<br/>
-        Hide streamers! You can now remove streamers from the
-        Featured Streams sections of the home page.
+        <b>Changelog</b>:<br/>
+        - <span className="chad-subtle">2023-07-30</span>: You can now display deleted messages.<br/>
+        - <span className="chad-subtle">2023-07-16</span>: You can now remove streamers from the
+        Featured Streams section of the home page.
       </p>
     </div>
   )

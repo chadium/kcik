@@ -8,6 +8,7 @@ import TabChatFont from './tabs/TabChatFont.jsx'
 import TabHost from './tabs/TabHost.jsx'
 import TabKeyboardNavigation from './tabs/TabKeyboardNavigation.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
+import TabChatMessageDeleted from './tabs/TabChatMessageDeleted.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -28,6 +29,10 @@ const tabs = [
   {
     name: 'Username',
     content: (params) => <TabChatUsername {...params}/>
+  },
+  {
+    name: 'Chat Messages',
+    content: (params) => <TabChatMessageDeleted {...params}/>
   },
   {
     name: 'Chat Font',
@@ -58,6 +63,7 @@ export default function Connected({ com, repo }) {
   let {
     mainColor,
     textColor,
+    textColorShade3,
     complementary,
     complementaryText
   } = useMemo(() => {
@@ -77,6 +83,7 @@ export default function Connected({ com, repo }) {
       <style>
 :root &#123;
   --chad-text-color: {textColor};
+  --chad-text-suble-color: {textColorShade3};
   --chad-bg-color: {mainColor};
   --chad-action-ok-text-color: {complementaryText};
   --chad-action-ok-bg-color: {complementary};

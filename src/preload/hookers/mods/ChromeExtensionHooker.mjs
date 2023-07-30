@@ -36,6 +36,7 @@ export class ChromeExtensionHooker extends Hooker {
     this.pimp.getApi('fontSize').setSize(initialData.fontSize)
     this.pimp.getApi('hostStopper').enableHost(initialData.enableHost)
     this.pimp.getApi('hideStreamers').setNaughtyList(initialData.hideStreamers)
+    this.pimp.getApi('chatMessageDeleted').setChatMessageDeletedMode(initialData.chatMessageDeletedMode)
 
     return {
       name: 'chromeExtension',
@@ -109,6 +110,10 @@ export class ChromeExtensionHooker extends Hooker {
 
     case 'kcik.hideStreamers':
       this.pimp.getApi('hideStreamers').setNaughtyList(data)
+      break
+
+    case 'kcik.chatMessageDeletedMode':
+      this.pimp.getApi('chatMessageDeleted').setChatMessageDeletedMode(data)
       break
     }
   }

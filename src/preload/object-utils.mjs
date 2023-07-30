@@ -166,10 +166,20 @@ export function allKeyValues(obj) {
 
       result.push([key, value])
     }
+  } else if (obj === undefined || obj === null) {
+    // Do nothing.
   } else {
-    for (let key of Object.keys(obj)) {
-      let value = obj[key]
-      result.push([key, value])
+    for (let key in obj) {
+      try {
+        let value = obj[key]
+        result.push([key, value])
+      } catch (e) {
+        if (e instanceof DOMException) {
+          // Ignore.
+        } else {
+          throw e
+        }
+      }
     }
 
     for (let symbol of Object.getOwnPropertySymbols(obj)) {

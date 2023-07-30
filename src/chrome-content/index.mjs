@@ -58,6 +58,7 @@ async function main() {
     enableHost: await repository.getEnableHost(),
     enableVodKeyboardNavigation: await repository.getEnableVodKeyboardNavigation(),
     hideStreamers: await repository.getHideStreamers(),
+    chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
   })
 
   // Forwarding messages.
