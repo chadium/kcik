@@ -399,6 +399,23 @@ html[lang] .variant-action.state-loading {
   color: currentColor !important;
 }
 
+/* Another checkbox */
+.base-checkbox label {
+  color: ${textColor} !important;
+}
+.base-checkbox input:before {
+  border-color: ${textColor} !important;
+}
+.base-checkbox input:checked:not(:disabled) {
+  border-color: ${complementaryShade1} !important;
+}
+.base-checkbox input:hover:not(:checked):not(:disabled) {
+  border-color: ${complementary} !important;
+}
+.base-checkbox input {
+  border-color: ${textColor} !important;
+}
+
 /* Toggle button */
 /* Not checked */
 .toggle-button-indicator.bg-white {
