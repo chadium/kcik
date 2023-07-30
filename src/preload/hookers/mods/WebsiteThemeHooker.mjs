@@ -256,6 +256,9 @@ html[lang] #search-input::placeholder {
 .sidebar-item .item-categories {
   color: ${textColorShade4};
 }
+.sidebar-divider {
+  background-color: ${shade3} !important;
+}
 
 /* Sidebar button */
 .show-action-btn {
