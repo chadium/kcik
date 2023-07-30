@@ -505,7 +505,10 @@ html[lang] .input-holder:has(input:disabled) {
   --tw-ring-color: ${shade6} !important;
 }
 .input-holder > input::placeholder {
-  color: ${textColorShade7};
+  color: ${textColorShade7} !important;
+}
+.input-holder > input:disabled {
+  color: ${textColorShade7} !important;
 }
 
 /* Phone number input */
@@ -542,6 +545,9 @@ html[lang] .input-holder:has(input:disabled) {
   caret-color: ${shade1} !important;
   border-color: ${shade6} !important;
   background-color: ${shade6} !important;
+}
+.textarea-holder > textarea::placeholder {
+  color: ${textColorShade7} !important;
 }
 .base-textarea-layout textarea:focus {
   border-color: ${shade6} !important;
