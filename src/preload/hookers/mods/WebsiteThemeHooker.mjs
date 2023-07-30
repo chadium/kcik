@@ -491,6 +491,31 @@ html[lang] .input-holder:has(input:disabled) {
   color: ${textColorShade7};
 }
 
+/* Phone number input */
+.vti__input {
+  background: ${shade6} !important;
+  color: ${textColorShade2} !important;
+}
+.vti__input:focus {
+  border-color: ${shade3} !important;
+  background: ${shade1} !important;
+}
+.vti__dropdown {
+  background: ${shade6} !important;
+  color: ${textColorShade2} !important;
+}
+.vti__dropdown-list {
+  background: ${shade1} !important;
+  color: ${textColor} !important;
+}
+.vti__dropdown-item {
+  background: ${shade1} !important;
+  color: ${textColor} !important;
+}
+.vti__dropdown-item.highlighted {
+  background: ${shade2} !important;
+}
+
 /* Text area input box */
 .base-textarea-layout > label {
   color: currentColor !important;
