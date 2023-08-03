@@ -22,18 +22,23 @@ export class VueComponentHooker extends Hooker {
       configurable: false,
       enumerable: false,
       set(v) {
-        this._accessCache = v
+        try {
+          this._accessCache = v
 
-        const component = this._.type
+          const component = this._.type
 
-        if (!that.idsByName[component.__name]) {
-          if (component.__name) {
-            that.idsByName[component.__name] = component
+          if (!that.idsByName[component.__name]) {
+            if (component.__name) {
+              that.idsByName[component.__name] = component
+            }
+
+            that.events.emit('newComponent', {
+              id: component
+            })
+            throw new Error('Bad')
           }
-
-          that.events.emit('newComponent', {
-            id: component
-          })
+        } catch (e) {
+          log.bad(e)
         }
       },
       get() {
