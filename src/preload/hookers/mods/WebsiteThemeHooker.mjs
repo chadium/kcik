@@ -797,6 +797,11 @@ html[lang] .category-tile-holder.category-tile-active {
   color: ${complementary} !important;
 }
 
+/* Video thumbnail */
+.video-hover-borders {
+  border-color: ${complementary} !important;
+}
+
 /* Anything else */
 .bg-secondary {
   color: ${textColor};
