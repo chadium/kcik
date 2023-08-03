@@ -35,7 +35,6 @@ export class VueComponentHooker extends Hooker {
             that.events.emit('newComponent', {
               id: component
             })
-            throw new Error('Bad')
           }
         } catch (e) {
           log.bad(e)
