@@ -9,7 +9,6 @@ export class VueComponentHooker extends Hooker {
   constructor() {
     super()
     this.events = new EventEmitter()
-    this.optionsCache = null
     this.mounted = new StupidMap()
     this.idsByName = {}
   }
@@ -42,26 +41,6 @@ export class VueComponentHooker extends Hooker {
       }
     })
 
-    vueAppApi.on('available', (vueApp) => {
-      this.optionsCache = vueApp._context.optionsCache
-
-      this.optionsCache.set = function (key, value) {
-        let existed = this.has(key)
-
-        WeakMap.prototype.set.call(this, key, value)
-
-        if (!existed) {
-          if (key.__name) {
-            that.idsByName[key.__name] = key
-          }
-
-          that.events.emit('newComponent', {
-            id: key
-          })
-        }
-      }
-    })
-
     return {
       name: 'vueComponent',
       api: {
@@ -91,6 +70,8 @@ export class VueComponentHooker extends Hooker {
             return null
           }
         },
+
+        getComponentById: (id) => id,
 
         addOnRemove: (node, fn) => {
           this.findScope(node).cleanups.push(fn)
@@ -222,10 +203,6 @@ export class VueComponentHooker extends Hooker {
         },
 
         addMounted: (id, fn) => {
-          if (!this.optionsCache.has(id)) {
-            throw new Error('Component has not been seen yet')
-          }
-
           let functions = this.mounted.get(id)
 
           if (functions === undefined) {
@@ -234,11 +211,11 @@ export class VueComponentHooker extends Hooker {
             this.mounted.set(id, functions)
 
             // Gotta hook then.
-            let value = this.optionsCache.get(id)
+            let component = this.getComponentById(id)
 
-            let originalMounted = value.mounted
+            let originalMounted = component.mounted
 
-            value.mounted = function () {
+            component.mounted = function () {
               if (originalMounted) {
                 originalMounted.call(this)
               }
@@ -337,4 +314,6 @@ export class VueComponentHooker extends Hooker {
 
     return scope
   }
+
+  getComponentById = (id) => id
 }
