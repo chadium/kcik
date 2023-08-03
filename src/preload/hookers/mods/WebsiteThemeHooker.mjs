@@ -193,6 +193,11 @@ footer svg path {
   color: ${textColor} !important;
 }
 
+/* Seen in a vod page */
+.chat-container {
+  border-color: ${shade2} !important;
+}
+
 /* Gifted subs in chat */
 .chatroom-event-subgift__container {
   background-color: ${shade3} !important;
