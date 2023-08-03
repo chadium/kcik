@@ -7,5 +7,5 @@ export function warn(tag, ...args) {
 }
 
 export function bad(tag, ...args) {
-  console.log(`%c ${tag} `, 'background: #ff6c6c; color: #ffffff', ...args);
+  console.error(`%c ${tag} `, 'background: #ff6c6c; color: #ffffff', ...args);
 }
