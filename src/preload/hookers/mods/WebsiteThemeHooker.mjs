@@ -880,8 +880,14 @@ html[lang] .category-tile-holder.category-tile-active {
 .border-\\[\\#232628\\] {
   border-color: ${shade3};
 }
+.border-\\[\\#24272C\\] {
+  border-color: ${shade3};
+}
 .bg-\\[\\#271B1D\\] {
   background-color: ${shade4};
+}
+.bg-\\[\\#0B0E0F\\] {
+  background-color: ${mainColor};
 }
 .\\!border-primary {
   border-color: ${complementary} !important;
@@ -1036,6 +1042,9 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 .text-\\[\\#D2DAE0\\] {
   color: ${textColorShade3};
+}
+.text-\\[\\#E9ECED\\] {
+  color: ${textColorShade2};
 }
 
 .bg-surface-tint {
