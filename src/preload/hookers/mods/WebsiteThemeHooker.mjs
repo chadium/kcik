@@ -137,18 +137,23 @@ footer svg path {
 .chatroom-identity .settings .global-badges .labels .title .suffix {
   color: ${shade8} !important;
 }
+.chatroom-event-sub__container,
 .chatroom-event-host__container,
 .chatroom-event-ban__container,
 .chatroom-event-unban__container {
   background: ${shade3} !important;
 }
-.chatroom-event-ban__container .chatroom-event-ban__icon,
-.chatroom-event-unban__container .chatroom-event-unban__icon {
+.chatroom-event-sub__icon,
+.chatroom-event-host__icon,
+.chatroom-event-ban__icon,
+.chatroom-event-unban__icon {
   color: ${complementary} !important;
 }
-.chatroom-event-sub__icon,
-.chatroom-event-host__icon {
-  color: ${complementary} !important;
+.chatroom-event-sub__label,
+.chatroom-event-host__label,
+.chatroom-event-ban__label,
+.chatroom-event-unban__label {
+  color: ${textColorShade3} !important;
 }
 #chatroom-top svg path[fill=white] {
   fill: ${textColor};
@@ -173,12 +178,6 @@ footer svg path {
 .sliding-div-holder:before {
   /* First seen in the chatroom banner. */
   background: linear-gradient(to right, ${complementary}, transparent 1%, transparent 99%, ${complementary} 100%) !important;
-}
-.chatroom-event-sub__container {
-  background: ${shade3} !important
-}
-.chatroom-event-sub__label {
-  color: ${textColorShade3} !important;
 }
 .pinned-message__container {
   background: ${shade3} !important;
