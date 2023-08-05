@@ -137,6 +137,7 @@ footer svg path {
 .chatroom-identity .settings .global-badges .labels .title .suffix {
   color: ${shade8} !important;
 }
+.chatroom-event-host__container,
 .chatroom-event-ban__container,
 .chatroom-event-unban__container {
   background: ${shade3} !important;
@@ -145,7 +146,8 @@ footer svg path {
 .chatroom-event-unban__container .chatroom-event-unban__icon {
   color: ${complementary} !important;
 }
-.chatroom-event-sub__icon {
+.chatroom-event-sub__icon,
+.chatroom-event-host__icon {
   color: ${complementary} !important;
 }
 #chatroom-top svg path[fill=white] {
