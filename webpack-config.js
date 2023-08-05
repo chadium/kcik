@@ -275,7 +275,7 @@ exports.generateChromeContentConfig = ({
       {
         matches: ["https://kick.com/*"],
         js: ["chrome-content/index.js"],
-        run_at: 'document_idle'
+        run_at: 'document_start'
       }
     ],
     permissions: [
