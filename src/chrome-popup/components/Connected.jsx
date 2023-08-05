@@ -87,6 +87,7 @@ export default function Connected({ com, repo }) {
   --chad-bg-color: {mainColor};
   --chad-action-ok-text-color: {complementaryText};
   --chad-action-ok-bg-color: {complementary};
+  --chad-highlight-color: {complementary};
 &#125;
       </style>
 

@@ -13,6 +13,7 @@ export default function TabHome({ com, repo }) {
 
       <p>
         <b>Changelog</b>:<br/>
+        - <span className="chad-subtle">2023-08-06</span>: Website theme presets.<br/>
         - <span className="chad-subtle">2023-07-30</span>: You can now display deleted messages.<br/>
         - <span className="chad-subtle">2023-07-16</span>: You can now remove streamers from the
         Featured Streams section of the home page.

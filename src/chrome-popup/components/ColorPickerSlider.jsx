@@ -17,7 +17,7 @@ export default function ColorPickerSlider({ value, onChange }) {
   return (
     <div className="color-picker-slider">
       <HexColorPicker
-        color={currentValue}
+        color={value}
         onChange={onCurrentChange}
       />
     </div>
