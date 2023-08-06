@@ -44,6 +44,7 @@ export class PiniaHooker extends Hooker {
         },
 
         on: this.#events.on.bind(this.#events),
+        once: this.#events.once.bind(this.#events),
         off: this.#events.off.bind(this.#events),
       }
     }

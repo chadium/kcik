@@ -15,8 +15,7 @@ export class HideStreamersHooker extends Hooker {
     const piniaApi = this.pimp.getApi('pinia')
 
     piniaApi.on('available', () => {
-      this.#workaroundWebsiteBug()
-      this.#doesTheDeed()
+      this.#hookIntoState()
     })
 
     return {
@@ -29,7 +28,7 @@ export class HideStreamersHooker extends Hooker {
             this._naughtyList[key] = new Set(this._naughtyList[key].map(naughty => naughty.toLowerCase()))
           }
 
-          this.#doesTheDeed()
+          piniaApi.once('available', () => this.#doesTheDeed())
         }
       }
     }
@@ -60,10 +59,16 @@ export class HideStreamersHooker extends Hooker {
     }
   }
 
-  #workaroundWebsiteBug() {
+  #hookIntoState() {
     const piniaApi = this.pimp.getApi('pinia')
 
     let channelState = piniaApi.getModuleState('channel')
+
+    if (!(channelState && channelState.featuredLivestreams)) {
+      // Not present.
+      log.warn('HideStreamers', 'featuredLivestreams state not found')
+      return
+    }
 
     let data = channelState.featuredLivestreams
 
