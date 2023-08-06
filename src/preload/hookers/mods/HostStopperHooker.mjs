@@ -29,9 +29,9 @@ class EnabledState extends MachineState {
 }
 
 class UnknownState extends MachineState {
-  async [MachineState.ON_ENTER]() {
+  #onAvailable = () => {
     let echoApi = this.machine.pimp.getApi('echo')
-
+    
     let streamerChannels = echoApi.getStreamerChannels()
 
     if (streamerChannels.length > 0) {
@@ -39,6 +39,18 @@ class UnknownState extends MachineState {
     } else {
       this.machine.next(new WaitingState())
     }
+  }
+  
+  async [MachineState.ON_ENTER]() {
+    let echoApi = this.machine.pimp.getApi('echo')
+
+    echoApi.on('available', this.#onAvailable)
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    let echoApi = this.machine.pimp.getApi('echo')
+
+    echoApi.off('available', this.#onAvailable)
   }
 }
 

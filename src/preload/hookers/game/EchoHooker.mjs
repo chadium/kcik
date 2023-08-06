@@ -1,5 +1,7 @@
 import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
+import * as objectUtils from '../../object-utils.mjs'
+import * as log from '../../log.mjs'
 
 function isStreamerChannel(channel) {
   return channel.startsWith('channel.')
@@ -15,42 +17,61 @@ export class EchoHooker extends Hooker {
   }
 
   async hook() {
-    this.#events = new EventEmitter()
+    this.#events = new EventEmitter();
 
-    this.#originalSubscribe = Echo.connector.pusher.subscribe
-    this.#originalUnsubscribe = Echo.connector.pusher.unsubscribe
+    (async () => {
+      try {
+        await objectUtils.waitForProperty(window, 'Echo')
 
-    Echo.connector.pusher.subscribe = (channel) => {
-      let result = this.#originalSubscribe.call(Echo.connector.pusher, channel)
+        log.info('Echo', 'Found Echo object.')
 
-      this.#events.emit('subscribe', {
-        channel
-      })
+        this.#originalSubscribe = Echo.connector.pusher.subscribe
+        this.#originalUnsubscribe = Echo.connector.pusher.unsubscribe
+    
+        Echo.connector.pusher.subscribe = (channel) => {
+          let result = this.#originalSubscribe.call(Echo.connector.pusher, channel)
+    
+          this.#events.emit('subscribe', {
+            channel
+          })
+    
+          if (isStreamerChannel(channel)) {
+            this.#events.emit('streamerSubscribe', {
+              streamerId: channel.substring(channel.indexOf('.') + 1),
+              channel
+            })
+          }
+    
+          return result
+        }
+    
+        Echo.connector.pusher.unsubscribe = (channel) => {
+          this.#events.emit('unsubscribe', {
+            channel
+          })
+    
+          if (isStreamerChannel(channel)) {
+            this.#events.emit('streamerUnsubscribe', {
+              streamerId: channel.substring(channel.indexOf('.') + 1),
+              channel
+            })
+          }
+    
+          return this.#originalUnsubscribe.call(Echo.connector.pusher, channel)
+        }
 
-      if (isStreamerChannel(channel)) {
-        this.#events.emit('streamerSubscribe', {
-          streamerId: channel.substring(channel.indexOf('.') + 1),
-          channel
+        this.#events.emit('available')
+
+        this.#events.on('newListener', (name, listener) => {
+          if (name === 'available') {
+            // Already available. Call it.
+            listener()
+          }
         })
+      } catch (e) {
+        log.bad('Echo', e)
       }
-
-      return result
-    }
-
-    Echo.connector.pusher.unsubscribe = (channel) => {
-      this.#events.emit('unsubscribe', {
-        channel
-      })
-
-      if (isStreamerChannel(channel)) {
-        this.#events.emit('streamerUnsubscribe', {
-          streamerId: channel.substring(channel.indexOf('.') + 1),
-          channel
-        })
-      }
-
-      return this.#originalUnsubscribe.call(Echo.connector.pusher, channel)
-    }
+    })()
 
     return {
       name: 'echo',
