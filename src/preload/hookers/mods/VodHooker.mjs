@@ -28,7 +28,7 @@ class EnabledState extends MachineState {
 }
 
 class UnknownState extends MachineState {
-  async [MachineState.ON_ENTER]() {
+  #onAvailable = () => {
     let vueRouteApi = this.machine.pimp.getApi('vueRoute')
 
     if (vueRouteApi.getRouteName() === 'video') {
@@ -36,6 +36,18 @@ class UnknownState extends MachineState {
     } else {
       this.machine.next(new WaitingForVideoPageState())
     }
+  }
+
+  async [MachineState.ON_ENTER]() {
+    let vueRouteApi = this.machine.pimp.getApi('vueRoute')
+
+    vueRouteApi.on('available', this.#onAvailable)
+  }
+
+  async [MachineState.ON_LEAVE]() {
+    let vueRouteApi = this.machine.pimp.getApi('vueRoute')
+
+    vueRouteApi.off('available', this.#onAvailable)
   }
 }
 
@@ -143,9 +155,9 @@ class VideoPageWaitForElementState extends MachineState {
   }
 
   async [MachineState.ON_ENTER]() {
-    let mainView = document.getElementById('main-view')
+    let container = document.getElementById('app')
 
-    this.observer.observe(mainView, {
+    this.observer.observe(container, {
       childList: true,
       subtree: true
     })
