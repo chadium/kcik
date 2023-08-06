@@ -49,7 +49,7 @@ export class ChatMessageDeletedHooker extends Hooker {
               }
 
               vueComponentApi.replaceSetup(id, (props, { originalSetup }) => {
-                let originalRender = originalSetup()
+                let originalRender = originalSetup(props)
         
                 return (_ctx, _cache, $props, $setup, $data, $options) => {
                   const node = originalRender()
