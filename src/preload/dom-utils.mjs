@@ -48,3 +48,17 @@ export function lookForElement(elem, fn) {
     return null
   }
 }
+
+export function findParent(elem, predicate) {
+  let current = elem.parentElement
+
+  while (current) {
+    if (predicate(current)) {
+      return current
+    }
+
+    current = current.parentElement
+  }
+
+  return null
+}
