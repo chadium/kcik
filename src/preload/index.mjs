@@ -9,7 +9,6 @@ import { UserHooker } from './hookers/game/UserHooker.mjs'
 import { VueAppHooker } from './hookers/game/VueAppHooker.mjs'
 import { VueComponentHooker } from './hookers/game/VueComponentHooker.mjs'
 import { VueRouteHooker } from './hookers/game/VueRouteHooker.mjs'
-import { DomChatMessageHooker } from './hookers/game/DomChatMessageHooker.mjs'
 import { CredentialsHooker } from './hookers/game/CredentialsHooker.mjs'
 import { ChatMessageDeletedHooker } from './hookers/mods/ChatMessageDeletedHooker.mjs'
 import { UsernameColorVueComponentHooker } from './hookers/mods/UsernameColorVueComponentHooker.mjs'
@@ -36,7 +35,6 @@ async function main() {
     new StateHooker(),
     new UserHooker(),
     new CredentialsHooker(),
-    new DomChatMessageHooker(),
     new UsernameColorVueComponentHooker(),
     new VueRouteHooker(),
     new WebsiteThemeHooker(),
