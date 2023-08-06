@@ -2,9 +2,6 @@ import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 
 export class UsernameColorVueComponentHooker extends Hooker {
-  #onNewUsername = () => {
-  }
-
   async hook() {
     const stateApi = this.pimp.getApi('state')
     const vueComponentApi = this.pimp.getApi('vueComponent')
