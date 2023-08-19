@@ -30,17 +30,31 @@ const presets = [
     } 
   },
   {
+    name: 'Sus Pandas',
+    websiteTheme: {
+      mainColor: '#ffffff',
+      complementaryColor: '#000000'
+    }
+  },
+  {
+    name: 'Faucy Tube',
+    websiteTheme: {
+      mainColor: '#d9d9d9',
+      complementaryColor: '#cd14d7'
+    }
+  },
+  {
+    name: 'Amouranth Hair',
+    websiteTheme: {
+      mainColor: '#e08300',
+      complementaryColor: '#fff2b8'
+    }
+  },
+  {
     name: 'Green',
     websiteTheme: {
       mainColor: '#003c50',
       complementaryColor: '#c71616'
-    } 
-  },
-  {
-    name: 'Pale Male',
-    websiteTheme: {
-      mainColor: '#ffffff',
-      complementaryColor: '#53fc18'
     }
   },
   {
@@ -55,8 +69,8 @@ const presets = [
 function PresetOption({ name, websiteTheme, selected, onSelect }) {
   const style = {
     backgroundColor: websiteTheme.mainColor,
-    width: '42px',
-    height: '42px',
+    width: '21px',
+    height: '21px',
     display: 'inline-block',
     borderRadius: 'var(--chad-border-radius)',
     border: 'var(--chad-control-border)'
