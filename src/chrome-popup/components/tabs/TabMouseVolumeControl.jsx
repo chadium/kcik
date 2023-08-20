@@ -34,7 +34,19 @@ export default function TabMouseVolumeControl({ com, repo }) {
           <div className="chad-p-t"></div>
 
           <p>
-            <b>Note</b>: you will not be able to scroll down the page when your mouse
+            <b>Note</b>: browsers have a security policy in place that prevents
+            websites from automatically playing unmuted videos. Due to this,
+            you may have seen that kick will sometimes play streams with the
+            audio muted. Scrolling will not unmute the video because
+            browser policies require that the user (you) interact with
+            the page first. Clicking counts as an interaction, therefore
+            the middle mouse button can be used to unmute the stream.
+          </p>
+
+          <div className="chad-p-t"></div>
+
+          <p>
+            <b>Note 2</b>: you will not be able to scroll down the page when your mouse
             is on top of the video player. Move your mouse out of the video
             player to be able to scroll.
           </p>
