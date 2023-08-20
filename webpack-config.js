@@ -261,7 +261,7 @@ exports.generateChromeContentConfig = ({
   let manifestJson = {
     manifest_version: 3,
     name: "KCIK",
-    description: "Created LIVE on kick.com.",
+    description: "An open source extension for the streaming platform kick.com that is developed LIVE on kick.com!",
     version_name: makeVersion(production),
     version: pkg.version,
     author: pkg.author,
