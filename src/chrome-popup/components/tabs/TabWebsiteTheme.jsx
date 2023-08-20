@@ -37,7 +37,7 @@ const presets = [
     }
   },
   {
-    name: 'Faucy Tube',
+    name: 'Fauzy Tube',
     websiteTheme: {
       mainColor: '#d9d9d9',
       complementaryColor: '#cd14d7'
