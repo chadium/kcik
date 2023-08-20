@@ -7,8 +7,8 @@ export class UsernameColorVueComponentHooker extends Hooker {
     const vueComponentApi = this.pimp.getApi('vueComponent')
 
     vueComponentApi.waitForComponentByName('CMUsername', (id) => {
-      vueComponentApi.replaceSetup(id, (props, { originalSetup }) => {
-        let originalRender = originalSetup(props)
+      vueComponentApi.replaceSetup(id, (props, ctx, { originalSetup }) => {
+        let originalRender = originalSetup(props, ctx)
 
         return (_ctx, _cache, $props, $setup, $data, $options) => {
           const node = originalRender()

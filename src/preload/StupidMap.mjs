@@ -15,4 +15,11 @@ export class StupidMap {
   get(key) {
     return this.#values[this.#keys.indexOf(key)]
   }
+
+  del(key) {
+    var index = this.#keys.indexOf(key)
+    if (index !== -1) {
+      delete this.#values[index]
+    }
+  }
 }

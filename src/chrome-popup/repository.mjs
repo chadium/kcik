@@ -5,9 +5,10 @@ export const chatMessageDeletedMode = {
   SHOW_MESSAGE: 1
 }
 
-const DEFAULT_FONT_SIZE = 14;
-const DEFAULT_ENABLE_HOST = true;
-const DEFAULT_VOD_KEYBOARD_NAVIGATION = true;
+const DEFAULT_FONT_SIZE = 14
+const DEFAULT_ENABLE_HOST = true
+const DEFAULT_VOD_KEYBOARD_NAVIGATION = true
+const DEFAULT_VOD_MOUSE_VOLUME_CONTROL = false
 const DEFAULT_WEBSITE_THEME = null
 const DEFAULT_CHAT_MESSAGE_DELETED_MODE = chatMessageDeletedMode.DEFAULT
 
@@ -127,6 +128,26 @@ export class Repository {
     } else {
       await this.#storageArea.set({
         enableVodKeyboardNavigation: value
+      })
+    }
+  }
+
+  async getEnableVodMouseVolumeControl() {
+    let result = await this.#storageArea.get(['enableVodMouseVolumeControl'])
+
+    if (result.enableVodMouseVolumeControl === undefined) {
+      return DEFAULT_VOD_MOUSE_VOLUME_CONTROL
+    }
+
+    return result.enableVodMouseVolumeControl
+  }
+
+  async setEnableVodMouseVolumeControl(value) {
+    if (value === DEFAULT_VOD_MOUSE_VOLUME_CONTROL) {
+      await this.#storageArea.remove(['enableVodMouseVolumeControl'])
+    } else {
+      await this.#storageArea.set({
+        enableVodMouseVolumeControl: value
       })
     }
   }

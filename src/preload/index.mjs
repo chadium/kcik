@@ -19,6 +19,8 @@ import { HostStopperHooker } from './hookers/mods/HostStopperHooker.mjs'
 import { WebsiteThemeHooker } from './hookers/mods/WebsiteThemeHooker.mjs'
 import { VodHooker } from './hookers/mods/VodHooker.mjs'
 import { ClipsHooker } from './hookers/mods/ClipsHooker.mjs'
+import { VodMouseVolumeControlHooker } from './hookers/mods/VodMouseVolumeControlHooker.mjs'
+import * as snapshotUtils from './snapshot-utils.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty, getByPath} from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
@@ -43,6 +45,7 @@ async function main() {
     new VodHooker(),
     new ClipsHooker(),
     new HideStreamersHooker(),
+    new VodMouseVolumeControlHooker(),
     new ChatMessageDeletedHooker(),
     new ChromeExtensionHooker(),
   ]
@@ -62,6 +65,7 @@ async function main() {
   window.breakOnGet = breakOnGet
   window.freezeProperty = freezeProperty
   window.getByPath = getByPath
+  window.snapshotUtils = snapshotUtils
   window.pimp = pimp
 
   pimp.getApi('dom').on('headAvailable', () => {

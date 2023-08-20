@@ -10,6 +10,7 @@ export class VueComponentHooker extends Hooker {
     super()
     this.events = new EventEmitter()
     this.mounted = new StupidMap()
+    this.cleanups = new StupidMap()
     this.idsByName = {}
   }
 
@@ -78,11 +79,37 @@ export class VueComponentHooker extends Hooker {
         getComponentById: (id) => id,
 
         addOnRemove: (node, fn) => {
-          this.findScope(node).cleanups.push(fn)
+          let functions = this.cleanups.get(node)
+
+          if (functions === undefined) {
+            functions = []
+
+            this.cleanups.set(node, functions)
+
+            this.findScope(node).cleanups.push((...args) => {
+              for (let fn of functions.concat()) {
+                try {
+                  fn(args)
+                } catch (e) {
+                  log.bad('VueComponent', e)
+                }
+              }
+
+              this.cleanups.del(node)
+            })
+          }
+
+          functions.push(fn)
         },
 
         removeOnRemove: (node, fn) => {
-          arrayUtils.removeFirstByValue(this.findScope(node).cleanups, fn)
+          let functions = this.cleanups.get(node)
+
+          if (functions === undefined) {
+            return
+          }
+
+          arrayUtils.removeFirstByValue(functions, fn)
         },
 
         findNodesByComponent: (id) => {
@@ -151,28 +178,26 @@ export class VueComponentHooker extends Hooker {
             for (let node of next.concat()) {
               arrayUtils.removeFirstByValue(next, node)
 
+              if (areTheseChildrenSane(node.vm.children)) {
+                for (let child of node.vm.children) {
+                  let childNode = {
+                    vm: child,
+                    children: [],
+                    isSubtree: false
+                  }
+                  node.children.push(childNode)
+                  next.push(childNode)
+                }
+              }
+
               if (node.vm.component) {
-                if (areTheseChildrenSane(node.vm.component.subTree.children)) {
-                  for (let child of node.vm.component.subTree.children) {
-                    let childNode = {
-                      vm: child,
-                      children: []
-                    }
-                    node.children.push(childNode)
-                    next.push(childNode)
-                  }
+                let childNode = {
+                  vm: node.vm.component.subTree,
+                  children: [],
+                  isSubtree: true
                 }
-              } else {
-                if (areTheseChildrenSane(node.vm.children)) {
-                  for (let child of node.vm.children) {
-                    let childNode = {
-                      vm: child,
-                      children: []
-                    }
-                    node.children.push(childNode)
-                    next.push(childNode)
-                  }
-                }
+                node.children.push(childNode)
+                next.push(childNode)
               }
             }
           }
@@ -191,8 +216,8 @@ export class VueComponentHooker extends Hooker {
 
           id.originalSetup = id.setup
 
-          id.setup = (props) => {
-            return replacement(props, { originalSetup: id.originalSetup })
+          id.setup = (props, ctx) => {
+            return replacement(props, ctx, { originalSetup: id.originalSetup })
           }
         },
 
@@ -224,7 +249,7 @@ export class VueComponentHooker extends Hooker {
                 originalMounted.call(this)
               }
 
-              for (let fn of functions) {
+              for (let fn of functions.concat()) {
                 try {
                   fn(this)
                 } catch (e) {
@@ -276,18 +301,14 @@ export class VueComponentHooker extends Hooker {
       for (let vm of next.concat()) {
         arrayUtils.removeFirstByValue(next, vm)
 
+        if (areTheseChildrenSane(vm.children)) {
+          for (let child of vm.children) {
+            next.push(child) // off the cliff.
+          }
+        }
+
         if (vm.component) {
-          if (areTheseChildrenSane(vm.component.subTree.children)) {
-            for (let child of vm.component.subTree.children) {
-              next.push(child) // off the cliff.
-            }
-          }
-        } else {
-          if (areTheseChildrenSane(vm.children)) {
-            for (let child of vm.children) {
-              next.push(child) // off the cliff.
-            }
-          }
+          next.push(vm.component.subTree)
         }
 
         try {

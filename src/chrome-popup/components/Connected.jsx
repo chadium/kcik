@@ -9,6 +9,7 @@ import TabHost from './tabs/TabHost.jsx'
 import TabKeyboardNavigation from './tabs/TabKeyboardNavigation.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
 import TabChatMessageDeleted from './tabs/TabChatMessageDeleted.jsx'
+import TabMouseVolumeControl from './tabs/TabMouseVolumeControl.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -45,6 +46,10 @@ const tabs = [
   {
     name: 'Keyboard Navigation',
     content: (params) => <TabKeyboardNavigation {...params}/>
+  },
+  {
+    name: 'Mouse Volume Control',
+    content: (params) => <TabMouseVolumeControl {...params}/>
   },
   {
     name: 'Credits',

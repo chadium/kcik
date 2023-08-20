@@ -57,6 +57,7 @@ async function main() {
     fontSize: await repository.getFontSize(),
     enableHost: await repository.getEnableHost(),
     enableVodKeyboardNavigation: await repository.getEnableVodKeyboardNavigation(),
+    enableVodMouseVolumeControl: await repository.getEnableVodMouseVolumeControl(),
     hideStreamers: await repository.getHideStreamers(),
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
   })
