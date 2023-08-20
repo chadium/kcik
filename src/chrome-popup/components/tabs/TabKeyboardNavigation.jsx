@@ -14,7 +14,7 @@ export default function TabKeyboardNavigation({ com, repo }) {
         <div>
           <div>
             <InputCheck
-              label="Videos"
+              label="Enable"
               value={data}
               onChange={async (value) => {
                 await repo.setEnableVodKeyboardNavigation(value)

@@ -12,14 +12,9 @@ export default function TabHost({ com, repo }) {
     <GenericLoading loading={loading} error={error}>
       {data !== null && (
         <div>
-          <p>Streamers can send their viewers to another channel
-            to show their support. You can opt out of hosts:</p>
-
-          <div className="chad-p-t"></div>
-
           <div>
             <InputCheck
-              label="Ignore hosting"
+              label="Enable"
               value={!data}
               onChange={async (value) => {
                 value = !value
@@ -29,6 +24,15 @@ export default function TabHost({ com, repo }) {
               }}
             />
           </div>
+
+          <div className="chad-p-t"></div>
+
+          <p>
+            Streamers can send their viewers to another channel
+            to show their support. By enabling this, you can
+            automatically reject hosts and never leave your favorite
+            streamer's channel.
+          </p>
         </div>
       )}
     </GenericLoading>

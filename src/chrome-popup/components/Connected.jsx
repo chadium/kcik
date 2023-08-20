@@ -32,15 +32,15 @@ const tabs = [
     content: (params) => <TabChatUsername {...params}/>
   },
   {
-    name: 'Chat Messages',
+    name: 'Show Deleted Messages',
     content: (params) => <TabChatMessageDeleted {...params}/>
   },
   {
-    name: 'Chat Font',
+    name: 'Chat Style',
     content: (params) => <TabChatFont {...params}/>
   },
   {
-    name: 'Host',
+    name: 'Reject Hosts',
     content: (params) => <TabHost {...params}/>
   },
   {

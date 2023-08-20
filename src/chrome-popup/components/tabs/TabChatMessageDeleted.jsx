@@ -16,7 +16,7 @@ export default function TabChatMessageDeleted({ com, repo }) {
 
           <div>
             <InputCheck
-              label="Show deleted messages"
+              label="Enable"
               value={data === chatMessageDeletedMode.SHOW_MESSAGE}
               onChange={async (value) => {
                 let mode = value ? chatMessageDeletedMode.SHOW_MESSAGE : chatMessageDeletedMode.DEFAULT
@@ -26,6 +26,14 @@ export default function TabChatMessageDeleted({ com, repo }) {
               }}
             />
           </div>
+
+          <div className="chad-p-t"></div>
+
+          <p>
+            Messages that were sent in chat that get deleted during your
+            presence will be displayed instead of hidden. Messages that
+            are deleted during your absence cannot be recovered.
+          </p>
         </div>
       )}
     </GenericLoading>
