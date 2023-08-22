@@ -51,6 +51,13 @@ const presets = [
     }
   },
   {
+    name: 'Deepak',
+    websiteTheme: {
+      mainColor: '#191715',
+      complementaryColor: '#ff9600'
+    }
+  },
+  {
     name: 'Green',
     websiteTheme: {
       mainColor: '#003c50',
