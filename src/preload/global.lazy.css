@@ -1,7 +1,9 @@
 :root {
-  --chad-font-size-small: 12px;
-  --chad-font-size-normal: 16px;
-  --chad-font-size-big: 20px;
+  --chad-font-size-tiny: 12px;
+  --chad-font-size-small: 13px;
+  --chad-font-size-normal: 15px;
+  --chad-font-size-big: 16px;
+  --chad-font-size-huge: 20px;
 
   --chad-text-color: #000;
   --chad-text-suble-color: #555;
@@ -12,7 +14,8 @@
 
   --chad-border-radius: 3px;
 
-  --chad-control-border: 1px solid var(--chad-text-color);
+  --chad-control-border-width: 1px;
+  --chad-control-border: var(--chad-control-border-width) solid var(--chad-text-color);
   --chad-control-height: 30px;
 
   --chad-safe-space: 10px;

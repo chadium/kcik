@@ -28,16 +28,20 @@
   line-height: var(--chad-control-height);
   font-size: var(--chad-control-height);
   box-sizing: border-box;
+  line-height: 1;
 }
 
 .checked {
   background-color: var(--chad-action-bg-color);
 }
 .checked:before {
+  display: block;
   content: "✓";
+  line-height: 1;
+  font-size: var(--chad-control-height);
   color: var(--chad-action-text-color);
 }
 
 .unchecked {
-  border: 2px solid var(--chad-action-bg-color);
+  border: var(--chad-control-border-width) solid var(--chad-action-bg-color);
 }

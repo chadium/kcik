@@ -1,5 +1,5 @@
 .container {
-  font-size: var(--chad-font-size-normal);
+  font-size: var(--chad-font-size-big);
   font-weight: 600;
   color: var(--chad-action-text-color);
   background-color: var(--chad-action-bg-color);

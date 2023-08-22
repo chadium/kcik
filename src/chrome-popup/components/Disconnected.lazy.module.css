@@ -6,7 +6,7 @@
 }
 
 .bigBoldAndBeautiful {
-  font-size: var(--chad-font-size-big);
+  font-size: var(--chad-font-size-huge);
   font-weight: bold;
   text-transform: capitalize;
 }
