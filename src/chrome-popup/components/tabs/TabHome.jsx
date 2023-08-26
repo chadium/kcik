@@ -13,6 +13,8 @@ export default function TabHome({ com, repo }) {
 
       <p>
         <b>Changelog</b>:<br/>
+        - <span className="chad-subtle">2023-08-26</span>: Playback speed control
+        and current time display in clips and vods.<br/>
         - <span className="chad-subtle">2023-08-20</span>: Mouse volume control.
         You can now unmute streams with middle mouse button clicks and change
         the volume with the scroll wheel.<br/>
