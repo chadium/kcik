@@ -20,9 +20,11 @@ export class VideoCurrentTimeFixState extends MachineState {
   }
 
   async [MachineState.ON_LEAVE]() {
-    this.player.controlBar.remainingTimeDisplay.el().className = this.originalClassName
-    this.player.controlBar.remainingTimeDisplay.show()
-
-    this.player.controlBar.currentTimeDisplay.el().style.display = ''
+    if (!this.player.isDisposed()) {
+      this.player.controlBar.remainingTimeDisplay.el().className = this.originalClassName
+      this.player.controlBar.remainingTimeDisplay.show()
+  
+      this.player.controlBar.currentTimeDisplay.el().style.display = ''
+    }
   }
 }
