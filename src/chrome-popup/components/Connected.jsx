@@ -11,6 +11,7 @@ import TabCredits from './tabs/TabCredits.jsx'
 import TabChatMessageDeleted from './tabs/TabChatMessageDeleted.jsx'
 import TabMouseVolumeControl from './tabs/TabMouseVolumeControl.jsx'
 import TabPlaybackSpeed from './tabs/TabPlaybackSpeed.jsx'
+import TabVodCurrentTime from './tabs/TabVodCurrentTime.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -55,6 +56,10 @@ const tabs = [
   {
     name: 'Playback Speed',
     content: (params) => <TabPlaybackSpeed {...params}/>
+  },
+  {
+    name: 'Display Current Time',
+    content: (params) => <TabVodCurrentTime {...params}/>
   },
   {
     name: 'Credits',

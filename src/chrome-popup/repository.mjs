@@ -10,6 +10,7 @@ const DEFAULT_ENABLE_HOST = true
 const DEFAULT_VOD_KEYBOARD_NAVIGATION = true
 const DEFAULT_VOD_MOUSE_VOLUME_CONTROL = false
 const DEFAULT_VOD_PLAYBACK_SPEED = true
+const DEFAULT_VOD_CURRENT_TIME = true
 const DEFAULT_WEBSITE_THEME = null
 const DEFAULT_CHAT_MESSAGE_DELETED_MODE = chatMessageDeletedMode.DEFAULT
 
@@ -169,6 +170,26 @@ export class Repository {
     } else {
       await this.#storageArea.set({
         enableVodPlaybackSpeed: value
+      })
+    }
+  }
+
+  async getEnableVodCurrentTime() {
+    let result = await this.#storageArea.get(['enableVodCurrentTime'])
+
+    if (result.enableVodCurrentTime === undefined) {
+      return DEFAULT_VOD_CURRENT_TIME
+    }
+
+    return result.enableVodCurrentTime
+  }
+
+  async setEnableVodCurrentTime(value) {
+    if (value === DEFAULT_VOD_CURRENT_TIME) {
+      await this.#storageArea.remove(['enableVodCurrentTime'])
+    } else {
+      await this.#storageArea.set({
+        enableVodCurrentTime: value
       })
     }
   }

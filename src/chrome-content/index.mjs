@@ -59,6 +59,7 @@ async function main() {
     enableVodKeyboardNavigation: await repository.getEnableVodKeyboardNavigation(),
     enableVodMouseVolumeControl: await repository.getEnableVodMouseVolumeControl(),
     enableVodPlaybackSpeed: await repository.getEnableVodPlaybackSpeed(),
+    enableVodCurrentTime: await repository.getEnableVodCurrentTime(),
     hideStreamers: await repository.getHideStreamers(),
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
   })
