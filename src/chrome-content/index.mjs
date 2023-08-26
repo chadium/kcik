@@ -58,6 +58,7 @@ async function main() {
     enableHost: await repository.getEnableHost(),
     enableVodKeyboardNavigation: await repository.getEnableVodKeyboardNavigation(),
     enableVodMouseVolumeControl: await repository.getEnableVodMouseVolumeControl(),
+    enableVodPlaybackSpeed: await repository.getEnableVodPlaybackSpeed(),
     hideStreamers: await repository.getHideStreamers(),
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
   })

@@ -34,6 +34,7 @@ export class ChromeExtensionHooker extends Hooker {
     this.pimp.getApi('clips').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
     this.pimp.getApi('vod').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
     this.pimp.getApi('vodMouseVolumeControl').setEnabled(initialData.enableVodMouseVolumeControl)
+    this.pimp.getApi('vodPlaybackSpeed').setEnabled(initialData.enableVodPlaybackSpeed)
     this.pimp.getApi('fontSize').setSize(initialData.fontSize)
     this.pimp.getApi('hostStopper').enableHost(initialData.enableHost)
     this.pimp.getApi('hideStreamers').setNaughtyList(initialData.hideStreamers)
@@ -107,6 +108,11 @@ export class ChromeExtensionHooker extends Hooker {
 
     case 'kcik.enableVodMouseVolumeControl': {
       this.pimp.getApi('vodMouseVolumeControl').setEnabled(data)
+      break
+    }
+
+    case 'kcik.enableVodPlaybackSpeed': {
+      this.pimp.getApi('vodPlaybackSpeed').setEnabled(data)
       break
     }
 

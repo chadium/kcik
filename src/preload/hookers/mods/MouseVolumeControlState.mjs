@@ -4,6 +4,13 @@ export class MouseVolumeControlState extends MachineState {
   videoPlayerElement = null
 
   onWheel = (e) => {
+    if (e.target.classList.contains('vjs-menu-item')
+        || e.target.classList.contains('vjs-menu-item-text')
+        || e.target.classList.contains('vjs-menu-content')) {
+      // No can do. This is a list. Scrolling is desirable.
+      return
+    }
+
     e.preventDefault()
 
     let volume = this.player.volume()

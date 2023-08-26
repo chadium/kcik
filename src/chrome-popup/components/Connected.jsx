@@ -10,6 +10,7 @@ import TabKeyboardNavigation from './tabs/TabKeyboardNavigation.jsx'
 import TabCredits from './tabs/TabCredits.jsx'
 import TabChatMessageDeleted from './tabs/TabChatMessageDeleted.jsx'
 import TabMouseVolumeControl from './tabs/TabMouseVolumeControl.jsx'
+import TabPlaybackSpeed from './tabs/TabPlaybackSpeed.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -50,6 +51,10 @@ const tabs = [
   {
     name: 'Mouse Volume Control',
     content: (params) => <TabMouseVolumeControl {...params}/>
+  },
+  {
+    name: 'Playback Speed',
+    content: (params) => <TabPlaybackSpeed {...params}/>
   },
   {
     name: 'Credits',
