@@ -136,7 +136,7 @@ export class VueComponentHooker extends Hooker {
         },
 
         snapshot: () => {
-          let root = objectUtils.getByPath(vueAppApi.getVueApp(), [
+          let routeRoot = objectUtils.getByPath(vueAppApi.getVueApp(), [
             "_container",
             "_vnode",
             "component",
@@ -155,8 +155,8 @@ export class VueComponentHooker extends Hooker {
             "vnode"
           ])
 
-          root = {
-            vm: root,
+          const root = {
+            vm: routeRoot.ctx.root.vnode,
             children: []
           }
 
