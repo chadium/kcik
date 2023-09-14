@@ -985,6 +985,9 @@ html[lang] .category-tile-holder.category-tile-active {
 .hover\\:text-primary:hover {
   color: ${complementary};
 }
+.hover\\:\\!text-primary:hover {
+  color: ${complementary} !important;
+}
 .sm\\:hover\\:text-primary:hover {
   color: ${complementary};
 }
@@ -994,6 +997,10 @@ html[lang] .category-tile-holder.category-tile-active {
 
 .text-primary-dark {
   color: ${complementaryShade1};
+}
+
+.\\!text-primary-dark {
+  color: ${complementaryShade1} !important;
 }
 
 .border-primary {
