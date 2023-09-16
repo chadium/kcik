@@ -1,6 +1,26 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
+import * as kickApi from '../../kick-api.mjs'
+import memoize from 'memoizee'
+
+async function getTooltipText(channelSlug) {
+  const data = await kickApi.getChannelInfo({
+    channelSlug
+  })
+
+  if (data.is_banned) {
+    return 'BaNNED'
+  } else if (data.livestream) {
+    return data.livestream.session_title
+  } else {
+    return 'OFFLINE'
+  }
+}
+
+getTooltipText = memoize(getTooltipText, {
+    maxAge: 1000 * 60
+})
 
 function renderTooltip(vueComponentApi, tooltipOpen, tooltipText) {
   const style = {
@@ -63,13 +83,7 @@ class EnabledState extends MachineState {
               height
             }
 
-            if (tooltipText.value) {
-              return
-            }
-
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-
-            tooltipText.value = `TITLE SET FOR ${props.item.user_username}`
+            tooltipText.value = await getTooltipText(props.item.channel_slug)
           }
 
           node.props.onMouseout = async () => {

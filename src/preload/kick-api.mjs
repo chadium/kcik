@@ -18,3 +18,13 @@ export async function sendChatMessage({
     }
   })
 }
+
+export async function getChannelInfo({
+  channelSlug
+}) {
+  const { data } = await apiFetch({
+    url: 'https://kick.com/api/v1/channels/' + encodeURIComponent(channelSlug)
+  })
+
+  return data
+}
