@@ -1,19 +1,24 @@
 # KCIK
 
-This is a browser extension for the streaming platform [kick.com](https://kick.com).
+An open source extension for the streaming platform kick.com that is developed LIVE on kick.com!
 
 Features:
-- change website color.
-- prevent hosts.
-- show deleted messages.
-- hide streamers in the home page.
-- extended keyboard navigation for vods and clips.
-- set chat font size.
-- set username color beyond fixed palette.
+- Change the color of the website.
+- Hide streamers in the Featured Streams section.
+- Show deleted chat messages.
+- Automatically reject hosts.
+- Change playback speed.
+- See stream title of following and recommended channels in sidebar.
+- Seek clips with arrow keys.
+- Space bar can pause and resume clips.
+- Mute streams with middle mouse button and change volume with scroll wheel.
+- Customize chat font size.
+- Display current time instead of remaining time in vods and clips.
+- Set your username color. The website only provides 14 colors but with the extension you will be able to pick any color. Anyone using the extension will see this color for your username in chat. Users without the extension will see the color you set on the platform.
 
-The development of this extension is being exclusively live streamed on kick.com! All of you who support me will be credited in the extension! Thank you!
+The development of this extension is being live streamed on kick.com! As a thank you to all my subscribers, your names will be listed in the Credits tab of the extension.
 
-[![Setting username color](https://lh3.googleusercontent.com/Pu3UMiARvVYgKN5Kx94BO712L2Q9gMIGXTpBZudRYsP4wHYcTL1tqhoD1fuzJFFeBjqsSq3FzFH-3p1MXQzUJkb7vg=w640-h400-e365-rj-sc0x00ffffff)]
+Note: after installing or updating the extension, you must refresh every kick.com tab. New extensions will not load in existing tabs.
 
 
 ## Installation
