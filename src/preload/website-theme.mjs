@@ -36,7 +36,7 @@ export function websiteThemeValues(websiteTheme) {
 
   let textColor = getTextColor(mainColor)
 
-  // Equivalent to: #f3f4f6
+  // Equivalent to: #f3f4f6 and #F8FBFE
   let textColorShade1 = colorUtils.adjustBrightness(textColor, 0.05 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #e5e7eb and #E9ECED
@@ -45,7 +45,7 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #d1d5db and #d3d8db and #d2dae0
   let textColorShade3 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
-  // Equivalent to: #b1bcc3
+  // Equivalent to: #b1bcc3 and b3b3b3
   let textColorShade4 = colorUtils.adjustBrightness(textColor, 0.25 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #a8b1b8

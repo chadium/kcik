@@ -73,6 +73,23 @@ export class WebsiteThemeHooker extends Hooker {
 :root {
   --toastify-color-dark: ${mainColor};
   --toastify-text-color-dark: ${textColor};
+
+  --colorText: ${textColor};
+  --colorTextSecondary: ${textColorShade4};
+}
+
+/*
+  Stripe is being used in an iframe from a different domain.
+  Styling is out of our control. Will force black background.
+*/
+.__PrivateStripeElement iframe {
+  background: black;
+}
+
+/* This seems to be used to determine whether to use dark mode. It's dark by
+default and we're just going to mess with it. */
+:is(.dark body) {
+  color: ${textColor};
 }
 
 /* Kick logo */
@@ -877,6 +894,9 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 
 /* Oh yes, they did. */
+.bg-\\[\\#24272C\\] {
+  background: ${shade3};
+}
 .bg-\\[\\#171C1E\\] {
   background: ${shade1};
 }
@@ -913,6 +933,10 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 .bg-black\\/80 {
   background: ${mainColor}cc;
+}
+
+.bg-\\[\\#191B1F\\] {
+  background: ${shade1};
 }
 
 .text-gray-500 {
@@ -1063,6 +1087,12 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 .text-\\[\\#E9ECED\\] {
   color: ${textColorShade2};
+}
+.text-\\[\\#B1BCC3\\] {
+  color: ${textColorShade4};
+}
+.text-\\[\\#F8FBFE\\] {
+  color: ${textColorShade1};
 }
 
 .bg-surface-tint {
