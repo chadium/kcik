@@ -12,6 +12,7 @@ import TabChatMessageDeleted from './tabs/TabChatMessageDeleted.jsx'
 import TabMouseVolumeControl from './tabs/TabMouseVolumeControl.jsx'
 import TabPlaybackSpeed from './tabs/TabPlaybackSpeed.jsx'
 import TabVodCurrentTime from './tabs/TabVodCurrentTime.jsx'
+import TabSidebarStreamTooltip from './tabs/TabSidebarStreamTooltip.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -60,6 +61,10 @@ const tabs = [
   {
     name: 'Display Current Time',
     content: (params) => <TabVodCurrentTime {...params}/>
+  },
+  {
+    name: 'Sidebar Stream Tooltip',
+    content: (params) => <TabSidebarStreamTooltip {...params}/>
   },
   {
     name: 'Credits',

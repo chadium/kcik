@@ -62,6 +62,7 @@ async function main() {
     enableVodCurrentTime: await repository.getEnableVodCurrentTime(),
     hideStreamers: await repository.getHideStreamers(),
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
+    enableSidebarStreamTooltip: await repository.getEnableSidebarStreamTooltip(),
   })
 
   // Forwarding messages.
