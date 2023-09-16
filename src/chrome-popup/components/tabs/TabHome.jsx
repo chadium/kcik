@@ -13,6 +13,8 @@ export default function TabHome({ com, repo }) {
 
       <p>
         <b>Changelog</b>:<br/>
+        - <span className="chad-subtle">2023-09-16</span>: Sidebar stream tooltip.
+        See the stream title in the following and recommended lists.<br/>
         - <span className="chad-subtle">2023-08-26</span>: Playback speed control
         and current time display in clips and vods.<br/>
         - <span className="chad-subtle">2023-08-20</span>: Mouse volume control.
