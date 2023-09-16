@@ -10,9 +10,19 @@ export default function TabCredits({ com }) {
   return (
     <div>
       <div>
-        THESE WONDERFUL PEOPLE HAVE
-        MADE THE DEVELOPMENT OF
-        THIS EXTENSION POSSIBLE
+        This extension is developed LIVE on kick.com!
+      </div>
+
+      <div className="chad-p-t"/>
+
+      <strong>
+        <TextLink newTab={true} url="https://kick.com/chadium">https://kick.com/chadium</TextLink>
+      </strong>
+
+      <div className="chad-p-t"/>
+
+      <div>
+        I'd like to thank the following people for supporting mr streamer:
       </div>
 
       <div className="chad-p-t"/>
@@ -45,9 +55,13 @@ export default function TabCredits({ com }) {
 
       <div className="chad-p-t"/>
 
-      <div className="text-center">
-        Check <TextLink newTab={true} url="https://chadium.dev">https://chadium.dev</TextLink>
-      </div>
+      <p>
+        More about the author of this extension:
+      </p>
+
+      <div className="chad-p-t"/>
+
+      <TextLink newTab={true} url="https://chadium.dev">https://chadium.dev</TextLink>
     </div>
   )
 }
