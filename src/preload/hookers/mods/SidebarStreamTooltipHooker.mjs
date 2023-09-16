@@ -74,6 +74,11 @@ class EnabledState extends MachineState {
           const node = originalRender()
 
           node.props.onMouseover = async (e) => {
+            if (!props.item.is_live) {
+              // Nothing to do,
+              return
+            }
+
             const { top, left, width, height } = node.el.getBoundingClientRect()
 
             tooltipOpen.value = {
