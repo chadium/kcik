@@ -40,6 +40,7 @@ export class ChromeExtensionHooker extends Hooker {
     this.pimp.getApi('hostStopper').enableHost(initialData.enableHost)
     this.pimp.getApi('hideStreamers').setNaughtyList(initialData.hideStreamers)
     this.pimp.getApi('chatMessageDeleted').setChatMessageDeletedMode(initialData.chatMessageDeletedMode)
+    this.pimp.getApi('sidebarStreamTooltip').setEnabled(false)
 
     return {
       name: 'chromeExtension',

@@ -5,6 +5,39 @@ import * as log from '../../log.mjs'
 import * as arrayUtils from '../../array-utils.mjs'
 import * as objectUtils from '../../object-utils.mjs'
 
+const shapeFlags = {
+  ELEMENT: 1,
+  FUNCTIONAL_COMPONENT: 1 << 1,
+  STATEFUL_COMPONENT: 1 << 2,
+  TEXT_CHILDREN: 1 << 3,
+  ARRAY_CHILDREN: 1 << 4,
+  SLOTS_CHILDREN: 1 << 5,
+  TELEPORT: 1 << 6,
+  SUSPENSE: 1 << 7,
+  COMPONENT_SHOULD_KEEP_ALIVE: 1 << 8,
+  COMPONENT_KEPT_ALIVE: 1 << 9,
+}
+shapeFlags.COMPONENT = shapeFlags.STATEFUL_COMPONENT | shapeFlags.FUNCTIONAL_COMPONENT
+
+
+const patchFlags = {
+  TEXT: 1,
+  CLASS: 1 << 1,
+  STYLE: 1 << 2,
+  PROPS: 1 << 3,
+  FULL_PROPS: 1 << 4,
+  HYDRATE_EVENTS: 1 << 5,
+  STABLE_FRAGMENT: 1 << 6,
+  KEYED_FRAGMENT: 1 << 7,
+  UNKEYED_FRAGMENT: 1 << 8,
+  NEED_PATCH: 1 << 9,
+  DYNAMIC_SLOTS: 1 << 10,
+  DEV_ROOT_FRAGMENT: 1 << 11,
+  HOISTED: -1,
+  BAIL: -2
+}
+
+
 export class VueComponentHooker extends Hooker {
   constructor() {
     super()
@@ -12,6 +45,7 @@ export class VueComponentHooker extends Hooker {
     this.mounted = new StupidMap()
     this.cleanups = new StupidMap()
     this.idsByName = {}
+    this.refConstructor = null
   }
 
   async hook() {
@@ -231,6 +265,14 @@ export class VueComponentHooker extends Hooker {
           delete id.originalSetup
         },
 
+        replaceSlot: (node, slotName, replacement) => {
+          const originalSlot = node.children[slotName]
+
+          node.children[slotName] = (props) => {
+            return replacement(props, { originalSlot })
+          }
+        },
+
         addMounted: (id, fn) => {
           let functions = this.mounted.get(id)
 
@@ -271,6 +313,54 @@ export class VueComponentHooker extends Hooker {
 
           arrayUtils.removeFirstByValue(functions, fn)
         },
+
+        ref: (value) => {
+          if (this.refConstructor === null) {
+            const donor = vueAppApi.getVueApp().config.globalProperties.$pinia.state
+
+            if (donor === null) {
+              throw new Error('Could not find a donor')
+            }
+
+            this.refConstructor = Object.getPrototypeOf(donor).constructor
+          }
+
+          return new this.refConstructor(value)
+        },
+
+        h(type, props = null, children = null) {
+          const node = {
+            __v_isVNode: true,
+            __v_skip: true,
+            type,
+            props,
+            children,
+            component: null,
+            suspense: null,
+            ssContent: null,
+            ssFallback: null,
+            dirs: null,
+            transition: null,
+            el: null,
+            anchor: null,
+            target: null,
+            targetAnchor: null,
+            staticCount: 0,
+            shapeFlag: shapeFlags.ELEMENT,
+            patchFlag: 0,
+            dynamicProps: null,
+            dynamicChildren: null,
+            appContext: null,
+
+            // This needed currentRenderingInstance.
+            ctx: null
+          }
+
+          return node
+        },
+
+        patchFlags,
+        shapeFlags,
 
         on: this.events.on.bind(this.events),
         off: this.events.off.bind(this.events),
