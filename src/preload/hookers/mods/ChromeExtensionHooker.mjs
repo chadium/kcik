@@ -32,7 +32,6 @@ export class ChromeExtensionHooker extends Hooker {
 
     this.pimp.getApi('websiteTheme').setWebsiteTheme(initialData.websiteTheme)
     this.pimp.getApi('clips').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
-    this.pimp.getApi('vod').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
     this.pimp.getApi('vodMouseVolumeControl').setEnabled(initialData.enableVodMouseVolumeControl)
     this.pimp.getApi('vodPlaybackSpeed').setEnabled(initialData.enableVodPlaybackSpeed)
     this.pimp.getApi('vodCurrentTime').setEnabled(initialData.enableVodCurrentTime)
@@ -101,8 +100,6 @@ export class ChromeExtensionHooker extends Hooker {
     }
 
     case 'kcik.enableVodKeyboardNavigation': {
-      let vodApi = this.pimp.getApi('vod')
-      vodApi.enableVodKeyboardNavigation(data)
       let clipsApi = this.pimp.getApi('clips')
       clipsApi.enableVodKeyboardNavigation(data)
       break

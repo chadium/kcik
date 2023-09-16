@@ -17,7 +17,6 @@ import { ChromeExtensionHooker } from './hookers/mods/ChromeExtensionHooker.mjs'
 import { FontSizeHooker } from './hookers/mods/FontSizeHooker.mjs'
 import { HostStopperHooker } from './hookers/mods/HostStopperHooker.mjs'
 import { WebsiteThemeHooker } from './hookers/mods/WebsiteThemeHooker.mjs'
-import { VodHooker } from './hookers/mods/VodHooker.mjs'
 import { ClipsHooker } from './hookers/mods/ClipsHooker.mjs'
 import { VodPlaybackSpeedHooker } from './hookers/mods/VodPlaybackSpeedHooker.mjs'
 import { VodMouseVolumeControlHooker } from './hookers/mods/VodMouseVolumeControlHooker.mjs'
@@ -45,7 +44,6 @@ async function main() {
     new WebsiteThemeHooker(),
     new FontSizeHooker(),
     new HostStopperHooker(),
-    new VodHooker(),
     new ClipsHooker(),
     new HideStreamersHooker(),
     new VodMouseVolumeControlHooker(),

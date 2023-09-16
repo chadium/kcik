@@ -1,6 +1,5 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
-import { lookForElement } from '../../dom-utils.mjs'
 import { Machine, MachineState } from '../../state-machine.mjs'
 import { VideoKeyboardNavigationState } from './VideoKeyboardNavigationState.mjs'
 import { WaitForVueComponentMountState } from './WaitForVueComponentMountState.mjs'

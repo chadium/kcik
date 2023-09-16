@@ -47,7 +47,7 @@ const tabs = [
     content: (params) => <TabHost {...params}/>
   },
   {
-    name: 'Keyboard Navigation',
+    name: 'Clip Keyboard Navigation',
     content: (params) => <TabKeyboardNavigation {...params}/>
   },
   {

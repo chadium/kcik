@@ -26,15 +26,18 @@ export default function TabKeyboardNavigation({ com, repo }) {
 
           <div className="chad-p-t"></div>
 
+          <p>
+            Kick supports keyboard navigation for vods but not clips.
+            Enabling this adds keyboard navigation to clips.
+          </p>
+
+          <div className="chad-p-t"></div>
+
           <ul>
             <li><b>Space bar</b>: pause/play video</li>
             <li><b>Left arrow</b>: go back 5 seconds</li>
             <li><b>Right arrow</b>: go forward 5 seconds</li>
           </ul>
-
-          <div className="chad-p-t"></div>
-
-          <p>Use the shift key to go back and forth 10 seconds.</p>
         </div>
       )}
     </GenericLoading>
