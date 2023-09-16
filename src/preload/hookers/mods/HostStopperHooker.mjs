@@ -30,15 +30,7 @@ class EnabledState extends MachineState {
 
 class UnknownState extends MachineState {
   #onAvailable = () => {
-    let echoApi = this.machine.pimp.getApi('echo')
-    
-    let streamerChannels = echoApi.getStreamerChannels()
-
-    if (streamerChannels.length > 0) {
-      this.machine.next(new ChannelState(streamerChannels[0]))
-    } else {
-      this.machine.next(new WaitingState())
-    }
+    this.machine.next(new WaitingState())
   }
   
   async [MachineState.ON_ENTER]() {
@@ -81,6 +73,8 @@ class ChannelState extends MachineState {
     let echoApi = this.machine.pimp.getApi('echo')
 
     echoApi.off('streamerUnsubscribe', this.onUnsubscribe)
+
+    this.sm.stop()
   }
 }
 
@@ -100,9 +94,23 @@ class ChannelHostDisableState extends MachineState {
   async [MachineState.ON_ENTER]() {
     log.info('HostStopper', 'Hosts disabled')
     let echoApi = this.machine.pimp.getApi('echo')
+
     this.eventHandlers = echoApi.getChannelEventHandlers(this.machine.channel, HOST_EVENT)
 
+    // Gotta remove existing event handlers.
     this.eventHandlers.forEach(echoApi.removeChannelEventHandler.bind(null, this.machine.channel, HOST_EVENT))
+
+    // Gotta prevent new event handlers that aren't our own.
+    echoApi.setChannelEventHandlerFilter(this.machine.channel, (type, handler) => {
+      if (type === HOST_EVENT) {
+        this.eventHandlers.push(handler)
+
+        // Block.
+        return false
+      }
+
+      return true
+    })
 
     echoApi.addChannelEventHandler(this.machine.channel, HOST_EVENT, this.onHost)
   }
@@ -110,6 +118,8 @@ class ChannelHostDisableState extends MachineState {
   async [MachineState.ON_LEAVE]() {
     log.info('HostStopper', 'Hosts enabled')
     let echoApi = this.machine.pimp.getApi('echo')
+
+    echoApi.removeChannelEventHandlerFilter(this.machine.channel)
 
     echoApi.removeChannelEventHandler(this.machine.channel, HOST_EVENT, this.onHost)
 
@@ -134,7 +144,13 @@ class WaitingState extends MachineState {
   async [MachineState.ON_ENTER]() {
     let echoApi = this.machine.pimp.getApi('echo')
 
-    echoApi.on('streamerSubscribe', this.onSubscribe)
+    const streamerChannels = echoApi.getStreamerChannels()
+
+    if (streamerChannels.length > 0) {
+      this.machine.next(new ChannelState(streamerChannels[0]))
+    } else {
+      echoApi.on('streamerSubscribe', this.onSubscribe)
+    }
   }
 
   async [MachineState.ON_LEAVE]() {

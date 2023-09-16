@@ -124,6 +124,30 @@ export class EchoHooker extends Hooker {
           }
 
           channel.callbacks.removeCallback([`_${type}`], eventHandler.fn, eventHandler.context)
+        },
+        setChannelEventHandlerFilter: (channel, filterCallback) => {
+          if (typeof channel === 'string') {
+            channel = Echo.connector.pusher.channels.find(channel)
+
+            if (channel === undefined) {
+              throw new Error('Could not find channel')
+            }
+          }
+
+          if (Object.hasOwnProperty(channel, 'bind')) {
+            throw new Error('Filter already set up. Please remove it first.')
+          }
+
+          const originalOn = channel.bind;
+
+          channel.bind = (type, fn, context) => {
+            if (filterCallback(type, { fn, context })) {
+              originalOn.call(channel, type, fn, context)
+            }
+          }
+        },
+        removeChannelEventHandlerFilter: (channel) => {
+          delete channel.bind
         }
       }
     }
