@@ -71,7 +71,7 @@ class EnabledState extends MachineState {
         let tooltipOpen = vueComponentApi.ref(null)
 
         return (_ctx, _cache, $props, $setup, $data, $options) => {
-          const node = originalRender()
+          const node = originalRender(_ctx, _cache, $props, $setup, $data, $options)
 
           node.props.onMouseover = async (e) => {
             if (!props.item.is_live) {

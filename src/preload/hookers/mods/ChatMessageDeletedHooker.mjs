@@ -52,7 +52,7 @@ export class ChatMessageDeletedHooker extends Hooker {
                 let originalRender = originalSetup(props, ctx)
         
                 return (_ctx, _cache, $props, $setup, $data, $options) => {
-                  const node = originalRender()
+                  const node = originalRender(_ctx, _cache, $props, $setup, $data, $options)
                   node.props.style = 'text-decoration: line-through; word-break: break-word; white-space: normal;'
                   node.children = sanitizeContent(_ctx._.parent.props.chatMessage.content)
                   return node

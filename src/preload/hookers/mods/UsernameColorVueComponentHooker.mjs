@@ -11,7 +11,7 @@ export class UsernameColorVueComponentHooker extends Hooker {
         let originalRender = originalSetup(props, ctx)
 
         return (_ctx, _cache, $props, $setup, $data, $options) => {
-          const node = originalRender()
+          const node = originalRender(_ctx, _cache, $props, $setup, $data, $options)
       
           let color = stateApi.getUsernameColor(props.sender.username)
 
