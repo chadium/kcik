@@ -53,6 +53,25 @@ export class VueComponentHooker extends Hooker {
 
     let that = this
 
+    vueAppApi.on('available', (vueApp) => {
+      // Have to collect the components that have already been mounted.
+      const root = this.getRootNode()
+
+      this.iterateTree(root, (node) => {
+        const component = node.type
+
+        if (!that.idsByName[component.__name]) {
+          if (component.__name) {
+            that.idsByName[component.__name] = component
+          }
+
+          that.events.emit('newComponent', {
+            id: component
+          })
+        }
+      })
+    })
+
     Object.defineProperty(Object.getPrototypeOf({}), '__v_skip', {
       configurable: false,
       enumerable: false,
@@ -316,7 +335,8 @@ export class VueComponentHooker extends Hooker {
   }
 
   getRootNode() {
-    return this.getRouteRootNode().ctx.root.vnode
+    const vueAppApi = this.pimp.getApi('vueApp')
+    return vueAppApi.getVueApp()._container._vnode
   }
 
   getRouteRootNode() {
