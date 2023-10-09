@@ -147,50 +147,12 @@ export class VueComponentHooker extends Hooker {
         },
 
         findNodesByComponent: (id) => {
-          let root = objectUtils.getByPath(vueAppApi.getVueApp(), [
-            "_container",
-            "_vnode",
-            "component",
-            "appContext",
-            "app",
-            "config",
-            "globalProperties",
-            "$router",
-            "currentRoute",
-            "_rawValue",
-            "matched",
-            "0",
-            "instances",
-            "default",
-            "_",
-            "vnode"
-          ])
-
-          return this.findNodes(root, (vm) => vm.type === id)
+          return this.findNodes(this.getRouteRootNode(), (vm) => vm.type === id)
         },
 
         snapshot: () => {
-          let routeRoot = objectUtils.getByPath(vueAppApi.getVueApp(), [
-            "_container",
-            "_vnode",
-            "component",
-            "appContext",
-            "app",
-            "config",
-            "globalProperties",
-            "$router",
-            "currentRoute",
-            "_rawValue",
-            "matched",
-            "0",
-            "instances",
-            "default",
-            "_",
-            "vnode"
-          ])
-
           const root = {
-            vm: routeRoot.ctx.root.vnode,
+            vm: this.getRootNode(),
             children: []
           }
 
@@ -353,8 +315,33 @@ export class VueComponentHooker extends Hooker {
   async unhook() {
   }
 
-  findNodes(root, predicate) {
-    let results = []
+  getRootNode() {
+    return this.getRouteRootNode().ctx.root.vnode
+  }
+
+  getRouteRootNode() {
+    const vueAppApi = this.pimp.getApi('vueApp')
+    return objectUtils.getByPath(vueAppApi.getVueApp(), [
+      "_container",
+      "_vnode",
+      "component",
+      "appContext",
+      "app",
+      "config",
+      "globalProperties",
+      "$router",
+      "currentRoute",
+      "_rawValue",
+      "matched",
+      "0",
+      "instances",
+      "default",
+      "_",
+      "vnode"
+    ])
+  }
+
+  iterateTree(root, cb) {
     let next = [root]
 
     function areTheseChildrenSane(children) {
@@ -383,15 +370,19 @@ export class VueComponentHooker extends Hooker {
           next.push(vm.component.subTree)
         }
 
-        try {
-          if (predicate(vm)) {
-            results.push(vm)
-          }
-        } catch (e) {
-          log.bad('VueComponent', e)
-        }
+        cb(vm)
       }
     }
+  }
+
+  findNodes(root, predicate) {
+    let results = []
+
+    this.iterateTree(root, (vm) => {
+      if (predicate(vm)) {
+        results.push(vm)
+      }
+    })
 
     return results
   }
