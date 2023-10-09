@@ -6,6 +6,7 @@ import * as objectUtils from '../../object-utils.mjs'
 export class PiniaHooker extends Hooker {
   #events = new EventEmitter()
   #pinia = null
+  #modules = null
 
   async hook() {
     const vueAppApi = this.pimp.getApi('vueApp')
@@ -16,6 +17,15 @@ export class PiniaHooker extends Hooker {
         await objectUtils.waitForProperty(vueApp.config.globalProperties, '$pinia')
 
         this.#pinia = vueApp.config.globalProperties.$pinia
+
+        for (let key in this.#pinia) {
+          const value = this.#pinia[key]
+
+          if (value instanceof Map) {
+            this.#modules = value
+            break
+          }
+        }
 
         this.#events.emit('available')
 
@@ -41,6 +51,27 @@ export class PiniaHooker extends Hooker {
           }
 
           return this.#pinia.state.value[name]
+        },
+
+        replaceModuleFunction: (moduleName, functionName, fn) => {
+          const module = this.#modules.get(moduleName)
+          const originalFunction = module[functionName]
+
+          module[functionName] = (...args) => {
+            return fn({ originalFunction, args })
+          }
+
+          module[functionName].original = originalFunction
+        },
+
+        restoreModuleFunction: (moduleName, functionName) => {
+          const module = this.#modules.get(moduleName)
+
+          if (!module[functionName].original) {
+            throw new Error('Module function had not been replaced.')
+          }
+
+          module[functionName] = module[functionName].original
         },
 
         on: this.#events.on.bind(this.#events),
