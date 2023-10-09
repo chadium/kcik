@@ -14,6 +14,7 @@ const DEFAULT_VOD_CURRENT_TIME = true
 const DEFAULT_WEBSITE_THEME = null
 const DEFAULT_CHAT_MESSAGE_DELETED_MODE = chatMessageDeletedMode.DEFAULT
 const DEFAULT_SIDEBAR_STREAM_TOOLTIP = true
+const DEFAULT_SEND_MESSAGE_HISTORY = true
 
 let websiteThemeSchema = Joi.object({
   mainColor: Joi.string()
@@ -31,6 +32,26 @@ export class Repository {
 
   constructor(storageArea) {
     this.#storageArea = storageArea
+  }
+
+  async getEnableSendMessageHistory() {
+    let result = await this.#storageArea.get(['enableSendMessageHistory'])
+
+    if (result.enableSendMessageHistory === undefined) {
+      return DEFAULT_SEND_MESSAGE_HISTORY
+    }
+
+    return result.enableSendMessageHistory
+  }
+
+  async setEnableSendMessageHistory(value) {
+    if (value === DEFAULT_SEND_MESSAGE_HISTORY) {
+      await this.#storageArea.remove(['enableSendMessageHistory'])
+    } else {
+      await this.#storageArea.set({
+        enableSendMessageHistory: value
+      })
+    }
   }
 
   async getEnableSidebarStreamTooltip() {

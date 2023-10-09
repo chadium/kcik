@@ -71,10 +71,11 @@ class ChatInputState extends MachineState {
   }
 }
 
+class DisabledState extends MachineState {}
+
 function waitForVodComponentState(machine) {
-  console.log('chat history')
   return new WaitForVueComponentMountState('ChatroomInput', (vm) => {
-    log.info('ChatHistory', 'The chatroom input has been mounted.')
+    log.info('SendMessageHistory', 'The chatroom input has been mounted.')
 
     machine.next(new VueNodeAliveState(
       vm,
@@ -84,13 +85,13 @@ function waitForVodComponentState(machine) {
   })
 }
 
-export class ChatHistoryHooker extends Hooker {
-  machine = null
+export class SendMessageHistoryHooker extends Hooker {
+  #sm = null
 
   async hook() {
-    this.machine = new Machine()
-    this.machine.pimp = this.pimp
-    await this.machine.start(waitForVodComponentState(this.machine))
+    this.#sm = new Machine()
+    this.#sm.pimp = this.pimp
+    await this.#sm.start(new DisabledState())
 
     const piniaApi = this.pimp.getApi('pinia')
 
@@ -110,6 +111,19 @@ export class ChatHistoryHooker extends Hooker {
         return originalFunction(...args)
       })
     })
+
+    return {
+      name: 'sendMessageHistory',
+      api: {
+        setEnabled: (state) => {
+          if (state) {
+            this.#sm.next(waitForVodComponentState(this.#sm))
+          } else {
+            this.#sm.next(new DisabledState())
+          }
+        }
+      }
+    }
   }
 
   async unhook() {

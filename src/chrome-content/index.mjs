@@ -63,6 +63,7 @@ async function main() {
     hideStreamers: await repository.getHideStreamers(),
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
     enableSidebarStreamTooltip: await repository.getEnableSidebarStreamTooltip(),
+    enableSendMessageHistory: await repository.getEnableSendMessageHistory(),
   })
 
   // Forwarding messages.

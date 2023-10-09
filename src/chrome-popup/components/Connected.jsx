@@ -13,6 +13,7 @@ import TabMouseVolumeControl from './tabs/TabMouseVolumeControl.jsx'
 import TabPlaybackSpeed from './tabs/TabPlaybackSpeed.jsx'
 import TabVodCurrentTime from './tabs/TabVodCurrentTime.jsx'
 import TabSidebarStreamTooltip from './tabs/TabSidebarStreamTooltip.jsx'
+import TabSendMessageHistory from './tabs/TabSendMessageHistory.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -41,6 +42,10 @@ const tabs = [
   {
     name: 'Chat Style',
     content: (params) => <TabChatFont {...params}/>
+  },
+  {
+    name: 'Send Message History',
+    content: (params) => <TabSendMessageHistory {...params}/>
   },
   {
     name: 'Reject Hosts',
@@ -96,7 +101,7 @@ export default function Connected({ com, repo }) {
         <ArrowNavigation
           tabIndex={tabIndex}
           tabs={tabs}
-          onTabIndexChange={(tabIndex) => setTabIndex(tabIndex)}
+          onTabIndexChange={setTabIndex}
         />
       }
     >
