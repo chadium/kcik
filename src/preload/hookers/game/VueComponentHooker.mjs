@@ -279,26 +279,8 @@ export class VueComponentHooker extends Hooker {
           if (functions === undefined) {
             functions = []
 
-            this.mounted.set(id, functions)
-
             // Gotta hook then.
-            let component = this.getComponentById(id)
-
-            let originalMounted = component.mounted
-
-            component.mounted = function () {
-              if (originalMounted) {
-                originalMounted.call(this)
-              }
-
-              for (let fn of functions.concat()) {
-                try {
-                  fn(this)
-                } catch (e) {
-                  log.bad('VueComponent', e)
-                }
-              }
-            }
+            this.takeOverMounted(id, functions)
           }
 
           functions.push(fn)
@@ -431,4 +413,36 @@ export class VueComponentHooker extends Hooker {
   }
 
   getComponentById = (id) => id
+
+  takeOverMounted(id, functions) {
+    this.mounted.set(id, functions)
+
+    const component = this.getComponentById(id)
+
+    let originalMounted = component.mounted
+
+    component.mounted = function () {
+      if (originalMounted) {
+        originalMounted.call(this)
+      }
+
+      for (let fn of functions.concat()) {
+        try {
+          fn(this)
+        } catch (e) {
+          log.bad('VueComponent', e)
+        }
+      }
+    }
+
+    // Must check if the options cache for this component has
+    // already been created. If so, need to update the mounted
+    // function.
+    const vueAppApi = this.pimp.getApi('vueApp')
+    const optionsCache = vueAppApi.getVueApp()._context.optionsCache.get(component)
+
+    if (optionsCache) {
+      optionsCache.mounted = component.mounted
+    }
+  }
 }
