@@ -8,7 +8,6 @@ export class WebsiteThemeHooker extends Hooker {
   constructor() {
     super()
     this._root = null
-    this._reactRoot = null
     this._websiteTheme = null
     this._css = null
   }
@@ -36,6 +35,7 @@ export class WebsiteThemeHooker extends Hooker {
   }
 
   unhook() {
+    this._css.destroy()
     this._root.remove()
   }
 
