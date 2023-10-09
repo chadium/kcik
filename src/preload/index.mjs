@@ -28,6 +28,11 @@ import * as log from './log.mjs'
 import styles from "./global.lazy.css"
 
 async function main() {
+  if (process.env.PRELOAD_DELAY) {
+    const delay = Number(process.env.PRELOAD_DELAY)
+    await new Promise((resolve) => setTimeout(resolve, delay))
+  }
+
   let pimp = new Pimp()
 
   let hookers = [
