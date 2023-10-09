@@ -58,7 +58,7 @@ export class VueComponentHooker extends Hooker {
       enumerable: false,
       set(v) {
         try {
-          this._accessCache = v
+          this.___v_skip = v
 
           const component = this._.type
 
@@ -76,7 +76,7 @@ export class VueComponentHooker extends Hooker {
         }
       },
       get() {
-        return this._accessCache
+        return this.___v_skip
       }
     })
 
