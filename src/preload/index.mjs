@@ -36,6 +36,18 @@ async function main() {
 
   let pimp = new Pimp()
 
+  if (process.env.NODE_ENV !== 'production') {
+    // Useful tools.
+    window.pathsToKey = pathsToKey
+    window.pathsToValue = pathsToValue
+    window.breakOnSet = breakOnSet
+    window.breakOnGet = breakOnGet
+    window.freezeProperty = freezeProperty
+    window.getByPath = getByPath
+    window.snapshotUtils = snapshotUtils
+    window.pimp = pimp
+  }
+
   let hookers = [
     new DomHooker(),
     new VueAppHooker(),
@@ -68,16 +80,6 @@ async function main() {
       log.bad('Index', 'Failed to register ' + hooker.constructor.name, e)
     }
   }
-
-  // Useful tools.
-  window.pathsToKey = pathsToKey
-  window.pathsToValue = pathsToValue
-  window.breakOnSet = breakOnSet
-  window.breakOnGet = breakOnGet
-  window.freezeProperty = freezeProperty
-  window.getByPath = getByPath
-  window.snapshotUtils = snapshotUtils
-  window.pimp = pimp
 
   pimp.getApi('dom').on('headAvailable', () => {
     styles.use()
