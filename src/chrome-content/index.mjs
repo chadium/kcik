@@ -1,6 +1,7 @@
 import { Repository } from "../chrome-popup/repository.mjs"
 import { PopupCom } from "./PopupCom.mjs"
 import { WebsiteCom } from "./WebsiteCom.mjs"
+import * as log from "../preload/log.mjs"
 
 class Injection {
   #s = null
@@ -28,11 +29,11 @@ class Injection {
 }
 
 async function migrate(storageArea) {
-  console.log('KCIK Storage migration start')
+  log.info('ContentScript', 'KCIK Storage migration start')
   let currentVersion = (await storageArea.get(['version'])).version
 
   if (currentVersion === undefined) {
-    console.log('KCIK Storage applying version 1')
+    log.info('ContentScript', 'KCIK Storage applying version 1')
 
     await storageArea.set({
       version: 1
@@ -41,7 +42,7 @@ async function migrate(storageArea) {
     currentVersion = 1
   }
 
-  console.log('KCIK Storage migration end.')
+  log.info('ContentScript', 'KCIK Storage migration end.')
 }
 
 async function main() {
@@ -68,15 +69,15 @@ async function main() {
 
   // Forwarding messages.
   popupCom.on('message', (message) => {
-    console.log('KCIK Forwarding data to website', message)
+    log.info('ContentScript', 'KCIK Forwarding data to website', message)
     websiteCom.send(message.type, message.data)
   })
   websiteCom.on('message', (message) => {
-    console.log('KCIK Forwarding data to popup', message)
+    log.info('ContentScript', 'KCIK Forwarding data to popup', message)
     popupCom.send(message.type, message.data)
   })
 }
 
 main().catch((e) => {
-  console.error('KCIK', e)
+  log.bad('ContentScript', e)
 })
