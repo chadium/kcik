@@ -35,7 +35,7 @@ export class StateHooker extends Hooker {
       onMessage: (message) => {
         switch (message.type) {
           case 'newUserColor':
-            log.info(`${message.username} changed color to ${message.color}`)
+            log.info('State', `${message.username} changed color to ${message.color}`)
             this.colorsByUser[message.username] = message.color
             break
 
@@ -51,7 +51,7 @@ export class StateHooker extends Hooker {
         this.colorsByUser[info.username] = info.color
       }
 
-      log.info('Got list of colors. Contains:', Object.keys(this.colorsByUser).length)
+      log.info('State', 'Got list of colors. Contains: ' + Object.keys(this.colorsByUser).length)
     })
 
     return {

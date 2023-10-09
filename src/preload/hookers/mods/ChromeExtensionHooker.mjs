@@ -14,7 +14,7 @@ export class ChromeExtensionHooker extends Hooker {
         if (mutation.attributeName === 'data-message') {
           const newValue = mutation.target.getAttribute('data-message');
           const message = JSON.parse(newValue)
-          log.info('Got message from content script', message.type)
+          log.info('ChromeExtension', 'Got message from content script: ' + message.type)
           this.handleReceived(message.type, message.data)
         }
       });
@@ -59,7 +59,7 @@ export class ChromeExtensionHooker extends Hooker {
   }
 
   send(type, data) {
-    log.info('Sending message to content script', type)
+    log.info('ChromeExtension', 'Sending message to content script: ' + type)
     postMessage({
       type,
       data
