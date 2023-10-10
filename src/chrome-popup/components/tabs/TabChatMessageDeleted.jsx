@@ -12,8 +12,6 @@ export default function TabChatMessageDeleted({ com, repo }) {
     <GenericLoading loading={loading} error={error}>
       {data !== null && (
         <div>
-          <div className="chad-p-t"></div>
-
           <div>
             <InputCheck
               label="Enable"
