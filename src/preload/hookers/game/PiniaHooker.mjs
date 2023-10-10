@@ -2,6 +2,7 @@ import { Hooker } from '../../Pimp.mjs'
 import EventEmitter from 'events'
 import * as log from '../../log.mjs'
 import * as objectUtils from '../../object-utils.mjs'
+import * as mapUtils from '../../map-utils.mjs'
 
 export class PiniaHooker extends Hooker {
   #events = new EventEmitter()
@@ -53,8 +54,24 @@ export class PiniaHooker extends Hooker {
           return this.#pinia.state.value[name]
         },
 
+        waitForModule: (name) => {
+          let state = this.#pinia.state.value[name]
+
+          if (state === undefined) {
+            return mapUtils.waitForSet(this.#modules, name)
+              .then(() => this.#pinia.state.value[name])
+          }
+
+          return this.#pinia.state.value[name]
+        },
+
         replaceModuleFunction: (moduleName, functionName, fn) => {
           const module = this.#modules.get(moduleName)
+
+          if (module === undefined) {
+            throw new Error('Module not found.')
+          }
+
           const originalFunction = module[functionName]
 
           module[functionName] = (...args) => {

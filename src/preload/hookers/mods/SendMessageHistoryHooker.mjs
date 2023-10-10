@@ -95,8 +95,8 @@ export class SendMessageHistoryHooker extends Hooker {
 
     const piniaApi = this.pimp.getApi('pinia')
 
-    piniaApi.on('available', () => {
-      const chatroomState = piniaApi.getModuleState('chatroomv2')
+    piniaApi.on('available', async () => {
+      const chatroomState = await piniaApi.waitForModule('chatroomv2')
 
       piniaApi.replaceModuleFunction('chatroomv2', 'sendCurrentMessage', ({ originalFunction, args}) => {
         const message = chatroomState.currentMessage.trim()
