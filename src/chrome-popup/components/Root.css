@@ -28,6 +28,7 @@ body > div {
 
 .text-link {
   color: var(--chad-text-color);
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -47,9 +48,16 @@ html {
 .bg-bad {
   background: linear-gradient(#f14f4f, #a02222);
 }
+.text-bad {
+  color: #f14f4f;
+}
 
 .bg-warn {
   background: linear-gradient(#f1b64f, #a07222);
+}
+
+.bg-neutral {
+  background: linear-gradient(hsl(38, 0%, 97%), hsl(38, 0%, 88%));
 }
 
 .slide-left-enter {
