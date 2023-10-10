@@ -1,11 +1,12 @@
 # KCIK
 
-An open source extension for the streaming platform kick.com that is developed LIVE on kick.com!
+An open source extension for the streaming platform kick.com!
 
 Features:
 - Change the color of the website.
 - Hide streamers in the Featured Streams section.
 - Show deleted chat messages.
+- Send message history.
 - Automatically reject hosts.
 - Change playback speed.
 - See stream title of following and recommended channels in sidebar.
@@ -18,7 +19,7 @@ Features:
 
 The development of this extension is being live streamed on kick.com! As a thank you to all my subscribers, your names will be listed in the Credits tab of the extension.
 
-Note: after installing or updating the extension, you must refresh every kick.com tab. New extensions will not load in existing tabs.
+Note: after installing or updating the extension, you will have to refresh every kick.com tab.
 
 
 ## Installation
