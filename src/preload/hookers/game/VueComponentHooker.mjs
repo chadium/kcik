@@ -170,7 +170,7 @@ export class VueComponentHooker extends Hooker {
         },
 
         findNodesByComponent: (id) => {
-          return this.findNodes(this.getRouteRootNode(), (vm) => vm.type === id)
+          return this.findNodes(this.getRootNode(), (vm) => vm.type === id)
         },
 
         snapshot: () => {
