@@ -34,7 +34,7 @@ export default function TabSidebarStreamTooltip({ com, repo }) {
 
           <p>
             Note: You will need to refresh the page when
-            you enable and disabled this feature.
+            you enable and disable this feature.
           </p>
         </div>
       )}
