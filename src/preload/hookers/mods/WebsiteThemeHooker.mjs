@@ -926,6 +926,9 @@ html[lang] .category-tile-holder.category-tile-active {
 .bg-primary {
   background: ${complementary};
 }
+.\\!bg-primary {
+  background: ${complementary} !important;
+}
 
 /* Weird, I know but looks good. */
 .bg-black {
