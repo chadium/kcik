@@ -39,6 +39,11 @@ export class StateHooker extends Hooker {
             this.colorsByUser[message.username] = message.color
             break
 
+          case 'removeUserColor':
+            log.info('State', `${message.username} removed color`)
+            delete this.colorsByUser[message.username]
+            break
+
           default:
             this.chatroomAuthentication.masterportReceive(message)
             break
@@ -58,9 +63,17 @@ export class StateHooker extends Hooker {
       name: 'state',
       api: {
         setUsernameColor: async (color) => {
-          let patientNotification = toaster('Assigning you a color, please wait...', {
-            duration: Infinity
-          })
+          let patientNotification = (() => {
+            if (color !== null) {
+              toaster('Assigning you a color, please wait...', {
+                duration: Infinity
+              })
+            } else {
+              toaster('Removing your color, please wait...', {
+                duration: Infinity
+              })
+            }
+          })()
 
           try {
             await this.chatroomAuthentication.use(async ({ token }) => {
@@ -69,7 +82,11 @@ export class StateHooker extends Hooker {
                 color
               })
             })
-            toaster('New username color has been set!')
+            if (color !== null) {
+              toaster('New username color has been set.')
+            } else {
+              toaster('Username color has been removed.')
+            }
           } catch (e) {
             toaster('Failed to set color. Try again later.')
             throw e

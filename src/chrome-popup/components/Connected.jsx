@@ -32,7 +32,7 @@ const tabs = [
     content: (params) => <TabHideStreamers {...params}/>
   },
   {
-    name: 'Username',
+    name: 'Custom Usename Color',
     content: (params) => <TabChatUsername {...params}/>
   },
   {
