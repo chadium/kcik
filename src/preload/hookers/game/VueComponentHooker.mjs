@@ -102,6 +102,10 @@ export class VueComponentHooker extends Hooker {
     return {
       name: 'vueComponent',
       api: {
+        getAllComponentNames: () => {
+          return Object.keys(this.idsByName)
+        },
+
         waitForComponentByName: (name, cb) => {
           if (this.idsByName[name]) {
             cb(this.idsByName[name])

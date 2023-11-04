@@ -44,6 +44,10 @@ export class PiniaHooker extends Hooker {
     return {
       name: 'pinia',
       api: {
+        getAllModuleStates: () => {
+          return this.#pinia.state.value
+        },
+
         getModuleState: (name) => {
           let state = this.#pinia.state.value[name]
 
