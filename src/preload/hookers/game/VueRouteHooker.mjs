@@ -35,7 +35,7 @@ export class VueRouteHooker extends Hooker {
           }
         })
       } catch (e) {
-        log.bad('Pinia', e)
+        log.bad('Router', e)
       }
     })
 

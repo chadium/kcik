@@ -1,14 +1,10 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 
-export class HideStreamersHooker extends Hooker {
+export class HideStreamersFeaturedHooker extends Hooker {
   constructor() {
     super()
-    this._root = null
-    this._reactRoot = null
-    this._naughtyList = {
-      featured: new Set()
-    }
+    this._naughtyList = new Set()
   }
 
   async hook() {
@@ -19,13 +15,11 @@ export class HideStreamersHooker extends Hooker {
     })
 
     return {
-      name: 'hideStreamers',
+      name: 'hideStreamersFeatured',
       api: {
         setNaughtyList: (list) => {
-          this._naughtyList = list
-
-          for (const key in this._naughtyList) {
-            this._naughtyList[key] = new Set(this._naughtyList[key].map(naughty => naughty.toLowerCase()))
+          if (list.featured) {
+            this._naughtyList = new Set(list.featured.map(naughty => naughty.toLowerCase()))
           }
 
           piniaApi.once('available', () => this.#doesTheDeed())
@@ -35,8 +29,6 @@ export class HideStreamersHooker extends Hooker {
   }
 
   unhook() {
-    this._reactRoot.unmount()
-    this._root.remove()
   }
 
   #doesTheDeed() {
@@ -53,7 +45,7 @@ export class HideStreamersHooker extends Hooker {
     for (let i = channelState.featuredLivestreams.length - 1; i >= 0; i--) {
       let user = channelState.featuredLivestreams[i].channel.user.username.toLowerCase()
 
-      if (this._naughtyList.featured.has(user)) {
+      if (this._naughtyList.has(user)) {
         channelState.featuredLivestreams.splice(i, 1)
       }
     }

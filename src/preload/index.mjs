@@ -2,7 +2,8 @@ import { Messenger } from './Messenger.mjs'
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { PiniaHooker } from './hookers/game/PiniaHooker.mjs'
-import { HideStreamersHooker } from './hookers/mods/HideStreamersHooker.mjs'
+import { HideStreamersFeaturedHooker } from './hookers/mods/HideStreamersFeaturedHooker.mjs'
+import { HideStreamersRecommendedHooker } from './hookers/mods/HideStreamersRecommendedHooker.mjs'
 import { EchoHooker } from './hookers/game/EchoHooker.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { UserHooker } from './hookers/game/UserHooker.mjs'
@@ -27,6 +28,7 @@ import * as snapshotUtils from './snapshot-utils.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty, getByPath} from './object-utils.mjs'
 import * as log from './log.mjs'
 import styles from "./global.lazy.css"
+import { VueQueryHooker } from './hookers/game/VueQueryHooker.mjs'
 
 async function main() {
   if (process.env.PRELOAD_DELAY) {
@@ -53,6 +55,7 @@ async function main() {
     new VueAppHooker(),
     new VueComponentHooker(),
     new PiniaHooker(),
+    new VueQueryHooker(),
     new EchoHooker(),
     new StateHooker(),
     new UserHooker(),
@@ -63,7 +66,8 @@ async function main() {
     new FontSizeHooker(),
     new HostStopperHooker(),
     new ClipsHooker(),
-    new HideStreamersHooker(),
+    new HideStreamersFeaturedHooker(),
+    new HideStreamersRecommendedHooker(),
     new VodMouseVolumeControlHooker(),
     new VodCurrentTimeHookerHooker(),
     new VodPlaybackSpeedHooker(),
