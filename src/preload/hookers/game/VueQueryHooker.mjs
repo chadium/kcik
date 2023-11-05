@@ -21,24 +21,14 @@ export class VueQueryHooker extends Hooker {
         this.#client = vueApp._context.provides[KEY]
 
         this.#client.queryCache.subscribe(({ query, type }) => {
-          if (type === 'observerResultsUpdated') {
-            if (query.state.data === undefined) {
-              // It looks like the library emits this event when the Query
-              // class is instantiated. The data is undefined. So There are
-              // technically no results to be updated.
-              // We bail out.
-              return
-            }
-
-            for (const interceptor of this.#interceptors) {
-              try {
-                interceptor({ query })
-              } catch (e) {
-                log.bad('VueQuery', e)
-              }
-            }
+          if (type === 'added') {
+            this.#addObserver(query)
           }
         })
+
+        for (let query of this.#client.queryCache.queries) {
+          this.#addObserver(query)
+        }
 
         this.#events.emit('available')
 
@@ -100,5 +90,21 @@ export class VueQueryHooker extends Hooker {
   }
 
   async unhook() {
+  }
+
+  #addObserver(query) {
+    query.observers.unshift({
+      onQueryUpdate: ({ type }) => {
+        if (type === 'success') {
+          for (const interceptor of this.#interceptors) {
+            try {
+              interceptor({ query })
+            } catch (e) {
+              log.bad('VueQuery', e)
+            }
+          }
+        }
+      }
+    })
   }
 }
