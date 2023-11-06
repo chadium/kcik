@@ -104,7 +104,8 @@ export class VueQueryHooker extends Hooker {
             }
           }
         }
-      }
+      },
+      shouldFetchOnWindowFocus: () => false
     })
   }
 }
