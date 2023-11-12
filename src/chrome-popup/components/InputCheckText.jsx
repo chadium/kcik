@@ -19,7 +19,8 @@ export default function InputCheckText({ children, tooltip, value, onChange }) {
       className={[
         styles.locals.container,
         `chad-theme--ok`,
-        value ? styles.locals.active : ''
+        value ? styles.locals.active : '',
+        value ? 'chad-text-shadow' : '',
       ].join(' ')}
       onClick={onClick}
       title={tooltip}

@@ -59,7 +59,8 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
 
   return (
     <ExtendShrink>
-      <div>{item.username}</div>
+      <div className={item.groups.length === 0 ? 'chad-subtle' : ''}>{item.username}</div>
+
       <FlexFlow multiplier={0.5}>
         {groups.map(g => (
           <InputCheckText
@@ -78,6 +79,7 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
           </InputCheckText>
         ))}
       </FlexFlow>
+
       <TextButton onClick={onRemove}>❌</TextButton>
     </ExtendShrink>
   )
