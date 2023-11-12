@@ -32,8 +32,8 @@ export default function TabSidebarStreamTooltip({ com, repo }) {
 
           <div className="chad-p-t"></div>
 
-          <p>
-            Note: You will need to refresh the page when
+          <p className="chad-text-small">
+            <b>Note</b>: You will need to refresh the page when
             you enable and disable this feature.
           </p>
         </div>

@@ -33,7 +33,7 @@ export default function TabMouseVolumeControl({ com, repo }) {
 
           <div className="chad-p-t"></div>
 
-          <p>
+          <p className="chad-text-small">
             <b>Note</b>: browsers have a security policy in place that prevents
             websites from automatically playing unmuted videos. Due to this,
             you may have seen that kick will sometimes play streams with the
@@ -45,7 +45,7 @@ export default function TabMouseVolumeControl({ com, repo }) {
 
           <div className="chad-p-t"></div>
 
-          <p>
+          <p className="chad-text-small">
             <b>Note 2</b>: you will not be able to scroll down the page when your mouse
             is on top of the video player. Move your mouse out of the video
             player to be able to scroll.
