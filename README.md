@@ -4,7 +4,7 @@ An open source extension for the streaming platform kick.com!
 
 Features:
 - Change the color of the website.
-- Hide streamers in the Featured Streams section.
+- Hide streamers in Featured Streams and Recommended sections.
 - Show deleted chat messages.
 - Send message history.
 - Automatically reject hosts.
