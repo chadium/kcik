@@ -10,10 +10,8 @@ export default function TabCredits({ com }) {
   return (
     <div>
       <div>
-        This extension is developed LIVE on kick.com!
+        This is developed LIVE on kick.com. My channel:
       </div>
-
-      <div className="chad-p-t"/>
 
       <strong>
         <TextLink newTab={true} url="https://kick.com/chadium">https://kick.com/chadium</TextLink>
@@ -21,45 +19,49 @@ export default function TabCredits({ com }) {
 
       <div className="chad-p-t"/>
 
-      <div>
-        I'd like to thank the following people for supporting mr streamer:
-      </div>
-
-      <div className="chad-p-t"/>
-
       <GenericLoading loading={loading} error={error}>
         {data && (
-          <div>
-            <div>Kick Subscribers:</div>
-            <div>
-              {data.kickSubscribers.map(username => (
-                <div key={username}>
-                  <strong><based><legend>{username}</legend></based></strong>
-                </div>
-              ))}
-            </div>
+          <>
+            {(data.kickSubscribers.length > 0 || data.kofiSupporters.length > 0) && (
+              <div>
+                I'd like to thank the following people for supporting mr streamer:
+              </div>
+            )}
 
-            <div className="chad-p-t"/>
-
-            <div>Ko-Fi Supporters:</div>
-            <div>
-              {data.kofiSupporters.map(name => (
-                <div key={name}>
-                  <strong><based><legend>{name}</legend></based></strong>
+            {data.kickSubscribers.length > 0 && (
+              <>
+                <div className="chad-p-t"/>
+                <div>Kick Subscribers &amp; Gifters:</div>
+                <div>
+                  {data.kickSubscribers.map(username => (
+                    <div key={username}>
+                      <strong><based><legend>{username}</legend></based></strong>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </>
+            )}
+
+            {data.kofiSupporters.length > 0 && (
+              <>
+                <div className="chad-p-t"/>
+                <div>Ko-Fi Supporters:</div>
+                <div>
+                  {data.kofiSupporters.map(name => (
+                    <div key={name}>
+                      <strong><based><legend>{name}</legend></based></strong>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </>
         )}
       </GenericLoading>
 
       <div className="chad-p-t"/>
 
-      <p>
-        More about the author of this extension:
-      </p>
-
-      <div className="chad-p-t"/>
+      <p>Learn more about me:</p>
 
       <TextLink newTab={true} url="https://chadium.dev">https://chadium.dev</TextLink>
     </div>
