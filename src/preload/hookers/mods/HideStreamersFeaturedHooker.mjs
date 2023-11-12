@@ -18,9 +18,7 @@ export class HideStreamersFeaturedHooker extends Hooker {
       name: 'hideStreamersFeatured',
       api: {
         setNaughtyList: (list) => {
-          if (list.featured) {
-            this._naughtyList = new Set(list.featured.map(naughty => naughty.toLowerCase()))
-          }
+          this._naughtyList = new Set(list.featured.map(naughty => naughty.toLowerCase()))
 
           piniaApi.once('available', () => this.#doesTheDeed())
         }

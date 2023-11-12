@@ -6,17 +6,31 @@ import InputText from '../InputText.jsx'
 import ExtendShrink from '../ExtendShrink.jsx'
 import { useResource } from '../../use-resource.mjs'
 import * as arrayUtils from '../../../preload/array-utils.mjs'
+import { GroupListEditor } from '../../GroupListEditor.mjs'
+import InputCheckText from '../InputCheckText.jsx'
+import { BinarySortedArray } from '../../../preload/binary-sorted-array.mjs'
+import FlexFlow from '../FlexFlow.jsx'
+
+const groups = [
+  'featured',
+  'recommended',
+]
 
 function AddForm({ onSave }) {
   let [name, setName] = useState('')
 
+  function setNameSanitized(value) {
+    setName(value)
+  }
+
   function add() {
-    if (name === '') {
+    const username = name.trim()
+    if (username === '') {
       return
     }
 
     onSave({
-      name
+      username
     })
 
     setName('')
@@ -26,68 +40,137 @@ function AddForm({ onSave }) {
     <ExtendShrink>
       <InputText
         value={name}
-        onChange={setName}
+        onChange={setNameSanitized}
       />
       <Button onClick={add}>Add</Button>
     </ExtendShrink>
   )
 }
 
-function NaughtyItem({ name, onRemove }) {
+function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
+  const letterByGroups = {
+    featured: 'F',
+    recommended: 'R',
+  }
+  const descriptionByGroups = {
+    featured: 'Block streamer from appearing in the featured streams section of the home page.',
+    recommended: 'Block streamer from appearing in the recommended section of the sidebar.',
+  }
+
   return (
     <ExtendShrink>
-      <div>{name}</div>
+      <div>{item.username}</div>
+      <FlexFlow multiplier={0.5}>
+        {groups.map(g => (
+          <InputCheckText
+            key={g}
+            tooltip={descriptionByGroups[g]}
+            value={item.groups.includes(g)}
+            onChange={(active) => {
+              if (active) {
+                onAllow(g)
+              } else {
+                onDisallow(g)
+              }
+            }}
+          >
+            {letterByGroups[g]}
+          </InputCheckText>
+        ))}
+      </FlexFlow>
       <TextButton onClick={onRemove}>❌</TextButton>
     </ExtendShrink>
   )
 }
 
 export default function TabHideStreamers({ com, repo }) {
-  let fetchResource = useCallback(() => repo.getHideStreamers(), [repo])
-  let { data, setData, loading, error } = useResource(fetchResource)
+  const editor = useMemo(() => new GroupListEditor({ groups }), [])
+  const [naughtyList, setNaughtyList] = useState(new BinarySortedArray())
+  let fetchResource = useCallback(() => {
+    return repo.getHideStreamers()
+  }, [repo])
+  let { data, loading, error } = useResource(fetchResource)
 
-  let naughtyList = useMemo(() => {
-    if (!data) {
-      return []
+  useEffect(() => {
+    if (data === null) {
+      return
     }
 
-    return data.featured
+    editor.set(data)
+
+    const comparator = (a, b) => a.username.localeCompare(b.username)
+
+    setNaughtyList(new BinarySortedArray(editor.info(), comparator))
   }, [data])
 
-  async function add({ name }) {
-    if (naughtyList.includes(name)) {
+  async function add({ username }) {
+    if (naughtyList.includes(username)) {
       throw new Error('Name already in the naughty list.')
     }
 
-    let newData = {
-      featured: data.featured.concat()
-    }
+    editor.add(username)
 
-    newData.featured.push(name)
+    const newData = editor.get()
 
     await repo.setHideStreamers(newData)
     com.send('kcik.hideStreamers', newData)
-    setData(newData)
+
+    naughtyList.push({
+      username,
+      groups: groups.slice(),
+    })
+
+    setNaughtyList(naughtyList.clone())
   }
 
-  async function remove(name) {
-    let newData = {
-      featured: data.featured.concat()
-    }
+  async function allow(item, group) {
+    editor.allow(item.username, group)
 
-    arrayUtils.removeFirstByValue(newData.featured, name)
+    const newData = editor.get()
 
     await repo.setHideStreamers(newData)
     com.send('kcik.hideStreamers', newData)
-    setData(newData)
+
+    const index = naughtyList.indexOf(item)
+    naughtyList.get(index).groups.push(group)
+
+    setNaughtyList(naughtyList.clone())
+  }
+
+  async function disallow(item, group) {
+    editor.disallow(item.username, group)
+
+    const newData = editor.get()
+
+    await repo.setHideStreamers(newData)
+    com.send('kcik.hideStreamers', newData)
+
+    const index = naughtyList.indexOf(item)
+    arrayUtils.removeFirstByValue(naughtyList.get(index).groups, group)
+
+    setNaughtyList(naughtyList.clone())
+  }
+
+  async function remove(item) {
+    editor.remove(item.username)
+
+    const newData = editor.get()
+
+    await repo.setHideStreamers(newData)
+    com.send('kcik.hideStreamers', newData)
+
+    naughtyList.remove(item)
+
+    setNaughtyList(naughtyList.clone())
   }
 
   return (
     <GenericLoading loading={loading} error={error}>
       <p>
-        You can hide streamers from the Featured Streams
-        section of the front page. Type their name in the
-        box below and add them to the naughty list.
+        You can block streamers from appearing on the website.
+        Type their name in the box below and add them to the
+        naughty list. You can optionally allow them to appear
+        in some areas.
       </p>
 
       <div className="chad-p-t"></div>
@@ -98,14 +181,18 @@ export default function TabHideStreamers({ com, repo }) {
       <div className="chad-p-t"></div>
 
       <div>
-        <center>Naughty List</center>
+        <center>Naughty List ({naughtyList.length})</center>
 
-
-        {naughtyList.map((name) => (
-          <>
+        {naughtyList.map((item) => (
+          <div key={item.username}>
             <div className="chad-p-t"></div>
-            <NaughtyItem name={name} onRemove={() => remove(name)}/>
-          </>
+            <NaughtyItem
+              item={item}
+              onAllow={(group) => allow(item, group)}
+              onDisallow={(group) => disallow(item, group)}
+              onRemove={() => remove(item)}
+            />
+          </div>
         ))}
         {naughtyList.length === 0 && (
           <>

@@ -21,9 +21,7 @@ export class HideStreamersRecommendedHooker extends Hooker {
       name: 'hideStreamersRecommended',
       api: {
         setNaughtyList: (list) => {
-          if (list.featured) {
-            this._naughtyList = new Set(list.featured.map(naughty => naughty.toLowerCase()))
-          }
+          this._naughtyList = new Set(list.recommended.map(naughty => naughty.toLowerCase()))
 
           vueQueryApi.once('available', () => {
             let data = vueQueryApi.getQueryData(["recommendedChannels"])

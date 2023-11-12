@@ -1,0 +1,13 @@
+.container {
+  font-size: var(--chad-font-size-big);
+  font-weight: 600;
+  line-height: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.active {
+  color: var(--chad-action-bg-color);
+}

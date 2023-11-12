@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "binary-sorted-array": "^1.0.4",
     "deep-equal": "^2.1.0",
     "dotenv": "^16.0.3",
     "electron-localshortcut": "^3.2.1",
