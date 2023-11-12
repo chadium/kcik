@@ -53,22 +53,32 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
     recommended: 'R',
   }
   const descriptionByGroups = {
-    featured: 'Block streamer from appearing in the featured streams section of the home page.',
-    recommended: 'Block streamer from appearing in the recommended section of the sidebar.',
+    featured: {
+      true: 'Blocked from appearing in the featured streams section of the home page.',
+      false: 'Allowed to appear in the featured streams section of the home page.',
+    },
+    recommended: {
+      true: 'Blocked from appearing in the recommended section of the sidebar.',
+      false: 'Allowed to appear in the recommended section of the sidebar.',
+    },
   }
 
   return (
     <ExtendShrink>
-      <div className={item.groups.length === 0 ? 'chad-subtle' : ''}>{item.username}</div>
+      {item.groups.length > 0 ? (
+        <div>{item.username}</div>
+      ) : (
+        <div className="chad-subtle chad-text-strike" title="Allowed in all sections. Will be removed from the list.">{item.username}</div>
+      )}
 
       <FlexFlow multiplier={0.5}>
         {groups.map(g => (
           <InputCheckText
             key={g}
-            tooltip={descriptionByGroups[g]}
-            value={item.groups.includes(g)}
+            tooltip={descriptionByGroups[g][item.groups.includes(g)]}
+            value={!item.groups.includes(g)}
             onChange={(active) => {
-              if (active) {
+              if (!active) {
                 onAllow(g)
               } else {
                 onDisallow(g)
@@ -199,7 +209,7 @@ export default function TabHideStreamers({ com, repo }) {
         {naughtyList.length === 0 && (
           <>
             <div className="chad-p-t"></div>
-            <center>Empty. Everybody is nice.</center>
+            <center><b>Empty</b>. Everybody is nice.</center>
           </>
         )}
       </div>

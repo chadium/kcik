@@ -68,3 +68,7 @@
 .chad-text-small {
   font-size: var(--chad-font-size-small);
 }
+
+.chad-text-strike {
+  text-decoration: line-through;
+}
