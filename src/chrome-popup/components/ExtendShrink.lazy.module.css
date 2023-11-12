@@ -5,4 +5,7 @@
 
 .container > *:first-child {
   flex: 1;
+
+  word-wrap: break-word;
+  min-width: 0;
 }
