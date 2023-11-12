@@ -209,7 +209,10 @@ export default function TabHideStreamers({ com, repo }) {
         {naughtyList.length === 0 && (
           <>
             <div className="chad-p-t"></div>
-            <center><b>Empty</b>. Everybody is nice.</center>
+            <center>
+              <b>Empty</b><br/>
+              Everybody is nice.
+            </center>
           </>
         )}
       </div>
