@@ -59,6 +59,6 @@ The easiest way to contribute is by starring this project on GitHub!
 
 https://github.com/chadium/kcik
 
-Found a bug or want to contribute code? Feel free to create an issue or send a pull request on GitHub:
+If you would like to report a bug you can create an issue on GitHub:
 
 https://github.com/chadium/kcik/issues

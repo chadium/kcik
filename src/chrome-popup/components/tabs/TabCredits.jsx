@@ -10,12 +10,17 @@ export default function TabCredits({ com }) {
   return (
     <div>
       <div>
-        This is developed LIVE on kick.com. My channel:
+        This is open source and developed
+        LIVE on kick.com:
       </div>
 
-      <strong>
+      <div>
         <TextLink newTab={true} url="https://kick.com/chadium">https://kick.com/chadium</TextLink>
-      </strong>
+      </div>
+
+      <div>
+        <TextLink newTab={true} url="https://github.com/chadium/kcik">https://github.com/chadium</TextLink>
+      </div>
 
       <div className="chad-p-t"/>
 
