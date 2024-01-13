@@ -237,7 +237,7 @@ footer svg path {
   background-color: ${shade1} !important;
 }
 
-/* Search input */
+/* Old search input */
 html[lang] #search-input {
   color: ${textColor} !important;
   caret-color: ${textColor} !important;
@@ -256,9 +256,31 @@ html[lang] #search-input::placeholder {
   color: ${textColor}80;
 }
 
-/* Search results */
+/* Old search results */
 .results .hit:hover {
   background: ${shade1} !important;
+}
+
+/* Search input */
+html[lang].dark #search-input-field {
+  color: ${textColor};
+  caret-color: ${textColor};
+  background-color: ${shade1};
+  border-color: ${shade1};
+}
+html[lang].dark #search-input-field:hover {
+  background-color: ${shade6} !important;
+  border-color: ${shade6} !important;
+}
+html[lang].dark #search-input-field:focus {
+  background-color: ${shade1} !important;
+  border-color: ${shade1} !important;
+}
+html[lang].dark #search-input-field::placeholder {
+  color: ${textColor}80;
+}
+html[lang] .results-container mark {
+  color: ${textColor};
 }
 
 /* Sidebar */
