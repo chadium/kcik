@@ -19,7 +19,7 @@ chrome.tabs.query(queryObj, async function(tabs) {
     reactRoot.render(React.createElement(Root, {
       com: 'on',
       repo: 'garbage',
-      error: new Error('You must open this on kick.com')
+      error: new Error('To use this extension, you need to open this on kick.com')
     }))
     return
   }

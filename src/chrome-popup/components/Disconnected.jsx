@@ -14,25 +14,27 @@ export default function Disconnected({ error }) {
         <div  className={styles.locals.body}>
           <div className={styles.locals.bigBoldAndBeautiful}>{'KCIK ' + BOOMER_VERSION}</div>
 
+          <div className="chad-p-t"/>
+
           <div className="chad-subtle chad-text-small">
             An open source extension for the
             streaming platform kick.com
           </div>
+
+          <div className="chad-p-t"/>
 
           <div className="text-bad">{error.message}</div>
 
           <div className="chad-p-t"/>
 
           <div>
-            This can happen when you're not in a kick.com
-            tab or if the extension was recently updated.
+            If you're on a kick.com tab, try refreshing the page.
           </div>
 
           <div className="chad-p-t"/>
         </div>
 
         <div className={styles.locals.bottom}>
-          <div><TextLink newTab url="https://kick.com">Click here to open kick.com</TextLink></div>
         </div>
       </div>
     </Page>
