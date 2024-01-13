@@ -34,7 +34,7 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #929ea6
   let shade8 = colorUtils.adjustBrightness(mainColor, 0.48 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
-  let textColor = getTextColor(mainColor)
+  let textColor = '#' + Math.floor(255 - colorUtils.getLightness(mainColor) * 255).toString(16).padStart(2, '0').repeat(3)
 
   // Equivalent to: #f3f4f6 and #F8FBFE
   let textColorShade1 = colorUtils.adjustBrightness(textColor, 0.05 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
