@@ -535,7 +535,11 @@ html[lang] .variant-action.state-loading {
 }
 .base-input-layout input {
   color: ${textColor} !important;
-  caret-color: ${shade1} !important;
+
+  /* Kick uses the shade1 color here but
+  certain background colors make it look so bad.
+  I've chosen to use text color instead. */
+  caret-color: ${textColor} !important;
 }
 .base-input-layout .input-holder .input-icon {
   color: ${textColor} !important;
@@ -587,9 +591,13 @@ html[lang] .input-holder:has(input:disabled) {
 }
 .textarea-holder > textarea {
   color: ${textColor} !important;
-  caret-color: ${complementary} !important;
   border-color: ${shade6} !important;
   background-color: ${shade6} !important;
+
+  /* Kick uses the complementary color here but
+  certain background colors make it look so bad.
+  I've chosen to use text color instead. */
+  caret-color: ${textColor} !important;
 }
 .textarea-holder > textarea::placeholder {
   color: ${textColorShade7} !important;
