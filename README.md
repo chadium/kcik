@@ -37,7 +37,7 @@ To build it yourself, you have to install the dependencies. You can do so by run
 npm install
 ```
 
-In the root directory of this project you're going to find a `.env.example` file. Rename it to `.env` and modify if necessary. If you're unsure, feel free to leave it as is.
+In the root directory of this project you're going to find a `.env.example` file. Rename it to `.env` and modify if necessary. You must likely won't need to change a thing.
 
 And then you can run the following command to build the extension:
 
