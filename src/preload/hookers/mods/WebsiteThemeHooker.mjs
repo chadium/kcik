@@ -237,30 +237,6 @@ footer svg path {
   background-color: ${shade1} !important;
 }
 
-/* Old search input */
-html[lang] #search-input {
-  color: ${textColor} !important;
-  caret-color: ${textColor} !important;
-  background: ${shade1} !important;
-  border-color: ${mainColor} !important;
-}
-html[lang] #search-input:hover {
-  border-color: ${shade6} !important;
-  background: ${shade6} !important;
-}
-html[lang] #search-input:focus {
-  border-color: ${mainColor} !important;
-  background: ${shade1} !important;
-}
-html[lang] #search-input::placeholder {
-  color: ${textColor}80;
-}
-
-/* Old search results */
-.results .hit:hover {
-  background: ${shade1} !important;
-}
-
 /* Search input */
 html[lang].dark #search-input-field {
   color: ${textColor};
