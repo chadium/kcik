@@ -7,7 +7,7 @@ import ExtendShrink from '../ExtendShrink.jsx'
 import { useResource } from '../../use-resource.mjs'
 import * as arrayUtils from '../../../preload/array-utils.mjs'
 import { GroupListEditor } from '../../GroupListEditor.mjs'
-import InputCheckText from '../InputCheckText.jsx'
+import InputCheckTextCheckmark from '../InputCheckTextCheckmark.jsx'
 import { BinarySortedArray } from '../../../preload/binary-sorted-array.mjs'
 import FlexFlow from '../FlexFlow.jsx'
 
@@ -73,7 +73,7 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
 
       <FlexFlow multiplier={0.5}>
         {groups.map(g => (
-          <InputCheckText
+          <InputCheckTextCheckmark
             key={g}
             tooltip={descriptionByGroups[g][item.groups.includes(g)]}
             value={!item.groups.includes(g)}
@@ -86,7 +86,7 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
             }}
           >
             {letterByGroups[g]}
-          </InputCheckText>
+          </InputCheckTextCheckmark>
         ))}
       </FlexFlow>
 
