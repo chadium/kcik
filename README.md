@@ -24,7 +24,9 @@ Note: after installing or updating the extension, you will have to refresh every
 
 ## Installation
 
-You can download the extension for your browser in the [Chrome Web Store](https://chrome.google.com/webstore/detail/kcik/gjhhdbbkhppoflbcoigffpphhmkffbcf).
+You can download the extension for your Google Chrome compatible browser (Edge, Opera, etc) in the [Chrome Web Store](https://chrome.google.com/webstore/detail/kcik/gjhhdbbkhppoflbcoigffpphhmkffbcf).
+
+A link for Firefox users will be available soon.
 
 Or you can build it yourself by following the Build Instructions below.
 
@@ -45,7 +47,7 @@ And then you can run the following command to build the extension:
 npm run build
 ```
 
-The extension files will be placed in `dist/chrome-user`. You can load this folder into your browser for development.
+The extension files will be placed in `dist/chrome-user`. You can load this folder into your browser. This has been successfully done on Google Chrome and Mozilla Firefox.
 
 
 ## Development
