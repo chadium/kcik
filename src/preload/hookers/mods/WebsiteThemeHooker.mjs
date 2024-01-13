@@ -554,7 +554,13 @@ html[lang] .input-holder:has(input:disabled) {
   --tw-ring-color: ${shade6} !important;
 }
 .input-holder > input::placeholder {
-  color: ${textColorShade7} !important;
+  /*
+    Unsure about this color.
+    Trying to make it look as visible as possible.
+    But it's not easy because in the original theme it's
+    already very hard to read.
+  */
+  color: ${shade8} !important;
 }
 .input-holder > input:disabled {
   color: ${textColorShade7} !important;
@@ -649,6 +655,21 @@ html[lang] .input-holder:has(input:disabled) {
 }
 .base-select-menu .menu-item.item-selected:hover {
   background-color: ${complementary} !important;
+}
+
+/* Empty list/table message */
+.base-empty-state .empty-state-content .empty-state-title {
+  color: ${textColor} !important;
+}
+
+/* Vods table label and desc */
+/* Unreliable selector */
+.bg-\\[rgb\\(25\\,28\\,32\\)\\] .label {
+  color: ${textColor};
+}
+
+.bg-\\[rgb\\(25\\,28\\,32\\)\\] .desc {
+  color: ${textColor}b3;
 }
 
 /* Special select boxes for live stream filters */
@@ -838,6 +859,10 @@ html[lang] .category-tile-holder.category-tile-active {
   background: ${shade1};
 }
 
+.hover\\:bg-\\[\\#313538\\]:hover {
+  background-color: ${shade4};
+}
+
 .bg-secondary-light {
   color: ${textColor};
   background: ${shade2};
@@ -902,6 +927,9 @@ html[lang] .category-tile-holder.category-tile-active {
 }
 
 /* Oh yes, they did. */
+.bg-\\[rgb\\(25\\,28\\,32\\)\\] {
+  background: ${shade1};
+}
 .bg-\\[\\#24272C\\] {
   background: ${shade3};
 }
@@ -953,6 +981,9 @@ html[lang] .category-tile-holder.category-tile-active {
 .text-gray-500 {
   color: ${textColorShade7};
 }
+.\\!text-gray-500 {
+  color: ${textColorShade7} !important;
+}
 .text-gray-500\\/40 {
   color: ${textColorShade7}66;
 }
@@ -972,17 +1003,26 @@ html[lang] .category-tile-holder.category-tile-active {
 .\\!text-white {
   color: ${textColor} !important;
 }
+.text-white\\/40 {
+  color: ${textColor}66;
+}
 .text-white\\/50 {
   color: ${textColor}80;
+}
+.text-white\\/60 {
+  color: ${textColor}99;
+}
+.text-white\\/70 {
+  color: ${textColor}b3;
 }
 .text-white\\/80 {
   color: ${textColor}cc;
 }
-.text-white\\/40 {
-  color: ${textColor}66;
-}
 .hover\\:text-white {
   color: ${textColor};
+}
+.hover\\:text-white\\/80:hover {
+  color: ${textColor}80;
 }
 .group:hover .group-hover\\:text-white {
   color: ${textColor};

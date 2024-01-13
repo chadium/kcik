@@ -10,7 +10,7 @@ export function websiteThemeValues(websiteTheme) {
 
   // Seen #0f1214.
 
-  // Equivalent to: #191b1f, #171c1e
+  // Equivalent to: #191b1f, #171c1e, #191c20
   let shade1 = colorUtils.adjustBrightness(mainColor, 0.06 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #202225
