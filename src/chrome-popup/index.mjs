@@ -11,7 +11,6 @@ let reactRoot = ReactDOM.createRoot(document.body.appendChild(document.createEle
 const queryObj = {
   active: true,
   currentWindow: true,
-  url: 'https://kick.com/*'
 }
 
 chrome.tabs.query(queryObj, async function(tabs) {
