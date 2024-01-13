@@ -68,8 +68,8 @@ export class WebsiteThemeHooker extends Hooker {
 
       let [complementaryHue] = colorUtils.rgbToHsl(complementary)
 
-      // Note: I use html[lang] to increase specifity.
-      return `
+      // Note: I use html[lang] to increase specificity.
+      let code = `
 :root {
   --toastify-color-dark: ${mainColor};
   --toastify-text-color-dark: ${textColor};
@@ -92,7 +92,7 @@ default and we're just going to mess with it. */
   color: ${textColor};
 }
 
-/* Kick logo */
+/* Kick logo as SVG */
 .main-navbar svg path {
   fill: ${textColor};
 }
@@ -1155,6 +1155,17 @@ textarea::placeholder {
   color: ${shade8};
 }
 `
+
+      if (colorUtils.getLightness(textColor) < 0.5) {
+        code += `
+/* Kick logo as image, apparently can appear for special occasions. */
+.main-navbar a img {
+  filter: brightness(0%);
+}
+`
+      }
+
+      return code
     } else {
       return ''
     }
