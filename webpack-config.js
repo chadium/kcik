@@ -281,6 +281,9 @@ exports.generateChromeContentConfig = ({
     permissions: [
       "storage"
     ],
+    host_permissions: [
+      "https://kick.com/*"
+    ],
     web_accessible_resources: [
       {
         resources: ["preload/index.js", "icon128.png"],
@@ -295,7 +298,12 @@ mF5CVdTcoekcgmqkl1sTlVrFC+zTVItm/MUv3iV+f4u9dHPYxtQqxUuxIIiewWGz
 fyeXEc7c7dQde95KdxBIsYGs1TyQvMlYTT7QKcCkShWETV87rZkSbCBZPdthYru2
 Mz4OeDQPM7svcFvtO8sfDrD6uYayy5khVPxK1wuugvOCXrS8/FaooiGgfVOaUz35
 RwIDAQAB
-`.replaceAll(/\s+/g, '')
+`.replaceAll(/\s+/g, ''),
+    browser_specific_settings: {
+      gecko: {
+        id: "kcik@chadium.dev"
+      }
+    }
   }
 
   config.plugins.push(generate({

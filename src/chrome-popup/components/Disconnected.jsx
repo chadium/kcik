@@ -3,7 +3,7 @@ import Page from './Page.jsx'
 import styles from "./Disconnected.lazy.module.css"
 import TextLink from './TextLink.jsx'
 
-export default function Disconnected() {
+export default function Disconnected({ error }) {
   useEffect(() => {
     styles.use()
   }, [])
@@ -19,7 +19,7 @@ export default function Disconnected() {
             streaming platform kick.com
           </div>
 
-          <div className="text-bad">Failed to connect to kick.com</div>
+          <div className="text-bad">{error.message}</div>
 
           <div className="chad-p-t"/>
 

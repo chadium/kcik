@@ -5,7 +5,7 @@ import Disconnected from './Disconnected.jsx'
 
 export default function Root({ com, repo, error }) {
   if (error) {
-    return <Disconnected/>
+    return <Disconnected error={error}/>
   } else {
     return <Connected com={com} repo={repo}/>
   }

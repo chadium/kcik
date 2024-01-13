@@ -8,7 +8,22 @@ import { Repository } from './repository.mjs'
 styles.use()
 let reactRoot = ReactDOM.createRoot(document.body.appendChild(document.createElement('div')))
 
-chrome.tabs.query({ "active": true, "currentWindow": true }, async function(tabs) {
+const queryObj = {
+  active: true,
+  currentWindow: true,
+  url: 'https://kick.com/*'
+}
+
+chrome.tabs.query(queryObj, async function(tabs) {
+  if (tabs.length === 0) {
+    reactRoot.render(React.createElement(Root, {
+      com: 'on',
+      repo: 'garbage',
+      error: new Error('You must open this on kick.com')
+    }))
+    return
+  }
+
   let port = chrome.tabs.connect(tabs[0].id)
 
   port.onDisconnect.addListener(() => {
@@ -17,7 +32,7 @@ chrome.tabs.query({ "active": true, "currentWindow": true }, async function(tabs
     reactRoot.render(React.createElement(Root, {
       com,
       repo: 'garbage',
-      error: chrome.runtime.lastError
+      error: new Error('Failed to connect to kick.com')
     }))
   })
 
