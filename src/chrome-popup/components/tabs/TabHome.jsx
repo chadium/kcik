@@ -13,14 +13,12 @@ export default function TabHome({ com, repo }) {
 
       <p>
         <b>Changelog</b>:<br/>
+        - <span className="chad-subtle">2024-01-14</span>: Hide streamers in
+        categories.<br/>
         - <span className="chad-subtle">2023-11-11</span>: Hide streamers in the
         sidebar.<br/>
         - <span className="chad-subtle">2023-10-10</span>: Send message history!
         Press up to get your previous message.<br/>
-        - <span className="chad-subtle">2023-09-16</span>: Sidebar stream tooltip.
-        See the stream title in the following and recommended lists.<br/>
-        - <span className="chad-subtle">2023-08-26</span>: Playback speed control
-        and current time display in clips and vods.<br/>
       </p>
 
       <div className="chad-p-t"/>
