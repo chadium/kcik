@@ -185,8 +185,7 @@ export default function TabHideStreamers({ com, repo }) {
   return (
     <GenericLoading loading={loading} error={error}>
       <p>
-        You can block streamers from appearing on the website.
-        Type their name in the box below and add them to the
+        Type the name of a streamer in the box below then add them to the
         naughty list.
       </p>
 
