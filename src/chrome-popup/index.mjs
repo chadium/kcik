@@ -7,6 +7,7 @@ import { Repository } from './repository.mjs'
 
 styles.use()
 let reactRoot = ReactDOM.createRoot(document.body.appendChild(document.createElement('div')))
+reactRoot.render(React.createElement(Root, { loading: true }))
 
 const queryObj = {
   active: true,
