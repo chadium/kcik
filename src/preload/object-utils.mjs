@@ -24,30 +24,32 @@ export function hijackProperty(o, propName, {
   }
 }
 
-export function hijackPropertyWithMemory(o, propName, {
+export function interceptProperty(o, propName, {
   get,
   set
 } = {}) {
-  let storage = o[propName]
+  let value = o[propName]
 
   let propSet = (() => {
     if (set) {
       return (v) => {
-        storage = v
-        set(v)
+        value = set(v)
       }
     } else {
       return (v) => {
-        storage = v
+        value = v
       }
     }
   })()
 
   let propGet = (() => {
     if (get) {
-      return () => get()
+      return () => {
+        debugger
+        get(value)
+      }
     } else {
-      return () => {}
+      return () => value
     }
   })()
 
@@ -60,7 +62,11 @@ export function hijackPropertyWithMemory(o, propName, {
   return {
     close() {
       delete o[propName]
-      o[propName] = storage
+      o[propName] = value
+    },
+
+    get value() {
+      return value
     }
   }
 }
