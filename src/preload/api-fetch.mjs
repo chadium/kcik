@@ -60,13 +60,14 @@ export async function apiFetch({
 
   try {
     let request = new XMLHttpRequest();
+
     request.open(method, url)
+
     for (let [name, value] of Object.entries(headers)) {
       request.setRequestHeader(name, value)
     }
-    request.send(body)
 
-    let response = await new Promise((resolve, reject) => {
+    const donePromise = new Promise((resolve, reject) => {
       request.onreadystatechange = () => {
         if (request.readyState === request.DONE) {
           resolve({
@@ -85,6 +86,10 @@ export async function apiFetch({
         }
       }
     })
+
+    request.send(body)
+
+    let response = await donePromise
 
     if (response.ok) {
       if (forceResponseJsonParse || response.headers.get('content-type') === 'application/json') {

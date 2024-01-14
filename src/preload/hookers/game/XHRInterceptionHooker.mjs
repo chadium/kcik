@@ -21,6 +21,8 @@ export class XHRInterceptionHooker extends Hooker {
       this.kcikMethod = method
       this.kcikUrl = url
 
+      self.#hijackOnreadystatechange(this)
+
       return self.#originalOpen.call(this, method, url, async, user, password)
     }
   
@@ -34,38 +36,6 @@ export class XHRInterceptionHooker extends Hooker {
             // TODO: Add other fields as they're needed.
           })
         }
-
-        this.addEventListener('readystatechange', () => {
-          if (this.readyState === XMLHttpRequest.DONE) {
-            try {
-              for (let interceptor of self.#responseInterceptors.values()) {
-                interceptor({
-                  method: this.kcikMethod,
-                  url: this.kcikUrl,
-                  responseText: () => {
-                    return this.responseText;
-                  },
-                  responseJson: () => {
-                    try {
-                      return JSON.parse(this.responseText);
-                    } catch (e) {
-                      log.warn('XHRInterception', e)
-                      return null
-                    }
-                  },
-                  replaceResponseJson: (data) => {
-                    const text = JSON.stringify(data)
-                    Object.defineProperty(this, 'responseText', {
-                      get: () => text
-                    })
-                  },
-                })
-              }
-            } catch (e) {
-              log.bad('XHRInterception', e)
-            }
-          }
-        })
       } catch (e) {
         log.bad('XHRInterception', e)
       }
@@ -109,5 +79,40 @@ export class XHRInterceptionHooker extends Hooker {
     this.#requestInterceptors.clear()
 
     this.#responseInterceptors.clear()
+  }
+
+  #hijackOnreadystatechange(xhr) {
+    // We're relying on the fact that this event handler will be the first.
+    xhr.addEventListener('readystatechange', (...args) => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        try {
+          for (let interceptor of this.#responseInterceptors.values()) {
+            interceptor({
+              method: xhr.kcikMethod,
+              url: xhr.kcikUrl,
+              responseText: () => {
+                return xhr.responseText;
+              },
+              responseJson: () => {
+                try {
+                  return JSON.parse(xhr.responseText);
+                } catch (e) {
+                  log.warn('XHRInterception', e)
+                  return null
+                }
+              },
+              replaceResponseJson: (data) => {
+                const text = JSON.stringify(data)
+                Object.defineProperty(xhr, 'responseText', {
+                  get: () => text
+                })
+              },
+            })
+          }
+        } catch (e) {
+          log.bad('XHRInterception', e)
+        }
+      }
+    })
   }
 }
