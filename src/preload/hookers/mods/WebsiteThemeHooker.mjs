@@ -289,6 +289,14 @@ html[lang] .results-container mark {
   color: ${textColor} !important;
 }
 
+/* Another sidebar button? */
+.show-action-btn-label {
+  color: ${textColorShade4} !important;
+}
+.show-action-btn-label:hover {
+  color: ${textColor} !important;
+}
+
 /* Buttons */
 .variant-action {
   color: ${complementaryText} !important;
@@ -382,6 +390,10 @@ html[lang] .variant-action.state-loading {
   color: ${complementary} !important;
 }
 
+.card-menu-btn-holder svg path[fill=\\#F8FBFE] {
+  fill: ${textColorShade1};
+}
+
 /* Stream category */
 .category-tags-holder .stream-category {
   color: ${complementary} !important;
@@ -396,6 +408,9 @@ html[lang] .variant-action.state-loading {
 /* Stream information */
 .stream-info svg path[fill=white] {
   fill: ${textColor};
+}
+.stream-info svg path[fill=\\#F8FBFE] {
+  fill: ${textColorShade1};
 }
 
 /* Stream information panel */
@@ -413,6 +428,11 @@ html[lang] .variant-action.state-loading {
 }
 .radio-container label {
   color: currentColor !important;
+}
+
+/* Base radio */
+.base-radio label {
+  color: ${textColor} !important;
 }
 
 /* Checkbox */
@@ -587,6 +607,12 @@ html[lang] .input-holder:has(input:disabled) {
 }
 .vti__dropdown-item.highlighted {
   background: ${shade2} !important;
+}
+
+/* Base dropdown menu */
+.base-dropdown-menu {
+  color: ${textColor};
+  background-color: ${shade1} !important;
 }
 
 /* Text area input box */
@@ -845,6 +871,11 @@ html[lang] .category-tile-holder.category-tile-active {
 /* Video thumbnail */
 .video-hover-borders {
   border-color: ${complementary} !important;
+}
+
+/* Report list */
+.report-list .report-list-title {
+  color: ${textColorShade2} !important;
 }
 
 /* Anything else */
