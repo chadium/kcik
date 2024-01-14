@@ -281,9 +281,6 @@ exports.generateChromeContentConfig = ({
     permissions: [
       "storage"
     ],
-    host_permissions: [
-      "https://kick.com/*"
-    ],
     web_accessible_resources: [
       {
         resources: ["preload/index.js", "icon128.png"],
