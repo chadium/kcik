@@ -26,6 +26,7 @@ let websiteThemeSchema = Joi.object({
 let hideStreamersSchema = Joi.object({
   featured: Joi.array().items(Joi.string()).required(),
   recommended: Joi.array().items(Joi.string()).required(),
+  category: Joi.array().items(Joi.string()).required(),
 })
 
 export class Repository {
@@ -252,6 +253,10 @@ export class Repository {
       result.hideStreamers.recommended = []
     }
 
+    if (result.hideStreamers.category === undefined) {
+      result.hideStreamers.category = []
+    }
+
     return result.hideStreamers
   }
 
@@ -264,6 +269,10 @@ export class Repository {
 
     if (value.recommended.length === 0) {
       delete value.recommended
+    }
+
+    if (value.category.length === 0) {
+      delete value.category
     }
 
     if (Object.keys(value).length === 0) {

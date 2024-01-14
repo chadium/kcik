@@ -2,8 +2,10 @@ import { Messenger } from './Messenger.mjs'
 import { Prompter } from './Prompter.mjs'
 import { Pimp } from './Pimp.mjs'
 import { PiniaHooker } from './hookers/game/PiniaHooker.mjs'
+import { XHRInterceptionHooker } from './hookers/game/XHRInterceptionHooker.mjs'
 import { HideStreamersFeaturedHooker } from './hookers/mods/HideStreamersFeaturedHooker.mjs'
 import { HideStreamersRecommendedHooker } from './hookers/mods/HideStreamersRecommendedHooker.mjs'
+import { HideStreamersCategoryHooker } from './hookers/mods/HideStreamersCategoryHooker.mjs'
 import { EchoHooker } from './hookers/game/EchoHooker.mjs'
 import { DomHooker } from './hookers/game/DomHooker.mjs'
 import { UserHooker } from './hookers/game/UserHooker.mjs'
@@ -51,6 +53,7 @@ async function main() {
   }
 
   let hookers = [
+    new XHRInterceptionHooker(),
     new DomHooker(),
     new VueAppHooker(),
     new VueComponentHooker(),
@@ -68,6 +71,7 @@ async function main() {
     new ClipsHooker(),
     new HideStreamersFeaturedHooker(),
     new HideStreamersRecommendedHooker(),
+    new HideStreamersCategoryHooker(),
     new VodMouseVolumeControlHooker(),
     new VodCurrentTimeHookerHooker(),
     new VodPlaybackSpeedHooker(),

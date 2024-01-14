@@ -14,6 +14,7 @@ import FlexFlow from '../FlexFlow.jsx'
 const groups = [
   'featured',
   'recommended',
+  'category',
 ]
 
 function AddForm({ onSave }) {
@@ -51,6 +52,7 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
   const letterByGroups = {
     featured: 'F',
     recommended: 'R',
+    category: 'C',
   }
   const descriptionByGroups = {
     featured: {
@@ -60,6 +62,10 @@ function NaughtyItem({ item, onAllow, onDisallow, onRemove }) {
     recommended: {
       true: 'Blocked from appearing in the recommended section of the sidebar.',
       false: 'Allowed to appear in the recommended section of the sidebar.',
+    },
+    category: {
+      true: 'Blocked from appearing in the category listing.',
+      false: 'Allowed to appear in the category listing.',
     },
   }
 
@@ -181,8 +187,7 @@ export default function TabHideStreamers({ com, repo }) {
       <p>
         You can block streamers from appearing on the website.
         Type their name in the box below and add them to the
-        naughty list. You can optionally allow them to appear
-        in some areas.
+        naughty list.
       </p>
 
       <div className="chad-p-t"></div>
@@ -216,6 +221,13 @@ export default function TabHideStreamers({ com, repo }) {
           </>
         )}
       </div>
+
+      <div className="chad-p-t"></div>
+
+      <p className="chad-text-small">
+        <b>Note</b>: You will need to refresh the page when
+        you add and remove streamers from the list.
+      </p>
     </GenericLoading>
   )
 }

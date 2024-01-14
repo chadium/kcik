@@ -39,6 +39,7 @@ export class ChromeExtensionHooker extends Hooker {
     this.pimp.getApi('hostStopper').enableHost(initialData.enableHost)
     this.pimp.getApi('hideStreamersFeatured').setNaughtyList(initialData.hideStreamers)
     this.pimp.getApi('hideStreamersRecommended').setNaughtyList(initialData.hideStreamers)
+    this.pimp.getApi('hideStreamersCategory').setNaughtyList(initialData.hideStreamers)
     this.pimp.getApi('chatMessageDeleted').setChatMessageDeletedMode(initialData.chatMessageDeletedMode)
     this.pimp.getApi('sidebarStreamTooltip').setEnabled(initialData.enableSidebarStreamTooltip)
     this.pimp.getApi('sendMessageHistory').setEnabled(initialData.enableSendMessageHistory)
@@ -129,6 +130,7 @@ export class ChromeExtensionHooker extends Hooker {
     case 'kcik.hideStreamers':
       this.pimp.getApi('hideStreamersFeatured').setNaughtyList(data)
       this.pimp.getApi('hideStreamersRecommended').setNaughtyList(data)
+      this.pimp.getApi('hideStreamersCategory').setNaughtyList(data)
       break
 
     case 'kcik.chatMessageDeletedMode':

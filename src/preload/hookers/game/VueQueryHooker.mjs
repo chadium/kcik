@@ -61,6 +61,10 @@ export class VueQueryHooker extends Hooker {
           }
         },
 
+        allKeys: () => {
+          return this.#client.queryCache.queriesMap.keys()
+        },
+
         getQueryData: (queryKey) => {
           const query = this.#client.queryCache.queriesMap[JSON.stringify(queryKey)]
 
