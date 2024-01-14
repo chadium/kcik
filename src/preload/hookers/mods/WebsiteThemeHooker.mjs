@@ -505,6 +505,10 @@ html[lang] .variant-action.state-loading {
 .chatroom-user-profile-history .tab-headers > div:hover {
   background-color: ${shade6} !important;
 }
+.user-profile .content .profile .information .details-container .details .label {
+  color: ${textColorShade4} !important;
+}
+
 /* Emote selector */
 .chat-emote-picker-popout {
   background-color: ${shade3} !important;
@@ -878,6 +882,18 @@ html[lang] .category-tile-holder.category-tile-active {
   color: ${textColorShade2} !important;
 }
 
+/* Report user */
+.report-container .body .description,
+.report-container .body .label {
+  color: ${textColorShade3} !important;
+}
+
+/* Mute user */
+.mute-container .description,
+.mute-container .body .label {
+  color: ${textColorShade3} !important;
+}
+
 /* Anything else */
 .bg-secondary {
   color: ${textColor};
@@ -890,6 +906,10 @@ html[lang] .category-tile-holder.category-tile-active {
 
 .hover\\:bg-\\[\\#313538\\]:hover {
   background-color: ${shade4};
+}
+
+.hover\\:bg-\\[\\#25272c\\]:hover {
+  background-color: ${shade3};
 }
 
 .bg-secondary-light {
@@ -1184,6 +1204,11 @@ input::placeholder {
 }
 textarea::placeholder {
   color: ${shade8};
+}
+
+/* Animation */
+.to-secondary-dark {
+  --tw-gradient-to: #00000030 var(--tw-gradient-to-position);
 }
 `
 

@@ -16,7 +16,7 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #202225
   let shade2 = colorUtils.adjustBrightness(mainColor, 0.1 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
-  // Equivalent to: #24272c, #232628
+  // Equivalent to: #24272c, #232628, #25272c
   let shade3 = colorUtils.adjustBrightness(mainColor, 0.12 * (colorUtils.getLightness(mainColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #313538, #271B1D
@@ -42,10 +42,10 @@ export function websiteThemeValues(websiteTheme) {
   // Equivalent to: #e5e7eb and #E9ECED
   let textColorShade2 = colorUtils.adjustBrightness(textColor, 0.1 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
-  // Equivalent to: #d1d5db and #d3d8db and #d2dae0
+  // Equivalent to: #d1d5db and #d3d8db and #d2dae0 and d4d4d4
   let textColorShade3 = colorUtils.adjustBrightness(textColor, 0.18 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
-  // Equivalent to: #b1bcc3 and b3b3b3
+  // Equivalent to: #b1bcc3 and b3b3b3 and b8b8b8
   let textColorShade4 = colorUtils.adjustBrightness(textColor, 0.25 * (colorUtils.getLightness(textColor) >= 0.5 ? -1 : 1))
 
   // Equivalent to: #a8b1b8
