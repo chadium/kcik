@@ -4,6 +4,7 @@ import Root from './components/Root.jsx'
 import styles from "../preload/global.lazy.css"
 import { ContentCom } from './ContentCom.mjs'
 import { Repository } from './repository.mjs'
+import { StorageV2toV3TranslationLayer } from './StorageV2toV3TranslationLayer.mjs'
 
 styles.use()
 let reactRoot = ReactDOM.createRoot(document.body.appendChild(document.createElement('div')))
@@ -36,8 +37,10 @@ chrome.tabs.query(queryObj, async function(tabs) {
     }))
   })
 
+  const storageArea = new StorageV2toV3TranslationLayer(chrome.storage.sync)
+
   let com = new ContentCom(port)
-  let repo = new Repository(chrome.storage.sync)
+  let repo = new Repository(storageArea)
 
   com.on('error', console.error)
 

@@ -1,6 +1,7 @@
 import { Repository } from "../chrome-popup/repository.mjs"
 import { PopupCom } from "./PopupCom.mjs"
 import { WebsiteCom } from "./WebsiteCom.mjs"
+import { StorageV2toV3TranslationLayer } from "../chrome-popup/StorageV2toV3TranslationLayer.mjs"
 import * as log from "../preload/log.mjs"
 
 class Injection {
@@ -50,8 +51,10 @@ async function main() {
   let popupCom = new PopupCom()
   let websiteCom = new WebsiteCom(injection)
 
-  await migrate(chrome.storage.sync)
-  let repository = new Repository(chrome.storage.sync)
+  const storageArea = new StorageV2toV3TranslationLayer(chrome.storage.sync)
+
+  await migrate(storageArea)
+  let repository = new Repository(storageArea)
 
   injection.init({
     websiteTheme: await repository.getWebsiteTheme(),
