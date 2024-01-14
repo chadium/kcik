@@ -9,5 +9,10 @@ export NODE_ENV=production
 
 # Chrome extension.
 npm run build
-rm -f dist/chrome-user/chrome-user.zip
-(cd dist/chrome-user && zip -r chrome-user.zip .)
+rm -f dist/chrome/chrome.zip
+(cd dist/chrome && zip -r chrome.zip .)
+
+# Firefox extension.
+npm run build
+rm -f dist/firefox/firefox.zip
+(cd dist/firefox && zip -r firefox.zip .)

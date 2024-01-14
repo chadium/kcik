@@ -71,7 +71,7 @@ exports.generateElectronConfig = ({
     plugins: [
       new DefinePlugin({
         BOOMER_ADMIN: admin,
-        BOOMER_VERSION: JSON.stringify(makeVersion(production))
+        BOOMER_VERSION: JSON.stringify(makeVersion(production)),
       }),
       new Dotenv({
         systemvars: true
@@ -156,13 +156,14 @@ exports.generatePreloadConfig = ({
   inlineSourceMap = false,
   production = false,
   outputDir,
-  chrome = false,
+  target = 'web|electron',
+  webVariant = 'chrome|firefox',
   admin = false
 }) => {
   let config = {
     mode: production ? 'production' : 'development',
     entry: './src/preload/index.mjs',
-    target: chrome ? 'web' : 'electron-renderer',
+    target: target === 'web' ? 'web' : 'electron-renderer',
     module: {
       rules: [
         ...uiRules,
@@ -172,7 +173,7 @@ exports.generatePreloadConfig = ({
       new DefinePlugin({
         BOOMER_ADMIN: admin,
         BOOMER_VERSION: JSON.stringify(makeVersion(production)),
-        BOOMER_CHROME_EXTENSION: chrome
+        KCIK_WEB_VARIANT: webVariant,
       }),
       new Dotenv({
         systemvars: true
@@ -202,7 +203,7 @@ exports.generatePreloadConfig = ({
     devtool: !production ? chooseSourceMapType(inlineSourceMap) : false
   }
 
-  if (chrome) {
+  if (target === 'web') {
     config.resolve = {
       alias: {
         electron: path.join(__dirname, 'src/empty.js')
@@ -217,7 +218,8 @@ exports.generateChromeContentConfig = ({
   inlineSourceMap = false,
   production = false,
   outputDir,
-  chrome = true,
+  target = 'web|electron',
+  webVariant = 'chrome|firefox',
   admin = false
 }) => {
   const config = {
@@ -232,7 +234,7 @@ exports.generateChromeContentConfig = ({
       new DefinePlugin({
         BOOMER_ADMIN: admin,
         BOOMER_VERSION: JSON.stringify(makeVersion(production)),
-        BOOMER_CHROME_EXTENSION: chrome
+        KCIK_WEB_VARIANT: webVariant,
       }),
       new Dotenv({
         systemvars: true
@@ -303,6 +305,25 @@ RwIDAQAB
     }
   }
 
+  if (webVariant === 'firefox') {
+    manifestJson.manifest_version = 2
+
+    delete manifestJson.version_name
+
+    manifestJson.browser_action = manifestJson.action
+    delete manifestJson.action
+
+    let allResources = []
+
+    for (let resource of manifestJson.web_accessible_resources) {
+      allResources = allResources.concat(resource.resources)
+    }
+
+    manifestJson.web_accessible_resources = allResources
+
+    delete manifestJson.key
+  }
+
   config.plugins.push(generate({
     file: path.join(__dirname, 'dist', outputDir, 'manifest.json'),
     content: JSON.stringify(manifestJson)
@@ -315,7 +336,8 @@ exports.generateChromeBackgroundConfig = ({
   inlineSourceMap = false,
   production = false,
   outputDir,
-  chrome = true,
+  target = 'web|electron',
+  webVariant = 'chrome|firefox',
   admin = false
 }) => {
   const config = {
@@ -330,7 +352,7 @@ exports.generateChromeBackgroundConfig = ({
       new DefinePlugin({
         BOOMER_ADMIN: admin,
         BOOMER_VERSION: JSON.stringify(makeVersion(production)),
-        BOOMER_CHROME_EXTENSION: chrome
+        KCIK_WEB_VARIANT: webVariant,
       }),
       new Dotenv({
         systemvars: true
@@ -372,7 +394,8 @@ exports.generateChromePopupConfig = ({
   inlineSourceMap = false,
   production = false,
   outputDir,
-  chrome = true,
+  target = 'web|electron',
+  webVariant = 'chrome|firefox',
   admin = false
 }) => {
   const config = {
@@ -393,7 +416,7 @@ exports.generateChromePopupConfig = ({
       new DefinePlugin({
         BOOMER_ADMIN: admin,
         BOOMER_VERSION: JSON.stringify(makeVersion(production)),
-        BOOMER_CHROME_EXTENSION: chrome
+        KCIK_WEB_VARIANT: webVariant,
       }),
       new Dotenv({
         systemvars: true

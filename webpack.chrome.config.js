@@ -10,20 +10,23 @@ let production = process.env.NODE_ENV === 'production'
 module.exports = [
   generatePreloadConfig({
     production,
-    outputDir: 'chrome-user',
-    chrome: true,
+    outputDir: 'chrome',
+    target: 'web',
+    webVariant: 'chrome',
     inlineSourceMap: true
   }),
   generateChromeContentConfig({
     production,
-    outputDir: 'chrome-user',
-    chrome: true,
+    outputDir: 'chrome',
+    target: 'web',
+    webVariant: 'chrome',
     inlineSourceMap: true
   }),
   generateChromePopupConfig({
     production,
-    outputDir: 'chrome-user',
-    chrome: true,
+    outputDir: 'chrome',
+    target: 'web',
+    webVariant: 'chrome',
     inlineSourceMap: true
   })
 ]

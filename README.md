@@ -47,7 +47,10 @@ And then you can run the following command to build the extension:
 npm run build
 ```
 
-The extension files will be placed in `dist/chrome-user`. You can load this folder into your browser. This has been successfully done on Google Chrome and Mozilla Firefox.
+The extension files will be placed in `dist/chrome`. You can load this folder into your browser. This has been successfully done on Google Chrome.
+
+For the Firefox variant, you must run `npm run build-firefox`. You will
+find the files in the `dist/firefox` folder.
 
 
 ## Development

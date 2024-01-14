@@ -4,8 +4,10 @@
   "description": "The best kick.com extension that you will find out there.",
   "main": "dist/user/electron/index.js",
   "scripts": {
-    "build": "webpack build -c webpack.chrome-user.config.js",
-    "watch": "webpack watch -c webpack.chrome-user.config.js"
+    "build": "webpack build -c webpack.chrome.config.js",
+    "watch": "webpack watch -c webpack.chrome.config.js",
+    "build-firefox": "webpack build -c webpack.firefox.config.js",
+    "watch-firefox": "webpack watch -c webpack.firefox.config.js"
   },
   "author": "chadium",
   "devDependencies": {
