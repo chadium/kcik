@@ -1027,6 +1027,10 @@ html[lang] .category-tile-holder.category-tile-active {
   background: ${shade1};
 }
 
+.text-gray-900 {
+  /* Unsure */
+  color: ${complementaryText};
+}
 .text-gray-500 {
   color: ${textColorShade7};
 }
