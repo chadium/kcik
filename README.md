@@ -26,7 +26,7 @@ Note: after installing or updating the extension, you will have to refresh every
 
 You can download the extension for your Google Chrome compatible browser (Edge, Opera, etc) in the [Chrome Web Store](https://chrome.google.com/webstore/detail/kcik/gjhhdbbkhppoflbcoigffpphhmkffbcf).
 
-A link for Firefox users will be available soon.
+Firefox users can download the extension from the [Firefox Browser Add-Ons page](https://addons.mozilla.org/en-US/firefox/addon/kcik/)
 
 Or you can build it yourself by following the Build Instructions below.
 
