@@ -13,6 +13,6 @@ rm -f dist/chrome/chrome.zip
 (cd dist/chrome && zip -r chrome.zip .)
 
 # Firefox extension.
-npm run build
+npm run build-firefox
 rm -f dist/firefox/firefox.zip
 (cd dist/firefox && zip -r firefox.zip .)
