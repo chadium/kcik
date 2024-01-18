@@ -18,7 +18,7 @@ export default function TabSendMessageHistory({ com, repo }) {
               value={data}
               onChange={async (value) => {
                 await repo.setEnableSendMessageHistory(value)
-                com.send('kcik.enableSendMessageHistory', value)
+                com.mail('kcik.enableSendMessageHistory', value)
                 setData(value)
               }}
             />

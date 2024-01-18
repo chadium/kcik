@@ -17,7 +17,7 @@ export default function TabVodCurrentTime({ com, repo }) {
               value={data}
               onChange={async (value) => {
                 await repo.setEnableVodCurrentTime(value)
-                com.send('kcik.enableVodCurrentTime', value)
+                com.mail('kcik.enableVodCurrentTime', value)
                 setData(value)
               }}
             />

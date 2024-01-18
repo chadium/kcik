@@ -107,6 +107,7 @@ async function main() {
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
     enableSidebarStreamTooltip: await repository.getEnableSidebarStreamTooltip(),
     enableSendMessageHistory: await repository.getEnableSendMessageHistory(),
+    enablePlayPositions: await repository.getEnablePlayPositions(),
   })
 }
 

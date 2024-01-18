@@ -127,12 +127,12 @@ export default function TabWebsiteTheme({ com, repo }) {
         onChange={async (value) => {
           if (value) {
             await repo.setWebsiteTheme(lastWebsiteTheme)
-            com.send('kcik.websiteTheme', lastWebsiteTheme)
+            com.mail('kcik.websiteTheme', lastWebsiteTheme)
             setData(lastWebsiteTheme)
           } else {
             setLastWebsiteTheme(data)
             await repo.setWebsiteTheme(null)
-            com.send('kcik.websiteTheme', null)
+            com.mail('kcik.websiteTheme', null)
             setData(null)
           }
         }}
@@ -166,7 +166,7 @@ export default function TabWebsiteTheme({ com, repo }) {
                     selected={deepEqual(p.websiteTheme, data)}
                     onSelect={async (websiteTheme) => {
                       await repo.setWebsiteTheme(websiteTheme)
-                      com.send('kcik.websiteTheme', websiteTheme)
+                      com.mail('kcik.websiteTheme', websiteTheme)
                       setData(websiteTheme)
                     }}
                   />
@@ -191,7 +191,7 @@ export default function TabWebsiteTheme({ com, repo }) {
                 onChange={async (value) => {
                   data.mainColor = value
                   await repo.setWebsiteTheme(data)
-                  com.send('kcik.websiteTheme', data)
+                  com.mail('kcik.websiteTheme', data)
                   setData(data)
                 }}
               />
@@ -213,7 +213,7 @@ export default function TabWebsiteTheme({ com, repo }) {
                 onChange={async (value) => {
                   data.complementaryColor = value
                   await repo.setWebsiteTheme(data)
-                  com.send('kcik.websiteTheme', data)
+                  com.mail('kcik.websiteTheme', data)
                   setData(data)
                 }}
               />

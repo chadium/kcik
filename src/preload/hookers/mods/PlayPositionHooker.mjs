@@ -55,7 +55,7 @@ export class TrackingState extends MachineState {
       id: this.id
     })
     if (currentTime !== null) {
-      log.info('watchTracking', `Will resume from ${hhmmss(currentTime)}.`)
+      log.info('playPosition', `Will resume from ${hhmmss(currentTime)}.`)
       this.player.currentTime(currentTime / 1000)
     }
 
@@ -72,7 +72,7 @@ export class TrackingState extends MachineState {
 function waitForVodComponentState(machine) {
   return new WaitForVueComponentMountState('VideoPlayer', (vm) => {
     if (vm._.props.isVOD) {
-      log.info('watchTracking', 'A VideoPlayer component has been mounted.')
+      log.info('playPosition', 'A VideoPlayer component has been mounted.')
 
       const videoPlayerElement = vm._.vnode.el.querySelector('.video-js')
 
@@ -87,17 +87,16 @@ function waitForVodComponentState(machine) {
 
 class DisabledState extends MachineState {}
 
-export class WatchTrackingHooker extends Hooker {
+export class PlayPositionHooker extends Hooker {
   #machine = null
 
   async hook() {
     this.#machine = new Machine()
     this.#machine.pimp = this.pimp
     await this.#machine.start(new DisabledState())
-    await this.#machine.next(waitForVodComponentState(this.#machine))
 
     return {
-      name: 'watchTracking',
+      name: 'playPosition',
       api: {
         setEnabled: (state) => {
           if (state) {

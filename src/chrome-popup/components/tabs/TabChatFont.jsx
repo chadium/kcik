@@ -14,7 +14,7 @@ export default function TabChatFont({ com, repo }) {
   // }, [com])
 
   useEffect(() => {
-    // com.send('kcik.ask', {
+    // com.mail('kcik.ask', {
     //   fields: ['fontSize']
     // })
   }, [])
@@ -28,7 +28,7 @@ export default function TabChatFont({ com, repo }) {
             value={data}
             onChange={async (value) => {
               await repo.setFontSize(value)
-              com.send('kcik.fontSize', value)
+              com.mail('kcik.fontSize', value)
               setData(value)
             }}
           />

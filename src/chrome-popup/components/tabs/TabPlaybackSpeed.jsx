@@ -18,7 +18,7 @@ export default function TabPlaybackSpeed({ com, repo }) {
               value={data}
               onChange={async (value) => {
                 await repo.setEnableVodPlaybackSpeed(value)
-                com.send('kcik.enableVodPlaybackSpeed', value)
+                com.mail('kcik.enableVodPlaybackSpeed', value)
                 setData(value)
               }}
             />

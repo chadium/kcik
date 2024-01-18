@@ -14,6 +14,7 @@ import TabPlaybackSpeed from './tabs/TabPlaybackSpeed.jsx'
 import TabVodCurrentTime from './tabs/TabVodCurrentTime.jsx'
 import TabSidebarStreamTooltip from './tabs/TabSidebarStreamTooltip.jsx'
 import TabSendMessageHistory from './tabs/TabSendMessageHistory.jsx'
+import TabPlayPosition from './tabs/TabPlayPosition.jsx'
 import ArrowNavigation from './ArrowNavigation.jsx'
 import { websiteThemeValues } from '../../preload/website-theme.mjs'
 import { useResource } from '../use-resource.mjs'
@@ -70,6 +71,10 @@ const tabs = [
   {
     name: 'Sidebar Stream Tooltip',
     content: (params) => <TabSidebarStreamTooltip {...params}/>
+  },
+  {
+    name: 'Remember VOD Playback',
+    content: (params) => <TabPlayPosition {...params}/>
   },
   {
     name: 'Credits',

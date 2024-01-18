@@ -26,7 +26,7 @@ import { VodMouseVolumeControlHooker } from './hookers/mods/VodMouseVolumeContro
 import { VodCurrentTimeHookerHooker } from './hookers/mods/VodCurrentTimeHooker.mjs'
 import { SidebarStreamTooltipHooker } from './hookers/mods/SidebarStreamTooltipHooker.mjs'
 import { SendMessageHistoryHooker } from './hookers/mods/SendMessageHistoryHooker.mjs'
-import { WatchTrackingHooker } from './hookers/mods/WatchTrackingHooker.mjs'
+import { PlayPositionHooker } from './hookers/mods/PlayPositionHooker.mjs'
 import * as snapshotUtils from './snapshot-utils.mjs'
 import { pathsToKey, pathsToValue, breakOnSet, breakOnGet, freezeProperty, getByPath} from './object-utils.mjs'
 import * as log from './log.mjs'
@@ -79,7 +79,7 @@ async function main() {
     new SidebarStreamTooltipHooker(),
     new ChatMessageDeletedHooker(),
     new SendMessageHistoryHooker(),
-    new WatchTrackingHooker(),
+    new PlayPositionHooker(),
     new ChromeExtensionHooker(),
   ]
 

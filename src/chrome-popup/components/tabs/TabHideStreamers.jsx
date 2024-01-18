@@ -131,7 +131,7 @@ export default function TabHideStreamers({ com, repo }) {
     const newData = editor.get()
 
     await repo.setHideStreamers(newData)
-    com.send('kcik.hideStreamers', newData)
+    com.mail('kcik.hideStreamers', newData)
 
     naughtyList.push({
       username,
@@ -147,7 +147,7 @@ export default function TabHideStreamers({ com, repo }) {
     const newData = editor.get()
 
     await repo.setHideStreamers(newData)
-    com.send('kcik.hideStreamers', newData)
+    com.mail('kcik.hideStreamers', newData)
 
     const index = naughtyList.indexOf(item)
     naughtyList.get(index).groups.push(group)
@@ -161,7 +161,7 @@ export default function TabHideStreamers({ com, repo }) {
     const newData = editor.get()
 
     await repo.setHideStreamers(newData)
-    com.send('kcik.hideStreamers', newData)
+    com.mail('kcik.hideStreamers', newData)
 
     const index = naughtyList.indexOf(item)
     arrayUtils.removeFirstByValue(naughtyList.get(index).groups, group)
@@ -175,7 +175,7 @@ export default function TabHideStreamers({ com, repo }) {
     const newData = editor.get()
 
     await repo.setHideStreamers(newData)
-    com.send('kcik.hideStreamers', newData)
+    com.mail('kcik.hideStreamers', newData)
 
     naughtyList.remove(item)
 

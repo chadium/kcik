@@ -17,7 +17,7 @@ export default function TabSidebarStreamTooltip({ com, repo }) {
               value={data}
               onChange={async (value) => {
                 await repo.setEnableSidebarStreamTooltip(value)
-                com.send('kcik.enableSidebarStreamTooltip', value)
+                com.mail('kcik.enableSidebarStreamTooltip', value)
                 setData(value)
               }}
             />

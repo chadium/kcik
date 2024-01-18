@@ -15,6 +15,7 @@ const DEFAULT_WEBSITE_THEME = null
 const DEFAULT_CHAT_MESSAGE_DELETED_MODE = chatMessageDeletedMode.DEFAULT
 const DEFAULT_SIDEBAR_STREAM_TOOLTIP = true
 const DEFAULT_SEND_MESSAGE_HISTORY = true
+const DEFAULT_ENABLE_PLAY_POSITIONS = true
 
 let websiteThemeSchema = Joi.object({
   mainColor: Joi.string()
@@ -34,6 +35,26 @@ export class Repository {
 
   constructor(storageArea) {
     this.#storageArea = storageArea
+  }
+
+  async getEnablePlayPositions() {
+    let result = await this.#storageArea.get(['enablePlayPositions'])
+
+    if (result.enablePlayPositions === undefined) {
+      return DEFAULT_ENABLE_PLAY_POSITIONS
+    }
+
+    return result.enablePlayPositions
+  }
+
+  async setEnablePlayPositions(value) {
+    if (value === DEFAULT_SEND_MESSAGE_HISTORY) {
+      await this.#storageArea.remove(['enablePlayPositions'])
+    } else {
+      await this.#storageArea.set({
+        enablePlayPositions: value
+      })
+    }
   }
 
   async getPlayPositions() {

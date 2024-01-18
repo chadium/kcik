@@ -18,7 +18,7 @@ export default function TabMouseVolumeControl({ com, repo }) {
               value={data}
               onChange={async (value) => {
                 await repo.setEnableVodMouseVolumeControl(value)
-                com.send('kcik.enableVodMouseVolumeControl', value)
+                com.mail('kcik.enableVodMouseVolumeControl', value)
                 setData(value)
               }}
             />

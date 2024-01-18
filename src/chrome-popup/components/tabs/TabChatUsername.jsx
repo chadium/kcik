@@ -13,7 +13,7 @@ export default function TabChatUsername({ com }) {
   }, [com])
 
   useEffect(() => {
-    com.send('kcik.ask', {
+    com.mail('kcik.ask', {
       fields: ['usernameColor']
     })
   }, [])
@@ -28,7 +28,7 @@ export default function TabChatUsername({ com }) {
             const color = value ? '#FFFFFF' : null
 
             setUsernameColor(color)
-            com.send('kcik.usernameColor.set', color)
+            com.mail('kcik.usernameColor.set', color)
           }}
         />
       </div>
@@ -53,7 +53,7 @@ export default function TabChatUsername({ com }) {
               value={usernameColor}
               onChange={(value) => {
                 setUsernameColor(value)
-                com.send('kcik.usernameColor.set', value)
+                com.mail('kcik.usernameColor.set', value)
               }}
             />
           }

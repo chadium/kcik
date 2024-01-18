@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import GenericLoading from '../GenericLoading.jsx'
-import FormField from '../FormField.jsx'
 import InputCheck from '../InputCheck.jsx'
 import { useResource } from '../../use-resource.mjs'
 
-export default function TabHost({ com, repo }) {
-  let fetchResource = useCallback(() => repo.getEnableHost(), [repo])
+export default function TabPlayPosition({ com, repo }) {
+  let fetchResource = useCallback(() => repo.getEnablePlayPositions(), [repo])
   let { data, setData, loading, error } = useResource(fetchResource)
 
   return (
@@ -15,11 +14,10 @@ export default function TabHost({ com, repo }) {
           <div>
             <InputCheck
               label="Enable"
-              value={!data}
+              value={data}
               onChange={async (value) => {
-                value = !value
-                await repo.setEnableHost(value)
-                com.mail('kcik.enableHost', value)
+                await repo.setEnablePlayPositions(value)
+                com.mail('kcik.enablePlayPositions', value)
                 setData(value)
               }}
             />
@@ -28,10 +26,8 @@ export default function TabHost({ com, repo }) {
           <div className="chad-p-t"></div>
 
           <p>
-            Streamers can send their viewers to another channel
-            to show their support. By enabling this, you can
-            automatically reject hosts and never leave your favorite
-            streamer's channel.
+            Whenever you watch a vod, close the tab and open it again,
+            the video player will continue to play where you left off.
           </p>
         </div>
       )}

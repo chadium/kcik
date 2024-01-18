@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, {useCallback } from 'react'
 import GenericLoading from '../GenericLoading.jsx'
 import InputCheck from '../InputCheck.jsx'
 import { useResource } from '../../use-resource.mjs'
@@ -19,7 +19,7 @@ export default function TabChatMessageDeleted({ com, repo }) {
               onChange={async (value) => {
                 let mode = value ? chatMessageDeletedMode.SHOW_MESSAGE : chatMessageDeletedMode.DEFAULT
                 await repo.setChatMessageDeletedMode(mode)
-                com.send('kcik.chatMessageDeletedMode', mode)
+                com.mail('kcik.chatMessageDeletedMode', mode)
                 setData(mode)
               }}
             />

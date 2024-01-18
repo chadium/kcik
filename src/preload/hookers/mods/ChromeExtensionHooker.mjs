@@ -50,6 +50,7 @@ export class ChromeExtensionHooker extends Hooker {
     this.pimp.getApi('chatMessageDeleted').setChatMessageDeletedMode(initialData.chatMessageDeletedMode)
     this.pimp.getApi('sidebarStreamTooltip').setEnabled(initialData.enableSidebarStreamTooltip)
     this.pimp.getApi('sendMessageHistory').setEnabled(initialData.enableSendMessageHistory)
+    this.pimp.getApi('playPosition').setEnabled(initialData.enablePlayPositions)
 
     return {
       name: 'chromeExtension',
@@ -155,6 +156,10 @@ export class ChromeExtensionHooker extends Hooker {
 
     case 'kcik.enableSendMessageHistory':
       this.pimp.getApi('sendMessageHistory').setEnabled(data)
+      break
+
+    case 'kcik.enablePlayPositions':
+      this.pimp.getApi('playPosition').setEnabled(data)
       break
     }
   }

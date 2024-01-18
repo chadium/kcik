@@ -18,7 +18,7 @@ export default function TabKeyboardNavigation({ com, repo }) {
               value={data}
               onChange={async (value) => {
                 await repo.setEnableVodKeyboardNavigation(value)
-                com.send('kcik.enableVodKeyboardNavigation', value)
+                com.mail('kcik.enableVodKeyboardNavigation', value)
                 setData(value)
               }}
             />
