@@ -1,12 +1,23 @@
-import EventEmitter from 'events'
+import { Bimescli } from '../preload/Bimescli.mjs';
 
 export class ContentCom {
-  constructor(port) {
+  constructor({
+    port,
+    onMail,
+    onRequest,
+  }) {
+    this.client = new Bimescli({
+      timeout: 10000,
+      output: (message) => {
+        this.port.postMessage(message)
+      },
+      onMail: (data) => onMail(data.type, data.data),
+      onRequest: (data) => onRequest(data.type, data.data),
+    })
     this.port = port
-    this.events = new EventEmitter()
 
     this.port.onMessage.addListener((message) => {
-      this.events.emit(message.type, message.data)
+      this.client.input(message)
     })
   }
 
@@ -18,16 +29,21 @@ export class ContentCom {
     this.events.off(type, cb)
   }
 
-  send(type, data) {
+  mail(type, data) {
     let message = {
       type,
       data
     }
 
-    try {
-      this.port.postMessage(message)
-    } catch (e) {
-      this.events.emit('error', e)
+    this.client.mail(message)
+  }
+
+  async request(type, data) {
+    let message = {
+      type,
+      data
     }
+
+    return await this.client.request(message)
   }
 }

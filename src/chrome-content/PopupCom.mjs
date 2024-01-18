@@ -1,15 +1,25 @@
-import EventEmitter from 'events'
+import { Bimescli } from '../preload/Bimescli.mjs';
 
 export class PopupCom {
-  constructor() {
+  constructor({
+    onMail,
+    onRequest,
+  }) {
+    this.client = new Bimescli({
+      timeout: 10000,
+      output: (message) => {
+        this.port.postMessage(message)
+      },
+      onMail: (data) => onMail(data.type, data.data),
+      onRequest: (data) => onRequest(data.type, data.data),
+    })
     this.port = null
-    this.events = new EventEmitter()
 
     chrome.runtime.onConnect.addListener((p) => {
       this.port = p
 
       this.port.onMessage.addListener((message) => {
-        this.events.emit('message', message)
+        this.client.input(message)
       })
 
       this.port.onDisconnect.addListener(() => {
@@ -18,15 +28,7 @@ export class PopupCom {
     });
   }
 
-  on(type, cb) {
-    this.events.on(type, cb)
-  }
-
-  off(type, cb) {
-    this.events.off(type, cb)
-  }
-
-  send(type, data) {
+  mail(type, data) {
     if (this.port === null) {
       return
     }
@@ -36,10 +38,19 @@ export class PopupCom {
       data
     }
 
-    try {
-      this.port.postMessage(message)
-    } catch (e) {
-      this.events.emit('error', e)
+    this.client.mail(message)
+  }
+
+  async request(type, data) {
+    if (this.port === null) {
+      return
     }
+
+    let message = {
+      type,
+      data
+    }
+
+    return await this.client.request(message)
   }
 }

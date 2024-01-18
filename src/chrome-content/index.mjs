@@ -3,6 +3,7 @@ import { PopupCom } from "./PopupCom.mjs"
 import { WebsiteCom } from "./WebsiteCom.mjs"
 import { StorageV2toV3TranslationLayer } from "../chrome-popup/StorageV2toV3TranslationLayer.mjs"
 import * as log from "../preload/log.mjs"
+import { WatchTracker } from "../preload/WatchTracker.mjs"
 
 class Injection {
   #s = null
@@ -47,14 +48,52 @@ async function migrate(storageArea) {
 }
 
 async function main() {
+  let watchTracker = new WatchTracker()
+
   let injection = new Injection()
-  let popupCom = new PopupCom()
-  let websiteCom = new WebsiteCom(injection)
+  let popupCom = new PopupCom({
+    onMail(type, data) {
+      log.info('ContentScript', 'Got mail from popup', type)
+
+      websiteCom.mail(type, data)
+    },
+    onRequest(type, data) {
+      log.info('ContentScript', 'Got request from popup', type)
+
+      return websiteCom.request(type, data)
+    },
+  })
+  let websiteCom = new WebsiteCom({
+    injection,
+    onMail(type, data) {
+      log.info('ContentScript', 'Got mail from website', type)
+
+      if (type === 'kcik.vod.currentTime.set') {
+        watchTracker.track(data.id, data.currentTime, new Date())
+        repository.setPlayPositions(watchTracker.save()).catch((e) => {
+          log.bad('ContentScript', e)
+        })
+      } else {
+        popupCom.mail(type, data)
+      }
+    },
+    onRequest(type, data) {
+      log.info('ContentScript', 'Got request from website', type)
+
+      if (type === 'kcik.vod.currentTime.get') {
+        return watchTracker.remember(data.id)
+      } else {
+        return popupCom.request(type, data)
+      }
+    },
+  })
 
   const storageArea = new StorageV2toV3TranslationLayer(chrome.storage.sync)
 
   await migrate(storageArea)
   let repository = new Repository(storageArea)
+
+  watchTracker.load(await repository.getPlayPositions())
 
   injection.init({
     websiteTheme: await repository.getWebsiteTheme(),
@@ -68,16 +107,6 @@ async function main() {
     chatMessageDeletedMode: await repository.getChatMessageDeletedMode(),
     enableSidebarStreamTooltip: await repository.getEnableSidebarStreamTooltip(),
     enableSendMessageHistory: await repository.getEnableSendMessageHistory(),
-  })
-
-  // Forwarding messages.
-  popupCom.on('message', (message) => {
-    log.info('ContentScript', 'KCIK Forwarding data to website', message)
-    websiteCom.send(message.type, message.data)
-  })
-  websiteCom.on('message', (message) => {
-    log.info('ContentScript', 'KCIK Forwarding data to popup', message)
-    popupCom.send(message.type, message.data)
   })
 }
 

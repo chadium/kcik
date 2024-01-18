@@ -36,6 +36,26 @@ export class Repository {
     this.#storageArea = storageArea
   }
 
+  async getPlayPositions() {
+    let result = await this.#storageArea.get(['playPositions'])
+
+    if (result.playPositions === undefined) {
+      return {}
+    }
+
+    return result.playPositions
+  }
+
+  async setPlayPositions(value) {
+    if (Object.keys(value).length > 0) {
+      await this.#storageArea.set({
+        playPositions: value
+      })
+    } else {
+      await this.#storageArea.remove(['playPositions'])
+    }
+  }
+
   async getEnableSendMessageHistory() {
     let result = await this.#storageArea.get(['enableSendMessageHistory'])
 

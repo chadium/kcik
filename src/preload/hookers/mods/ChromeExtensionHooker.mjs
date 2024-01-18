@@ -1,10 +1,18 @@
 import { Hooker } from '../../Pimp.mjs'
 import * as log from '../../log.mjs'
 import EventEmitter from 'events'
+import { Bimescli } from '../../Bimescli.mjs'
 
 export class ChromeExtensionHooker extends Hooker {
   constructor() {
     super()
+
+    this.client = new Bimescli({
+      timeout: 10000,
+      output: (message) => postMessage(message),
+      onMail: (data) => this.handleMail(data.type, data.data),
+      onRequest: (data) => this.handleRequest(data.type, data.data),
+    })
 
     this.events = new EventEmitter()
 
@@ -14,8 +22,7 @@ export class ChromeExtensionHooker extends Hooker {
         if (mutation.attributeName === 'data-message') {
           const newValue = mutation.target.getAttribute('data-message');
           const message = JSON.parse(newValue)
-          log.info('ChromeExtension', 'Got message from content script: ' + message.type)
-          this.handleReceived(message.type, message.data)
+          this.client.input(message)
         }
       });
     })
@@ -28,7 +35,7 @@ export class ChromeExtensionHooker extends Hooker {
 
     const initialData = JSON.parse(kcik.getAttribute('data-message'))
 
-    this.send('kcik.ready', {})
+    this.mail('kcik.ready', {})
 
     this.pimp.getApi('websiteTheme').setWebsiteTheme(initialData.websiteTheme)
     this.pimp.getApi('clips').enableVodKeyboardNavigation(initialData.enableVodKeyboardNavigation)
@@ -47,9 +54,8 @@ export class ChromeExtensionHooker extends Hooker {
     return {
       name: 'chromeExtension',
       api: {
-        send: (type, data) => {
-          this.send(type, data)
-        },
+        mail: (type, data) => this.mail(type, data),
+        request: (type, data) => this.request(type, data),
         on: (type, cb) => this.events.on(type, cb),
         off: (type, cb) => this.events.off(type, cb),
       }
@@ -60,15 +66,21 @@ export class ChromeExtensionHooker extends Hooker {
     this.scriptMutationObserver.disconnect()
   }
 
-  send(type, data) {
-    log.info('ChromeExtension', 'Sending message to content script: ' + type)
-    postMessage({
+  mail(type, data) {
+    this.client.mail({
       type,
       data
     })
   }
 
-  handleReceived(type, data) {
+  async request(type, data) {
+    return this.client.request({
+      type,
+      data
+    })
+  }
+
+  handleMail(type, data) {
     switch (type) {
     case 'kcik.ask':
       for (const field of data.fields) {
@@ -77,7 +89,7 @@ export class ChromeExtensionHooker extends Hooker {
           let userApi = this.pimp.getApi('user')
           let color = this.pimp.getApi('state').getUsernameColor(userApi.getCurrentUsername())
 
-          this.send('kcik.usernameColor', color)
+          this.mail('kcik.usernameColor', color)
           break
         }
         }
@@ -146,4 +158,6 @@ export class ChromeExtensionHooker extends Hooker {
       break
     }
   }
+
+  handleRequest(type, data) {}
 }

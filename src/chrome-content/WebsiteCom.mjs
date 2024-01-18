@@ -1,37 +1,45 @@
-import EventEmitter from 'events'
+import { Bimescli } from '../preload/Bimescli.mjs';
 
 export class WebsiteCom {
-  constructor(injection) {
+  constructor({
+    injection,
+    onMail,
+    onRequest,
+  }) {
+    this.client = new Bimescli({
+      timeout: 10000,
+      output: (message) => {
+        this.injection.sendMessage(message)
+      },
+      onMail: (data) => onMail(data.type, data.data),
+      onRequest: (data) => onRequest(data.type, data.data),
+    })
     this.injection = injection
-    this.events = new EventEmitter()
 
     window.addEventListener('message', (e) => {
       if (e.origin === 'https://kick.com') {
         if (e.data.type !== undefined) {
-          this.events.emit('message', e.data)
+          this.client.input(e.data)
         }
       }
     })
   }
 
-  on(type, cb) {
-    this.events.on(type, cb)
-  }
-
-  off(type, cb) {
-    this.events.off(type, cb)
-  }
-
-  send(type, data) {
+  mail(type, data) {
     let message = {
       type,
       data
     }
 
-    try {
-      this.injection.sendMessage(message)
-    } catch (e) {
-      this.events.emit('error', e)
+    this.client.mail(message)
+  }
+
+  async request(type, data) {
+    let message = {
+      type,
+      data
     }
+
+    return await this.client.request(message)
   }
 }

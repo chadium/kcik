@@ -39,10 +39,13 @@ chrome.tabs.query(queryObj, async function(tabs) {
 
   const storageArea = new StorageV2toV3TranslationLayer(chrome.storage.sync)
 
-  let com = new ContentCom(port)
+  let com = new ContentCom({
+    port,
+    onMail(type, data) {
+      console.log(type, data)
+    }
+  })
   let repo = new Repository(storageArea)
-
-  com.on('error', console.error)
 
   console.log('render')
   reactRoot.render(React.createElement(Root, { com, repo }))
