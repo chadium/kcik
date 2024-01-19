@@ -1,6 +1,6 @@
 {
   "name": "kcik",
-  "version": "25.0.0",
+  "version": "26.0.0",
   "description": "The best kick.com extension that you will find out there.",
   "main": "dist/user/electron/index.js",
   "scripts": {
