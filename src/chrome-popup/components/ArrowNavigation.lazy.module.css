@@ -1,5 +1,8 @@
 .container {
   display: flex;
+
+  /* Don't want the animation to cause overflow. */
+  overflow: hidden;
 }
 
 .selected {

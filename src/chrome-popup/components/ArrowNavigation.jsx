@@ -36,19 +36,21 @@ export default function ArrowNavigation({ tabIndex, tabs, onTabIndexChange }) {
   return (
     <div className={styles.locals.container}>
       <ArrowButton direction="left" onClick={moveLeft}></ArrowButton>
+
       <div className={styles.locals.selected}>
-      {tabs.map((tab) => (
-        <CSSTransition
-          key={tab.name}
-          in={tab === activeTab}
-          timeout={100}
-          classNames={`slide-${direction}`}
-          unmountOnExit
-        >
-          <div className={styles.locals.selectedText}>{activeTab.name}</div>
-        </CSSTransition>
-      ))}
+        {tabs.map((tab) => (
+          <CSSTransition
+            key={tab.name}
+            in={tab === activeTab}
+            timeout={100}
+            classNames={`slide-${direction}`}
+            unmountOnExit
+          >
+            <div className={styles.locals.selectedText}>{tab.name}</div>
+          </CSSTransition>
+        ))}
       </div>
+
       <ArrowButton direction="right" onClick={moveRight}></ArrowButton>
     </div>
   )
