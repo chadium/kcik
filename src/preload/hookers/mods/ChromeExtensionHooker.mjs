@@ -83,20 +83,6 @@ export class ChromeExtensionHooker extends Hooker {
 
   handleMail(type, data) {
     switch (type) {
-    case 'kcik.ask':
-      for (const field of data.fields) {
-        switch (field) {
-        case 'usernameColor': {
-          let userApi = this.pimp.getApi('user')
-          let color = this.pimp.getApi('state').getUsernameColor(userApi.getCurrentUsername())
-
-          this.mail('kcik.usernameColor', color)
-          break
-        }
-        }
-      }
-      break
-
     case 'kcik.fontSize': {
       let fontSizeApi = this.pimp.getApi('fontSize')
       fontSizeApi.setSize(data)
@@ -136,10 +122,6 @@ export class ChromeExtensionHooker extends Hooker {
       break
     }
 
-    case 'kcik.usernameColor.set':
-      this.pimp.getApi('state').setUsernameColor(data)
-      break
-
     case 'kcik.hideStreamers':
       this.pimp.getApi('hideStreamersFeatured').setNaughtyList(data)
       this.pimp.getApi('hideStreamersRecommended').setNaughtyList(data)
@@ -164,5 +146,18 @@ export class ChromeExtensionHooker extends Hooker {
     }
   }
 
-  handleRequest(type, data) {}
+  async handleRequest(type, data) {
+    switch (type) {
+    case 'kcik.usernameColor.get': {
+      let userApi = this.pimp.getApi('user')
+      let color = this.pimp.getApi('state').getUsernameColor(userApi.getCurrentUsername())
+
+      return color
+    }
+
+    case 'kcik.usernameColor.set':
+      await this.pimp.getApi('state').setUsernameColor(data.color)
+      break
+    }
+  }
 }

@@ -87,13 +87,11 @@ export class Bimescli {
       if (this.onRequest) {
         const replyData = await this.onRequest(message.data)
 
-        if (replyData !== undefined) {
-          this.output({
-            id: message.id,
-            type: 'reply',
-            data: replyData
-          })
-        }
+        this.output({
+          id: message.id,
+          type: 'reply',
+          data: replyData
+        })
       }
     }
   }

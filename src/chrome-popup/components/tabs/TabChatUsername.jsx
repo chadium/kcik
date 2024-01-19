@@ -1,35 +1,43 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import GenericLoading from '../GenericLoading.jsx'
 import FormField from '../FormField.jsx'
 import InputCheck from '../InputCheck.jsx'
 import ColorPickerSlider from '../ColorPickerSlider.jsx'
+import { useResource } from '../../use-resource.mjs'
 
-export default function TabChatUsername({ com }) {
-  let [usernameColor, setUsernameColor] = useState()
+function Content({ data, com, setData }) {
+  let [enabled, setEnabled] = useState(data !== null)
+  let [color, setColor] = useState(data !== null ? data : '#FFFFFF')
 
-  useEffect(() => {
-    com.on('kcik.usernameColor', setUsernameColor)
-    return () => com.off('kcik.usernameColor', setUsernameColor)
-  }, [com])
+  async function onChangeEnabled(value) {
+    if (value) {
+      await com.request('kcik.usernameColor.set', {
+        color
+      })
+    } else {
+      await com.request('kcik.usernameColor.set', {
+        color: null
+      })
+      setData(null)
+    }
 
-  useEffect(() => {
-    com.mail('kcik.ask', {
-      fields: ['usernameColor']
+    setEnabled(value)
+  }
+
+  async function onChangeColor(color) {
+    await com.request('kcik.usernameColor.set', {
+      color
     })
-  }, [])
+    setColor(color)
+  }
 
   return (
-    <GenericLoading loading={usernameColor === undefined}>
+    <>
       <div>
         <InputCheck
           label="Enable"
-          value={usernameColor !== null}
-          onChange={async (value) => {
-            const color = value ? '#FFFFFF' : null
-
-            setUsernameColor(color)
-            com.mail('kcik.usernameColor.set', color)
-          }}
+          value={enabled}
+          onChange={onChangeEnabled}
         />
       </div>
 
@@ -43,21 +51,33 @@ export default function TabChatUsername({ com }) {
         extension will see the color you set in the website.
       </div>
 
-      <div className="chad-p-t"/>
+      {enabled && (
+        <>
+          <div className="chad-p-t"/>
 
-      {usernameColor && (
-        <FormField
-          label="Choose color"
-          control={
-            <ColorPickerSlider
-              value={usernameColor}
-              onChange={(value) => {
-                setUsernameColor(value)
-                com.mail('kcik.usernameColor.set', value)
-              }}
-            />
-          }
-        />
+          <FormField
+            label="Choose color"
+            control={
+              <ColorPickerSlider
+                value={color}
+                onChange={onChangeColor}
+              />
+            }
+          />
+        </>
+      )}
+    </>
+  )
+}
+
+export default function TabChatUsername({ com }) {
+  let fetchResource = useCallback(() => com.request('kcik.usernameColor.get'), [com])
+  let { data, setData, loading, error } = useResource(fetchResource)
+
+  return (
+    <GenericLoading loading={loading} error={error}>
+      {!loading && (
+        <Content data={data} setData={setData} com={com}/>
       )}
     </GenericLoading>
   )

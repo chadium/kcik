@@ -65,11 +65,11 @@ export class StateHooker extends Hooker {
         setUsernameColor: async (color) => {
           let patientNotification = (() => {
             if (color !== null) {
-              toaster('Assigning you a color, please wait...', {
+              return toaster('Assigning you a color, please wait...', {
                 duration: Infinity
               })
             } else {
-              toaster('Removing your color, please wait...', {
+              return toaster('Removing your color, please wait...', {
                 duration: Infinity
               })
             }
