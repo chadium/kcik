@@ -5,6 +5,7 @@ An open source extension for the streaming platform kick.com!
 Features:
 - Change the color of the website.
 - Hide streamers from the website.
+- VOD player continues playing where you left off.
 - Show deleted chat messages.
 - Send message history.
 - Automatically reject hosts.

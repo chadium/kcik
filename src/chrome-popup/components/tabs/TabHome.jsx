@@ -13,6 +13,8 @@ export default function TabHome({ com, repo }) {
 
       <p>
         <b>Changelog</b>:<br/>
+        - <span className="chad-subtle">2024-01-20</span>: VOD player
+        continues playing where you left off.<br/>
         - <span className="chad-subtle">2024-01-14</span>: Hide streamers in
         categories.<br/>
         - <span className="chad-subtle">2023-11-11</span>: Hide streamers in the
