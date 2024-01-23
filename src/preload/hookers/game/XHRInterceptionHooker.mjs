@@ -16,14 +16,14 @@ export class XHRInterceptionHooker extends Hooker {
     this.#originalOpen = XMLHttpRequest.prototype.open
     this.#originalSend = XMLHttpRequest.prototype.send
   
-    XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+    XMLHttpRequest.prototype.open = function (...args) {
       // We need to keep track of this information otherwise it becomes inaccessible.
-      this.kcikMethod = method
-      this.kcikUrl = url
+      this.kcikMethod = args[0]
+      this.kcikUrl = args[1]
 
       self.#hijackOnreadystatechange(this)
 
-      return self.#originalOpen.call(this, method, url, async, user, password)
+      return self.#originalOpen.apply(this, args)
     }
   
     XMLHttpRequest.prototype.send = function (body) {
